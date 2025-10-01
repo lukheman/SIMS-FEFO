@@ -1,49 +1,40 @@
-@extends('layouts.main')
+<x-layout>
 
-@section('title', 'Kurir')
-
-@section('sidebar-menu')
-    @include('kurir.menu')
-@endsection
-
-@section('content')
 <div class="row">
     <div class="col-8">
         <div id="reader"></div>
     </div>
     <div class="col-4" id="info-pesanan">
-        <div class="form-group">
-            <label for="tanggal">Tanggal Pesan</label>
+        <div class="mb-3">
+            <label for="tanggal" class="form-label">Tanggal Pesan</label>
             <input type="text" id="tanggal" class="form-control" readonly>
         </div>
-        <div class="form-group">
-            <label for="nama-pemesan">Nama Pemesan</label>
+        <div class="mb-3">
+            <label for="nama-pemesan" class="form-label">Nama Pemesan</label>
             <input type="text" id="nama-pemesan" class="form-control" readonly>
         </div>
-        <div class="form-group">
-            <label for="alamat">Alamat</label>
+        <div class="mb-3">
+            <label for="alamat" class="form-label">Alamat</label>
             <textarea id="alamat" class="form-control" readonly></textarea>
         </div>
-        <div class="form-group">
-            <label for="total-harga">Total Harga</label>
+        <div class="mb-3">
+            <label for="total-harga" class="form-label">Total Harga</label>
             <input type="text" id="total-harga" class="form-control" readonly>
         </div>
-        <div class="form-group">
-            <button class="btn btn-sm btn-secondary w-100" id="btn-detail-transaksi" data-toggle="modal" data-target="#modal-detail-transaksi">
+        <div class="mb-3">
+            <button class="btn btn-sm btn-secondary w-100" id="btn-detail-transaksi" data-bs-toggle="modal" data-bs-target="#modal-detail-transaksi">
                 <i class="fas fa-info-circle"></i> Detail Pesanan
             </button>
         </div>
     </div>
 </div>
 
-<div class="modal fade show" id="modal-detail-transaksi" style="display: none;" aria-modal="true" role="dialog">
+<div class="modal fade" id="modal-detail-transaksi" style="display: none;" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Detail Pesanan</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <table class="table table-bordered" id="table-detail-transaksi">
@@ -63,9 +54,10 @@
         </div>
     </div>
 </div>
-@endsection
+</x-layout>
 
-@section('custom-script')
+@push('scripts')
+
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <script>
@@ -164,4 +156,5 @@
     });
 
 </script>
-@endsection
+
+@endpush

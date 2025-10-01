@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         $roles = [
             'admin toko' => 'admintoko',
             'admin gudang' => 'admingudang',
-            'pemilik toko' => 'pemiliktoko',
+            'pimpinan' => 'pimpinan',
             'Kurir 1' => 'kurir',
             'Kurir 2' => 'kurir',
         ];
@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
         foreach ($roles as $name => $role) {
             DB::table('users')->insert([
                 /* 'username' => $role, */
-                'email' => str_replace(' ', '', strtolower($name)).'@example.com',
+                'email' => str_replace(' ', '', strtolower($name)).'@gmail.com',
                 'password' => Hash::make('password123'), // Gunakan hashing untuk keamanan
                 'role' => $role,
                 'name' => $name, // Nama sesuai dengan role

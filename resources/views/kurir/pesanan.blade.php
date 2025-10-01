@@ -1,14 +1,5 @@
-@extends('layouts.main')
+<x-layout>
 
-@section('title', 'Kurir')
-
-@section('sidebar-menu')
-
-@include('kurir.menu')
-
-@endsection
-
-@section('content')
 <div class="card">
     <div class="card-header">
 
@@ -128,9 +119,9 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- end modal-update-persediaan -->
-@endsection
+</x-layout>
 
-@section('custom-script')
+@push('scripts')
 
 <script>
 
@@ -254,5 +245,5 @@
 
     });
 </script>
-
-@endsection
+    
+@endpush

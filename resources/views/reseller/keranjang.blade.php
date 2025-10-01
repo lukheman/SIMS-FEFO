@@ -1,12 +1,5 @@
-@extends('layouts.main')
+<x-layout>
 
-@section('title', 'Toko Kecil')
-
-@section('sidebar-menu')
-@include('reseller.menu')
-@endsection
-
-@section('content')
 <div class="card">
     <div class="card-header">
         <button type="button" class="btn btn-outline-primary" id="btn-show-modal-metode-pembayaran"  {{ $pesanan->count() == 0 ? 'disabled' : '' }}>
@@ -190,9 +183,10 @@
         </div>
     </div>
 </div>
-@endsection
+</x-layout>
 
-@section('custom-script')
+
+@push('scripts')
 
 <script>
 
@@ -475,5 +469,5 @@
     });
 
 </script>
-
-@endsection
+    
+@endpush

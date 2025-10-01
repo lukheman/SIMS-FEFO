@@ -1,8 +1,6 @@
-
 <x-nav-link
     :href="route('admingudang.dashboard')"
-    icon="fas fa-tachometer-alt"
-    :active="$page === 'Dashboard'" >
+    icon="bi-speedometer2">
     Dashboard
 </x-nav-link>
 
@@ -10,54 +8,53 @@
 
 <x-nav-link
     :href="route('admingudang.produk')"
-    icon="fas fa-cubes"
-    :active="$page === 'Produk'">
+    icon="bi-box-seam">
     Data Produk
 </x-nav-link>
 
+{{--
+
 <x-nav-link
     :href="route('admingudang.produk.persediaan')"
-    icon="fas fa-boxes"
-    :active="$page === 'Persediaan Produk'">
+    icon="bi-archive">
     Persediaan Produk
 </x-nav-link>
 
 <x-nav-link
     :href="route('admingudang.produk.biaya-pemesanan')"
-    icon="fas fa-shopping-cart"
-    :active="$page === 'Biaya Pemesanan Produk'">
+    icon="bi-cart4">
     Biaya Pemesanan
 </x-nav-link>
 
 <x-nav-link
     :href="route('admingudang.produk.biaya-penyimpanan')"
-    icon="fas fa-dolly-flatbed"
-    :active="$page === 'Biaya Penyimpanan Produk'">
+    icon="bi-box2">
     Biaya Penyimpanan
 </x-nav-link>
+--}}
 
 <li class="nav-header">RESTOK</li>
 
 <x-nav-link
     :href="route('admingudang.barang-masuk')"
-    icon="fas fa-box-open"
-    :active="$page === 'Barang Masuk'">
+    icon="bi-box-arrow-in-down">
     Barang Masuk
 </x-nav-link>
 
 <x-nav-link
     :href="route('admingudang.pesanan')"
-    icon="fas fa-clipboard-list"
-    :active="$page === 'Pesanan'">
+    icon="bi-clipboard-check">
     Pesanan
 </x-nav-link>
+
+
+{{--
 
 <li class="nav-header">EOQ</li>
 
 <x-nav-link
     :href="route('admingudang.eoq')"
-    icon="fas fa-calculator"
-    :active="$page === 'EOQ'">
+    icon="bi-calculator">
     Hitung EOQ
 </x-nav-link>
 
@@ -65,14 +62,14 @@
 
 <x-nav-link
     :href="route('admingudang.laporan-barang-masuk')"
-    icon="fas fa-box-open"
-    :active="$page === 'Laporan Barang Masuk'">
+    icon="bi-box-arrow-in-down">
     Barang Masuk
 </x-nav-link>
 
 <x-nav-link
     :href="route('admingudang.laporan-penjualan')"
-    icon="far fa-chart-bar"
-    :active="$page === 'Laporan Penjualan'">
+    icon="bi-bar-chart">
     Penjualan
 </x-nav-link>
+--}}
+

@@ -1,12 +1,6 @@
-@extends('layouts.main')
 
-@section('title', 'Admin Toko')
+<x-layout>
 
-@section('sidebar-menu')
-    @include('admin_toko.menu')
-@endsection
-
-@section('content')
 <div class="row">
     <!-- Bagian Scanner -->
     <div class="col-12 col-md-7 mb-3 mb-md-0">
@@ -47,9 +41,10 @@
         </div>
     </div>
 </div>
-@endsection
+</x-layout>
 
-@section('custom-script')
+@push('scripts')
+
 <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
 <script>
 let pesanan = {};
@@ -192,4 +187,5 @@ $(document).ready(function() {
     });
 });
 </script>
-@endsection
+
+@endpush

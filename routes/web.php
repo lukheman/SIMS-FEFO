@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KurirController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\MutasiController;
-use App\Http\Controllers\PemilikTokoController;
+use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\PersediaanController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\ProdukController;
@@ -81,8 +81,8 @@ Route::middleware(['auth:web', 'role:web,admingudang'])->prefix('admingudang')->
 });
 
 // Routes untuk Pemilik Toko (guard: web)
-Route::middleware(['auth:web', 'role:web,pemiliktoko'])->prefix('pemiliktoko')->name('pemiliktoko.')->group(function () {
-    Route::controller(PemilikTokoController::class)->group(function () {
+Route::middleware(['auth:web', 'role:web,pimpinan'])->prefix('pimpinan')->name('pimpinan.')->group(function () {
+    Route::controller(PimpinanController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/dashboard', 'index')->name('dashboard');
         Route::get('/persediaan', 'persediaan')->name('persediaan');

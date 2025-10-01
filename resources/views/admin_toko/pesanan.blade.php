@@ -1,14 +1,6 @@
-@extends('layouts.main')
 
-@section('title', 'Admin Toko')
+<x-layout>
 
-@section('sidebar-menu')
-
-@include('admin_toko.menu')
-
-@endsection
-
-@section('content')
 <div class="card">
     <div class="card-header">
 
@@ -196,9 +188,9 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- end modal-update-persediaan -->
-@endsection
+</x-layout>
 
-@section('custom-script')
+@push('scripts')
 
 <script>
 
@@ -385,4 +377,5 @@ $(document).ready(function() {
 });
 
 </script>
-@endsection
+
+@endpush

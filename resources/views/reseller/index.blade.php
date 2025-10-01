@@ -1,12 +1,5 @@
-@extends('layouts.main')
+<x-layout>
 
-@section('title', 'Toko Kecil')
-
-@section('sidebar-menu')
-@include('reseller.menu')
-@endsection
-
-@section('content')
 <div class="row">
     <div class="col-6">
         <div class="small-box bg-info shadow">
@@ -35,4 +28,4 @@
         </div>
     </div>
 </div>
-@endsection
+</x-layout>

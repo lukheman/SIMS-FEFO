@@ -74,7 +74,7 @@ class AuthController extends Controller
             return match (Role::from($user->role)) {
                 Role::ADMINGUDANG => redirect()->route('admingudang.index'),
                 Role::ADMINTOKO => redirect()->route('admintoko.index'),
-                Role::PEMILIKTOKO => redirect()->route('pemiliktoko.index'),
+                Role::PIMPINAN => redirect()->route('pimpinan.index'),
                 Role::KURIR => redirect()->route('kurir.index'),
                 default => redirect()->route('login'),
             };

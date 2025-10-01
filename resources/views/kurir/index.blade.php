@@ -1,12 +1,5 @@
-@extends('layouts.main')
+<x-layout>
 
-@section('title', 'Kurir')
-
-@section('sidebar-menu')
-@include('kurir.menu')
-@endsection
-
-@section('content')
 <div class="row">
     <div class="col-md-6">
         <div class="info-box bg-warning shadow">
@@ -33,4 +26,4 @@
         </div>
     </div>
 </div>
-@endsection
+</x-layout>

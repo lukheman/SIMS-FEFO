@@ -1,235 +1,207 @@
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
+<!doctype html>
 <html lang="en">
+  <!--begin::Head-->
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AdminLTE 4 | Fixed Complete</title>
+    <!--begin::Accessibility Meta Tags-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <!--end::Accessibility Meta Tags-->
+    <!--begin::Primary Meta Tags-->
+    <meta name="title" content="AdminLTE 4 | Fixed Complete" />
+    <meta name="author" content="ColorlibHQ" />
+    <meta
+      name="description"
+      content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS. Fully accessible with WCAG 2.1 AA compliance."
+    />
+    <meta
+      name="keywords"
+      content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant"
+    />
+    <!--end::Primary Meta Tags-->
+    <!--begin::Accessibility Features-->
+    <!-- Skip links will be dynamically added by accessibility.js -->
+    <meta name="supported-color-schemes" content="light dark" />
+    <link rel="preload" href="{{ asset('/css/adminlte.css')}}" as="style" />
+    <!--end::Accessibility Features-->
+    <!--begin::Fonts-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
+      integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
+      crossorigin="anonymous"
+      media="print"
+      onload="this.media='all'"
+    />
+    <!--end::Fonts-->
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
+      crossorigin="anonymous"
+    />
+    <!--end::Third Party Plugin(OverlayScrollbars)-->
+    <!--begin::Third Party Plugin(Bootstrap Icons)-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+      crossorigin="anonymous"
+    />
+    <!--end::Third Party Plugin(Bootstrap Icons)-->
+    <!--begin::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="{{ asset('/css/adminlte.css')}}" />
+    <!--end::Required Plugin(AdminLTE)-->
+  </head>
+  <!--end::Head-->
+  <!--begin::Body-->
+  <body
+    class="layout-fixed fixed-header fixed-footer sidebar-expand-lg sidebar-open bg-body-tertiary"
+  >
+    <!--begin::App Wrapper-->
+    <div class="app-wrapper">
+      <!--begin::Header-->
+        <x-navbar />
+      <!--end::Header-->
+      <!--begin::Sidebar-->
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-            {{ config('app.name') ?? 'UD Toko Diva'}} | {{ auth()->check() ? Auth::user()->role  : Auth::guard('reseller')->user()->role }}
-    </title>
+        <x-sidebar />
 
-
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-
-    <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
-
-<!-- Tambahkan di dalam <head> layout utama -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css')}}">
-    <!-- ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css')}}">
-
-        <style>
-        .product-image {
-            width: 180px; /* Set desired width */
-            height: 180px; /* Set desired height */
-            object-fit: cover; /* Ensures images scale and crop nicely */
-            display: block;
-            /* margin: 0 auto; /* Center the image */ */
-        }
-       .modal-body {
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-</style>
-
-</head>
-
-<body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-
-        <!-- Navbar -->
-        @include('layouts.navbar')
-        <!-- /.navbar -->
-
-        <!-- Main Sidebar Container -->
-        @include('layouts.sidebar')
-
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">{{ $page }}</h1>
-                        </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-<li class="breadcrumb-item">
-    <a href="{{ route((Auth::guard('reseller')->check() ? str_replace('_', '', Auth::guard('reseller')->user()->role) : str_replace('_', '', Auth::guard('web')->user()->role)) . '.dashboard') }}">Home</a>
-</li>
-                                <li class="breadcrumb-item active">{{ $page }}</li>
-                            </ol>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
+      <!--end::Sidebar-->
+      <!--begin::App Main-->
+      <main class="app-main">
+        <!--begin::App Content Header-->
+        <div class="app-content-header">
+          <!--begin::Container-->
+          <div class="container-fluid">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Fixed Complete</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Fixed Complete</li>
+                </ol>
+              </div>
             </div>
-            <!-- /.content-header -->
-
-            <!-- Main content -->
-            <div class="content">
-                <div class="container-fluid">
-                    @yield('content')
-                </div><!-- /.container-fluid -->
-            </div>
-            <!-- /.content -->
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
         </div>
-        <!-- /.content-wrapper -->
+        <!--end::App Content Header-->
+        <!--begin::App Content-->
+        <div class="app-content">
+          <!--begin::Container-->
+          <div class="container-fluid">
+            <!--begin::Row-->
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-            <div class="p-3">
-                <h5>Title</h5>
-                <p>Sidebar content</p>
+            {{ $slot }}
+
+            {{--
+
+            <div class="row">
+              <div class="col-12">
+                <!-- Default box -->
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Title</h3>
+                    <div class="card-tools">
+                      <button
+                        type="button"
+                        class="btn btn-tool"
+                        data-lte-toggle="card-collapse"
+                        title="Collapse"
+                      >
+                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-tool"
+                        data-lte-toggle="card-remove"
+                        title="Remove"
+                      >
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">Start creating your amazing application!</div>
+                  <!-- /.card-body -->
+                  <div class="card-footer">Footer</div>
+                  <!-- /.card-footer-->
+                </div>
+                <!-- /.card -->
+              </div>
             </div>
-        </aside>
-        <!-- /.control-sidebar -->
+            --}}
 
-        <!-- Main Footer -->
-        <footer class="main-footer">
-            <!-- <!-- To the right -->
-            <!-- <div class="float-right d-none d-sm-inline"> -->
-            <!--     Anything you want -->
-            <!-- </div> -->
-            <!-- <!-- Default to the left -->
-            <!-- <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights -->
-            <!-- reserved. -->
-        </footer>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
+        </div>
+        <!--end::App Content-->
+      </main>
+      <!--end::App Main-->
+      <!--begin::Footer-->
+      <footer class="app-footer">
+        <!--begin::To the end-->
+        <div class="float-end d-none d-sm-inline">Anything you want</div>
+        <!--end::To the end-->
+        <!--begin::Copyright-->
+        <strong>
+          Copyright &copy; 2014-2025&nbsp;
+          <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
+        </strong>
+        All rights reserved.
+        <!--end::Copyright-->
+      </footer>
+      <!--end::Footer-->
     </div>
-    <!-- ./wrapper -->
-
-    <!-- REQUIRED SCRIPTS -->
-
+    <!--end::App Wrapper-->
+    <!--begin::Script-->
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
+    <script src="{{ asset('/js/adminlte.js')}}"></script>
+    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
-
-        function formatRupiah(angka) {
-            return new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR'}).format(angka);
+      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
+      const Default = {
+        scrollbarTheme: 'os-theme-light',
+        scrollbarAutoHide: 'leave',
+        scrollbarClickScroll: true,
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+        if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+            scrollbars: {
+              theme: Default.scrollbarTheme,
+              autoHide: Default.scrollbarAutoHide,
+              clickScroll: Default.scrollbarClickScroll,
+            },
+          });
         }
-
+      });
     </script>
-
-    <!-- Sweetalert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- jQuery -->
-    <script src="{{ asset('plugins/jquery/jquery.min.js')}}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{ asset('dist/js/adminlte.min.js')}}"></script>
-
-    <!-- DataTables  & Plugins -->
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
-
-    <!-- <script src="{{ asset('plugins/jszip/jszip.min.js')}}"></script> -->
-    <!-- <script src="{{ asset('plugins/pdfmake/pdfmake.min.js')}}"></script> -->
-    <!-- <script src="{{ asset('plugins/pdfmake/vfs_fonts.js')}}"></script> -->
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-
-    <script>
-
-        function formatRupiah(angka) {
-            return new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR'}).format(angka);
-        }
-
-        function swalToast(title, icon = 'success') {
-
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: icon,
-                title: title,
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer);
-                    toast.addEventListener('mouseleave', Swal.resumeTimer);
-                }
-            });
-
-
-        }
-
-        const showToast = (title, icon = 'success', reload=true) => {
-
-            // Reload halaman
-            if(reload) {
-                // Simpan status bahwa halaman akan di-reload
-                sessionStorage.setItem('reload', 'true');
-                sessionStorage.setItem('icon', icon);
-                sessionStorage.setItem('title', title);
-
-                window.location.reload();
-            } else  {
-
-                swalToast(title, icon);
-
-            }
-        };
-
-        // Setelah halaman dimuat ulang, periksa apakah reload terjadi
-        $(window).on('load', function() {
-            if (sessionStorage.getItem('reload') === 'true') {
-                title = sessionStorage.getItem('title');
-                icon = sessionStorage.getItem('icon');
-                // Tampilkan toast
-                swalToast(title, icon);
-
-                // Hapus item setelah toast ditampilkan
-                sessionStorage.removeItem('reload');
-            }
-        });
-        </script>
-
-
-    @yield('custom-script')
-
-    <script>
-    $(document).ready(function() {
-
-        $('#datatable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: false,
-            scrollX: true
-        });
-    });
-    </script>
-
-
-@stack('scripts')
-</body>
-
+    <!--end::OverlayScrollbars Configure-->
+    <!--end::Script-->
+  </body>
+  <!--end::Body-->
 </html>
+

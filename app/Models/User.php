@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\Role;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable

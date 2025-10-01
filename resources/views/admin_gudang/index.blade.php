@@ -1,12 +1,5 @@
-@extends('layouts.main')
+<x-layout> 
 
-@section('title', 'Admin Gudang')
-
-@section('sidebar-menu')
-@include('admin_gudang.menu')
-@endsection
-
-@section('content')
 <div class="row"> 
     <div class="col-md-6">
         <div class="small-box bg-info shadow">
@@ -36,4 +29,4 @@
         </div>
     </div>
 </div>
-@endsection
+</x-layout>

@@ -1,35 +1,22 @@
-@extends('layouts.main')
-
-@section('title', 'Toko Kecil')
-
-@section('sidebar-menu')
-@include('reseller.menu')
-@endsection
-
-@section('content')
+<x-layout>
 
 <div class="row mb-3">
-
     <div class="col-12">
         <form action="{{ route('reseller.katalog')}}" method="get">
-
             <div class="input-group">
                 <input type="text" class="form-control" name="q" value="{{ request('q') }}" placeholder="Cari produk">
-                <span class="input-group-append">
+                <span class="input-group-text">
                     <button type="submit" class="btn btn-info btn-flat">Cari</button>
                 </span>
             </div>
         </form>
     </div>
-
-
 </div>
 
 <div class="row">
-
     @foreach ($produk as $item)
     <div class="col-12 col-md-3 mb-4">
-        <div class="card shadow-sm border-0 rounded-lg">
+        <div class="card shadow-sm border-0 rounded">
             <div class="card-body p-2">
                 <div class="position-relative rounded" style="height: 180px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; overflow: hidden;">
                     <img src="{{ asset('storage/' . $item->gambar) }}"
@@ -40,7 +27,7 @@
                     @if ($item->persediaan->jumlah === 0)
                     <div class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center"
                          style="background: rgba(0,0,0,0.5);">
-                        <span class="text-white font-weight-bold" style="font-size: 1.5rem;">Kosong</span>
+                        <span class="text-white fw-bold" style="font-size: 1.5rem;">Kosong</span>
                     </div>
                     @endif
                 </div>
@@ -48,19 +35,19 @@
                 <div class="mt-3">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <strong class="text-truncate" style="max-width: 65%;">{{ $item->nama_produk }}</strong>
-                        <span class="badge badge-info">{{ $item->label_persediaan}}</span>
+                        <span class="badge bg-info">{{ $item->label_persediaan}}</span>
                     </div>
 
                     <div class="d-flex justify-content-between mb-1">
                         <small class="text-muted">Rp. {{ number_format($item->harga_jual, 2, ',', '.') }}</small>
-                        <small class="text-muted text-right">Exp: {{ $item->exp }}</small>
+                        <small class="text-muted text-end">Exp: {{ $item->exp }}</small>
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-end">
                         <button type="button"
                                 class="btn btn-sm btn-primary btn-tambah-pesanan"
-                                data-toggle="modal"
-                                data-target="#modal-tambah-pesanan"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-tambah-pesanan"
                                 data-id-produk="{{ $item->id }}"
                                 data-gambar-produk="{{ $item->gambar }}"
                                 {{ $item->persediaan->jumlah == 0 ? 'disabled' : '' }}>
@@ -74,20 +61,17 @@
     @endforeach
 </div>
 
-<div class="modal fade show" id="modal-tambah-pesanan" style="display: none;" aria-modal="true" role="dialog">
+<div class="modal fade" id="modal-tambah-pesanan" tabindex="-1" aria-labelledby="modal-tambah-pesanan-label" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Pemesanan</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
+                <h4 class="modal-title" id="modal-tambah-pesanan-label">Pemesanan</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="form-tambah-pesanan">
                 @csrf
 
                 <input type="hidden" id="id-produk" name="id_produk">
-
 
                 <div class="modal-body">
                     <div class="row">
@@ -98,47 +82,44 @@
                             <div class="mb-2">
                                 <h5 class="mb-1" id="nama-produk"></h5>
                                 <p class="text-muted mb-1"><small id="deskripsi-produk"></small></p>
-                                <p class="text-primary font-weight-bold mb-1" id="total-harga-display"></p> <p class="text-info mb-2"><small><i class="fas fa-info-circle"></i> Pemesanan dalam satuan <strong id="satuan-text">bal</strong></small></p>
+                                <p class="text-primary fw-bold mb-1" id="total-harga-display"></p> 
+                                <p class="text-info mb-2"><small><i class="fas fa-info-circle"></i> Pemesanan dalam satuan <strong id="satuan-text">bal</strong></small></p>
                             </div>
 
-                            <div class="form-group">
-                                <label for="satuan">Satuan</label>
-                                <select name="satuan" id="satuan" class="form-control form-control-sm" style="width: 140px;">
+                            <div class="mb-3">
+                                <label for="satuan" class="form-label">Satuan</label>
+                                <select name="satuan" id="satuan" class="form-select form-select-sm" style="width: 140px;">
                                     <option id="unit-besar" selected></option>
                                     <option id="unit-kecil"></option>
                                 </select>
                             </div>
 
                             <div class="input-group input-group-sm" style="width: 140px;">
-                                <div class="input-group-prepend">
-                                    <button type="button" class="btn btn-outline-secondary" id="btn-kurang-jumlah">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" name="jumlah" id="jumlah" class="form-control text-center" value="1">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-outline-secondary" id="btn-tambah-jumlah">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
+                                <button type="button" class="btn btn-outline-secondary" id="btn-kurang-jumlah">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="text" name="jumlah" id="jumlah" class="form-control" value="1">
+                                <button type="button" class="btn btn-outline-secondary" id="btn-tambah-jumlah">
+                                    <i class="fas fa-plus"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">
                         <i class="nav-icon fas fa-cart-plus"></i> Tambah Ke Keranjang
                     </button>
                 </div>
             </form>
         </div>
-        </div>
     </div>
+</div>
 
-@endsection
+</x-layout>
 
-@section('custom-script')
+@push('scripts')
 
 <script>
     function formatRupiah(angka) {
@@ -281,4 +262,5 @@
 
     });
 </script>
-@endsection
+
+@endpush

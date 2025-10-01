@@ -19,10 +19,11 @@
 <div class="card">
     <div class="card-header">
 
-        <button class="btn btn-outline-danger" id="btn-cetak-laporan-pesanan" data-toggle="modal"
-            data-target="#modal-cetak-laporan-pesanan">
-            <i class="fas fa-print"></i>
-            Cetak Laporan Pesanan</button>
+<button class="btn btn-outline-danger" id="btn-cetak-laporan-pesanan"
+    data-bs-toggle="modal" data-bs-target="#modal-cetak-laporan-pesanan">
+    <i class="fas fa-print"></i>
+    Cetak Laporan Pesanan
+</button>
 
     </div>
     <div class="card-body">
@@ -92,38 +93,33 @@
 
 
 <!-- modal-cetak-laporan-pesanan - modal untuk menampilkan form tambah data produk -->
-<div class="modal fade show" id="modal-cetak-laporan-pesanan" style="display: none;" aria-modal="true" role="dialog">
+<div class="modal fade" id="modal-cetak-laporan-pesanan" tabindex="-1" aria-labelledby="modalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Periode Laporan</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
+                <h5 class="modal-title" id="modalLabel">Periode Laporan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <form action="{{ route('laporan.laporan-pesanan') }}" method="post">
                 <input type="hidden" name="ttd" value="{{ $ttd }}">
                 @csrf
                 <div class="modal-body">
-
-                    <div class="form-group">
-                        <label for="periode">Periode</label>
+                    <div class="mb-3">
+                        <label for="periode" class="form-label">Periode</label>
                         <input type="month" class="form-control" name="periode" id="periode">
                     </div>
-
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-danger">
                         <i class="fas fa-print"></i>
-                        Cetak</button>
+                        Cetak
+                    </button>
                 </div>
             </form>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
-    <!-- end modal-cetak-laporan-pesanan -->
 </div>
 
 @push('scripts')

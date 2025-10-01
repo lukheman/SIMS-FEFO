@@ -6,7 +6,7 @@ enum Role: string
 {
     case ADMINTOKO = 'admintoko';
     case ADMINGUDANG = 'admingudang';
-    case PEMILIKTOKO = 'pemiliktoko';
+    case PIMPINAN = 'pimpinan';
     case RESELLER = 'reseller';
     case KURIR = 'kurir';
 
