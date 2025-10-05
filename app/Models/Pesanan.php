@@ -25,7 +25,7 @@ class Pesanan extends Model
 
     public function keranjang()
     {
-        return $this->belongsTo(Keranjang::class);
+        return $this->belongsTo(Keranjang::class, 'id_keranjang_belanja');
     }
 
     public function produk()

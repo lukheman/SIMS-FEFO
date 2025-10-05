@@ -17,6 +17,6 @@ class Keranjang extends Model
 
     public function pesanan()
     {
-        return $this->hasMany(Pesanan::class, 'id_pesanan');
+        return $this->hasMany(Pesanan::class, 'id_keranjang_belanja');
     }
 }

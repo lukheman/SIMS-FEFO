@@ -1,8 +1,8 @@
 <?php
 
-use App\Constants\MetodePembayaran;
-use App\Constants\StatusPembayaran;
-use App\Constants\StatusTransaksi;
+use App\Enums\MetodePembayaran;
+use App\Enums\StatusPembayaran;
+use App\Enums\StatusTransaksi;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

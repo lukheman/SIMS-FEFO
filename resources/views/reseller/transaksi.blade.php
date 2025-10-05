@@ -58,7 +58,7 @@
                                 </td>
 
                                 <td>
-                                    @if ($item->metode_pembayaran === \App\Constants\MetodePembayaran::TRANSFER)
+                                    @if ($item->metode_pembayaran === \App\Enums\MetodePembayaran::TRANSFER)
 
                                         @if (isset($item->bukti_pembayaran))
                                             <button type="button"
@@ -73,7 +73,7 @@
                                                 class="btn btn-sm btn-outline-primary btn-kirim-bukti-pembayaran"
                                                 data-id-transaksi="{{ $item->id }}"
                                                 data-bs-toggle="modal" data-bs-target="#modal-kirim-bukti-pembayaran"
-                                                {{ $item->status === \App\Constants\StatusTransaksi::SELESAI ? 'disabled' : '' }}>
+                                                {{ $item->status === \App\Enums\StatusTransaksi::SELESAI ? 'disabled' : '' }}>
                                                 <i class="fa fa-paper-plane"></i> Kirim Bukti Pembayaran
                                             </button>
                                         @endif
@@ -83,7 +83,7 @@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-outline-success btn-pesanan-selesai"
                                         data-id-transaksi="{{ $item->id }}"
-                                        {{ $item->status === \App\Constants\StatusTransaksi::DITERIMA ? '' : 'disabled' }}>
+                                        {{ $item->status === \App\Enums\StatusTransaksi::DITERIMA ? '' : 'disabled' }}>
                                         <i class="fas fa-check"></i> Pesanan selesai
                                     </button>
                                 </td>
@@ -261,7 +261,7 @@
                 url: `{{ route('transaksi.update', ':id')}}`.replace(':id', idTransaksi),
                 method: 'PUT',
                 data: {
-                    status: '{{ \App\Constants\StatusTransaksi::DITERIMA }}'
+                    status: '{{ \App\Enums\StatusTransaksi::DITERIMA }}'
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

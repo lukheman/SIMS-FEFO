@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\MetodePembayaran;
-use App\Constants\StatusTransaksi;
+use App\Enums\MetodePembayaran;
+use App\Enums\StatusTransaksi;
 use App\Models\Keranjang;
 use App\Models\Pesanan;
 use App\Models\Produk;
-use App\Models\Transaksi;
+use App\Models\TransaksiMode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,29 +24,12 @@ class ResellerController extends Controller
 
         $keranjang = Pesanan::where('id_keranjang_belanja', $keranjang->id)->count();
 
-        $pesanan = Transaksi::where('id_reseller', Auth::guard('reseller')->id())->where('status', '!=', 'selesai')->count();
+        $pesanan = TransaksiMode::where('id_reseller', Auth::guard('reseller')->id())->where('status', '!=', 'selesai')->count();
 
         return view('reseller.index', [
             'page' => 'Dashboard',
             'keranjang' => $keranjang,
             'pesanan' => $pesanan,
-        ]);
-    }
-
-    public function katalog(Request $request)
-    {
-        $query = $request->input('q');
-
-        $produk = Produk::query()
-            ->when($query, function ($q) use ($query) {
-                $q->where('nama_produk', 'like', "%{$query}%");
-            })
-            ->get(); // atau ->get() jika tidak ingin pagination
-
-        return view('reseller.katalog', [
-            'page' => 'Katalog',
-            'produk' => $produk,
-            'query' => $query,
         ]);
     }
 
@@ -79,7 +62,7 @@ class ResellerController extends Controller
         $dikirim = $request->query('dikirim');
         $selesai = $request->query('selesai');
 
-        $transaksi = Transaksi::where('id_reseller', Auth::guard('reseller')->id());
+        $transaksi = TransaksiMode::where('id_reseller', Auth::guard('reseller')->id());
 
         if ($belumbayar === '0') {
 

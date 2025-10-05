@@ -22,15 +22,6 @@ class KurirController extends Controller
         ]);
     }
 
-    public function pesanan()
-    {
-        $pesanan = Transaksi::with(['user'])->where('status', 'dikirim')->where('id_kurir', auth()->user()->id)->get();
-
-        return view('kurir.pesanan', [
-            'page' => 'Pesanan',
-            'pesanan' => $pesanan,
-        ]);
-    }
 
     public function konfirmasiPembayaranPage()
     {

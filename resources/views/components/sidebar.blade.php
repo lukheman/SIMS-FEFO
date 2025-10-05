@@ -1,6 +1,6 @@
 @php
 
-use App\Constants\Role;
+use App\Enums\Role;
 
 @endphp
       <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
@@ -9,14 +9,14 @@ use App\Constants\Role;
           <!--begin::Brand Link-->
           <a href="../index.html" class="brand-link">
             <!--begin::Brand Image-->
-            <img
-              src="../assets/img/AdminLTELogo.png"
-              alt="AdminLTE Logo"
-              class="brand-image opacity-75 shadow"
-            />
+            <!-- <img -->
+            <!--   src="{{ getActiveUser()->foto ? asset('storage/' . getActiveUser()->foto) : asset('assets/compiled/jpg/2.jpg') }}" -->
+            <!--   alt="AdminLTE Logo" -->
+            <!--   class="brand-image opacity-75 shadow rounded-circle" -->
+            <!-- /> -->
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">AdminLTE 4</span>
+            <span class="brand-text fw-light">SIMS</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -37,13 +37,13 @@ use App\Constants\Role;
 
                       @if (auth('web')->check())
 
-                          @if (Role::from(auth()->user()->role) === Role::ADMINTOKO)
+                          @if ( getActiveUser()->role === Role::ADMINTOKO)
                                 @include('admin_toko.menu')
-                          @elseif (Role::from(auth()->user()->role) === \App\Constants\Role::ADMINGUDANG)
+                          @elseif (getActiveUser()->role === \App\Enums\Role::ADMINGUDANG)
                                 @include('admin_gudang.menu')
-                          @elseif (Role::from(auth()->user()->role) === \App\Constants\Role::PIMPINAN)
+                          @elseif (getActiveUser()->role === \App\Enums\Role::PIMPINAN)
                                 @include('pimpinan.menu')
-                          @elseif (Role::from(auth()->user()->role) === \App\Constants\Role::KURIR)
+                          @elseif (getActiveUser()->role === \App\Enums\Role::KURIR)
                                 @include('kurir.menu')
                           @endif
                       @elseif(auth('reseller')->check())

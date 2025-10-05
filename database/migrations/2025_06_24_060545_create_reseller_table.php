@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('name', 100);
             $table->string('password');
             $table->enum('role', ['reseller']);
-            $table->string('foto')->nullable();
-            $table->string('alamat')->nullable();
             $table->string('phone', 15)->nullable()->unique();
+            $table->string('alamat')->nullable();
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

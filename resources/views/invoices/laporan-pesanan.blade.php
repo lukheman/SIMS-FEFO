@@ -227,7 +227,7 @@
                 {{-- Left column can be used for notes or additional information if needed --}}
             </div>
             <div class="col signature">
-                <p style="margin-bottom: 80px;"><b>UD Toko Diva Mowewe</b></p>
+                <p style="margin-bottom: 80px;"><b>Toko Bintang Poleang Timur</b></p>
                 <p><b><u>{{ $ttd }}</u></b></p>
             </div>
         </div>

@@ -4,10 +4,13 @@ namespace App\Models;
 
 use App\Providers\PerhitunganEOQServices;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Produk extends Model
 {
+    use HasFactory;
+
     protected $table = 'produk';
 
     protected $guarded = [];
@@ -32,145 +35,9 @@ class Produk extends Model
         return $this->hasMany(Mutasi::class, 'id_produk');
     }
 
-    public function biayaPemesanan()
-    {
-        return $this->hasOne(BiayaPemesanan::class, 'id_produk');
-    }
-
-    public function biayaPenyimpanan()
-    {
-        return $this->hasOne(BiayaPenyimpanan::class, 'id_produk');
-    }
-
     public function isPersediaanMencukupi(int $permintaan): bool
     {
         return ($this->persediaan?->jumlah ?? 0) >= $permintaan;
-    }
-
-    public static function EOQSemuaProdukAllTime()
-    {
-        $result = [];
-
-        // Ambil tanggal keluar pertama dari semua produk
-        $firstDate = Mutasi::where('jenis', 'keluar')
-            ->orderBy('tanggal', 'asc')
-            ->value('tanggal');
-
-        if (! $firstDate) {
-            return []; // Tidak ada data keluar
-        }
-
-        $start = Carbon::parse($firstDate)->startOfMonth();
-        $end = Carbon::now()->startOfMonth();
-        $current = $start->copy();
-
-        // Ambil semua produk (gunakan model Produk)
-        $produkList = Produk::with(['biayaPemesanan', 'biayaPenyimpanan'])->get();
-
-        // Loop semua bulan dari awal sampai sekarang
-        while ($current <= $end) {
-            foreach ($produkList as $produk) {
-
-                // cek apakah data mencukupi
-                if (! PerhitunganEOQServices::hasSufficientSalesData($produk->id, $current)) {
-                    // $result[] = [
-                    //      'nama_produk' => $produk->nama_produk,
-                    //      'periode' => $current->format('Y-m'),
-                    // ];
-
-                    continue;
-                }
-
-                $EOQ = PerhitunganEOQServices::economicOrderQuantity($produk->id, $current);
-                $SS = PerhitunganEOQServices::safetyStock($produk->id, $current);
-                $ROP = PerhitunganEOQServices::reorderPoint($produk->id, $current);
-
-                $result[] = [
-                    'nama_produk' => $produk->nama_produk,
-                    'eoq' => $EOQ,
-                    'safety_stock' => $SS,
-                    'reorder_point' => $ROP,
-                    'periode' => $current->format('Y-m'),
-                ];
-            }
-
-            $current->addMonth();
-        }
-
-        return $result;
-    }
-
-    public static function EOQPerBulan($periode)
-    {
-        $result = [];
-
-        try {
-            $periode = Carbon::createFromFormat('Y-m', $periode);
-        } catch (\Exception $e) {
-            return ['error' => 'Format periode tidak valid. Gunakan format Y-m (contoh: 2024-05).'];
-        }
-
-        $produkList = self::with(['biayaPemesanan', 'biayaPenyimpanan'])->get();
-
-        foreach ($produkList as $produk) {
-
-            // cek apakah data mencukupi
-            if (! PerhitunganEOQServices::hasSufficientSalesData($produk->id, $periode)) {
-                // $result[] = [
-                //      'produk' => $produk,
-                // ];
-
-                continue;
-            }
-
-            $EOQ = PerhitunganEOQServices::economicOrderQuantity($produk->id, $periode);
-            $SS = PerhitunganEOQServices::safetyStock($produk->id, $periode);
-            $ROP = PerhitunganEOQServices::reorderPoint($produk->id, $periode);
-
-            $result[] = [
-                'produk' => $produk,
-                'eoq' => $EOQ,
-                'safety_stock' => $SS,
-                'reorder_point' => $ROP,
-            ];
-        }
-
-        return $result;
-    }
-
-    public function getEconomicOrderQuantityAttribute(): string
-    {
-        $unitBesar = $this->unit_besar ?? 'unit';
-        $unitKecil= $this->unit_kecil?? 'unit';
-        $eoq = PerhitunganEOQServices::economicOrderQuantity($this->id);
-        $eoqBesar = $eoq / ($this->tingkat_konversi ?? 1);
-        return "{$eoq} {$unitKecil} ({$eoqBesar} {$unitBesar})";
-    }
-
-    public function getSafetyStockAttribute(): string
-    {
-
-        $unitBesar = $this->unit_besar ?? 'unit';
-        $unitKecil= $this->unit_kecil?? 'unit';
-        $ss = PerhitunganEOQServices::safetyStock($this->id);
-        $ssBesar = $ss / ($this->tingkat_konversi ?? 1);
-        return "{$ss} {$unitKecil} ({$ssBesar} {$unitBesar})";
-    }
-
-    public function getReorderPointAttribute(): string
-    {
-        $unitBesar = $this->unit_besar ?? 'unit';
-        $unitKecil= $this->unit_kecil?? 'unit';
-        $rop = PerhitunganEOQServices::reorderPoint($this->id);;
-        $ropBesar = $rop / ($this->tingkat_konversi ?? 1);
-
-        return "{$rop} {$unitKecil} ({$ropBesar} {$unitBesar})";
-
-    }
-
-    public function getFrekuensiPemesananAttribute(): int
-    {
-        return PerhitunganEOQServices::frekuensiPemesanan($this->id);
     }
 
     public function getLabelHargaBeliAttribute() {

@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Constants\MetodePembayaran;
-use App\Constants\StatusPembayaran;
-use App\Constants\StatusTransaksi;
+use App\Enums\MetodePembayaran;
+use App\Enums\StatusPembayaran;
+use App\Enums\StatusTransaksi;
 use Illuminate\Database\Eloquent\Model;
 
 class Transaksi extends Model
@@ -22,7 +22,7 @@ class Transaksi extends Model
 
     public function pesanan()
     {
-        return $this->hasMany(Pesanan::class, 'id_pesanan');
+        return $this->hasMany(Pesanan::class, 'id_transaksi');
     }
 
     public function user()

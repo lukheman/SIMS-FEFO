@@ -122,7 +122,7 @@
             <div class="col">
             </div>
             <div class="col" style="text-align: center;">
-                <p style="margin-bottom: 100px;"><b>UD Toko Diva Mowewe</b></p>
+                <p style="margin-bottom: 100px;"><b>Toko Bintang Poleang Timur</b></p>
                 <p><b><u>{{ $ttd }}</u></b></p>
             </div>
         </div>

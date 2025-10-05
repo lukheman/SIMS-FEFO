@@ -136,7 +136,7 @@
                 <img src="{{ $qrcode }}" alt="qrcode">
             </div>
             <div class="col" style="text-align: center;">
-                <p style="margin-bottom: 100px;"><b>UD Toko Diva Mowewe</b></p>
+                <p style="margin-bottom: 100px;"><b>Toko Bintang Poleang Timur</b></p>
                 <p><b><u>Kepala Toko</u></b></p>
             </div>
         </div>

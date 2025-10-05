@@ -20,17 +20,6 @@
     Persediaan Produk
 </x-nav-link>
 
-<x-nav-link
-    :href="route('admingudang.produk.biaya-pemesanan')"
-    icon="bi-cart4">
-    Biaya Pemesanan
-</x-nav-link>
-
-<x-nav-link
-    :href="route('admingudang.produk.biaya-penyimpanan')"
-    icon="bi-box2">
-    Biaya Penyimpanan
-</x-nav-link>
 --}}
 
 <li class="nav-header">RESTOK</li>

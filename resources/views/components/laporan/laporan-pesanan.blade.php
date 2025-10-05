@@ -63,7 +63,7 @@
                                 </td>
                                 <td>
 
-                                    <button class="btn btn-sm btn-success btn-status-pembayaran-lunas" data-id-transaksi="{{ $item->id }}" {{ $item->metode_pembayaran === \App\Constants\MetodePembayaran::COD ? 'disabled' : ''}} >
+                                    <button class="btn btn-sm btn-success btn-status-pembayaran-lunas" data-id-transaksi="{{ $item->id }}" {{ $item->metode_pembayaran === \App\Enums\MetodePembayaran::COD ? 'disabled' : ''}} >
                                         <i class="fas fa-money-check"></i> Lunas</button>
                                 </td>
 

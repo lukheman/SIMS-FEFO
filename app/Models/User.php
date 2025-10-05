@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Constants\Role;
+use App\Enums\Role;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -13,13 +13,19 @@ class User extends Authenticatable
 
     public $guarded = [];
 
+    public function casts(): array {
+        return [
+            'role' => Role::class
+        ];
+    }
+
     public function transaksi()
     {
-        return $this->hasMany(Transaksi::class, 'id_user');
+        return $this->hasMany(TransaksiMode::class, 'id_user');
     }
 
     public function transaksiKurir()
     {
-        return $this->hasMany(Transaksi::class, 'id_kurir');
+        return $this->hasMany(TransaksiMode::class, 'id_kurir');
     }
 }

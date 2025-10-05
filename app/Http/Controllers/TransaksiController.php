@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\MetodePembayaran;
-use App\Constants\Role;
-use App\Constants\StatusPembayaran;
-use App\Constants\StatusTransaksi;
+use App\Enums\MetodePembayaran;
+use App\Enums\Role;
+use App\Enums\StatusTransaksi;
 use App\Models\Keranjang;
 use App\Models\Mutasi;
 use App\Models\Pesanan;
@@ -48,7 +47,7 @@ class TransaksiController extends Controller
         }
 
 
-        $transaksi = Transaksi::create([
+        $transaksi = Transaksi::query()->create([
             'id_reseller' => Auth::guard('reseller')->id(),
             'metode_pembayaran' => $request->metode_pembayaran,
             'status' => MetodePembayaran::from($validated['metode_pembayaran']) === MetodePembayaran::COD ? StatusTransaksi::DIPROSES : StatusTransaksi::PENDING,

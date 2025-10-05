@@ -10,18 +10,6 @@
     <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
     <!--end::Accessibility Meta Tags-->
-    <!--begin::Primary Meta Tags-->
-    <meta name="title" content="AdminLTE 4 | Fixed Complete" />
-    <meta name="author" content="ColorlibHQ" />
-    <meta
-      name="description"
-      content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS. Fully accessible with WCAG 2.1 AA compliance."
-    />
-    <meta
-      name="keywords"
-      content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant"
-    />
-    <!--end::Primary Meta Tags-->
     <!--begin::Accessibility Features-->
     <!-- Skip links will be dynamically added by accessibility.js -->
     <meta name="supported-color-schemes" content="light dark" />
@@ -54,6 +42,9 @@
     <!--begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="{{ asset('/css/adminlte.css')}}" />
     <!--end::Required Plugin(AdminLTE)-->
+
+    <!-- Toastfy -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   </head>
   <!--end::Head-->
   <!--begin::Body-->
@@ -69,6 +60,8 @@
 
         <x-sidebar />
 
+
+
       <!--end::Sidebar-->
       <!--begin::App Main-->
       <main class="app-main">
@@ -78,13 +71,7 @@
           <div class="container-fluid">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Fixed Complete</h3></div>
-              <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Fixed Complete</li>
-                </ol>
-              </div>
+              <div class="col-sm-6"><h3 class="mb-0">{{ $title ?? ''}}</h3></div>
             </div>
             <!--end::Row-->
           </div>
@@ -199,6 +186,97 @@
         }
       });
     </script>
+
+
+<!-- Toastfy -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+
+        document.addEventListener('livewire:initialized', () => {
+
+  Livewire.on('openModal', ({ id }) => {
+        const modalElement = document.getElementById(id);
+        if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+    });
+
+    Livewire.on('closeModal', ({ id }) => {
+        const modalElement = document.getElementById(id);
+        if (modalElement) {
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+        }
+    });
+
+            Livewire.on('deleteConfirmation', ({ message }) => {
+                Swal.fire({
+                    title: message,
+                    icon: "warning",
+                    showCancelButton: true,
+                    customClass: {
+                        confirmButton: 'btn btn-primary',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    confirmButtonText: "Ya, Hapus",
+                    showClass: {
+                        popup: `
+animate__animated
+animate__fadeIn
+animate__faster`
+                    },
+                    hideClass: {
+                        popup: `
+animate__animated
+animate__fadeOut
+animate__faster`
+                    }
+                }).then((result) => {
+                        if (result.isConfirmed) {
+                            Livewire.dispatch('deleteConfirmed');
+                        }
+                    });
+            });
+
+            Livewire.on('toast', ({ message, variant }) => {
+                const borderColors = {
+                    success: "#198754",
+                    warning: "#ffc107",
+                    error: "#dc3545",
+primary:   "#be83f4",
+secondary: "#6c757d",
+info:      "#0dcaf0",
+light:     "#f8f9fa",
+dark:      "#212529",
+                };
+
+                Toastify({
+                    text: message,
+                    duration: 3000,
+                    close: false,
+                    gravity: "bottom",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "#ffffff",
+                        border: `2px solid ${borderColors[variant] || "#374151"}`,
+                        color: "#111827",
+                        borderRadius: "10px"
+                    },
+                }).showToast();
+            });
+
+        });
+
+        </script>
+
+        @stack('scripts')
     <!--end::OverlayScrollbars Configure-->
     <!--end::Script-->
   </body>

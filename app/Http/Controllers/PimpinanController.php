@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mutasi;
 use App\Models\Produk;
-use App\Models\Transaksi;
+use App\Models\TransaksiMode;
 
 class PimpinanController extends Controller
 {
@@ -22,7 +22,7 @@ class PimpinanController extends Controller
 
     public function index()
     {
-        $transaksi = Transaksi::where('status', 'selesai')->count();
+        $transaksi = TransaksiMode::where('status', 'selesai')->count();
         $persediaan_barang = Produk::with('persediaan')->get()->sum('persediaan.jumlah');
 
         return view('pimpinan.index', [

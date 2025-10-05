@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\Role;
+use App\Enums\Role;
 use App\Models\Reseller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -53,7 +53,7 @@ class AuthController extends Controller
     {
 
         if (Auth::check()) {
-            return redirect()->route(auth()->user()->role.'.index');
+            return redirect()->route(getActiveUser()->role->value.'.index');
         }
 
         return view('auth.login');
@@ -71,7 +71,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = Auth::guard('web')->user();
 
-            return match (Role::from($user->role)) {
+            return match ($user->role) {
                 Role::ADMINGUDANG => redirect()->route('admingudang.index'),
                 Role::ADMINTOKO => redirect()->route('admintoko.index'),
                 Role::PIMPINAN => redirect()->route('pimpinan.index'),
@@ -83,9 +83,9 @@ class AuthController extends Controller
         // Coba login sebagai Reseller (guard: reseller)
         if (Auth::guard('reseller')->attempt($credentials)) {
             $request->session()->regenerate();
-            $reseller = Auth::guard('reseller')->user();
+            $user = getActiveUser();
 
-            if ($reseller->role === Role::RESELLER->value) {
+            if ($user->role === Role::RESELLER) {
                 return redirect()->route('reseller.index');
             }
         }

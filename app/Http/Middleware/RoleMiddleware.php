@@ -15,7 +15,7 @@ class RoleMiddleware
             return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        if (! in_array(Auth::guard($guard)->user()->role, $roles)) {
+        if (! in_array(getActiveUser()->role->value, $roles)) {
             abort(403, 'Anda tidak memiliki izin untuk mengakses halaman ini.');
         }
 

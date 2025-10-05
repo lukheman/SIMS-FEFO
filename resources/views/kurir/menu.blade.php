@@ -6,6 +6,9 @@
     Pesanan
 </x-nav-link>
 
+{{--  
+
 <x-nav-link href="{{ route('kurir.konfirmasi-pembayaran-page') }}" icon="bi-qr-code-scan">
     Konfirmasi Pembayaran
 </x-nav-link>
+--}}

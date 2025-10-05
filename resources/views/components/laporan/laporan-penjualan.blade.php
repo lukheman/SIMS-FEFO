@@ -1,17 +1,3 @@
-<div class="card card-outline card-warning">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h3 class="card-title mb-0">Perhatian</h3>
-        <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#card-warning-body" aria-expanded="true" aria-controls="card-warning-body">
-            <i class="fas fa-minus"></i>
-        </button>
-    </div>
-    <div id="card-warning-body" class="collapse show">
-        <div class="card-body">
-            Catatan penjualan dibuat secara otomatis ketika pesanan diterima.
-        </div>
-    </div>
-</div>
-
 <div class="card">
     <div class="card-header">
         <button class="btn btn-outline-danger" id="btn-cetak-laporan-penjualan" data-bs-toggle="modal"

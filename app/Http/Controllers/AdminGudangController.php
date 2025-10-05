@@ -11,25 +11,6 @@ class AdminGudangController extends Controller
 {
     protected $role = 'admin_gudang';
 
-    public function biayaPenyimpanan()
-    {
-        $produk = Produk::query()->with('biayaPenyimpanan')->get();
-
-        return view("{$this->role}.produk.biaya-penyimpanan", [
-            'page' => 'Biaya Penyimpanan Produk',
-            'produk' => $produk,
-        ]);
-    }
-
-    public function biayaPemesanan()
-    {
-        $produk = Produk::query()->with('biayaPemesanan')->get();
-
-        return view("{$this->role}.produk.biaya-pemesanan", [
-            'page' => 'Biaya Pemesanan Produk',
-            'produk' => $produk,
-        ]);
-    }
 
     public function persediaan()
     {
@@ -75,7 +56,7 @@ class AdminGudangController extends Controller
 
     public function produk()
     {
-        $produk = Produk::query()->with(['biayaPenyimpanan', 'biayaPemesanan'])->get();
+        $produk = Produk::all();
 
         return view("{$this->role}.produk.produk", [
             'page' => 'Produk',

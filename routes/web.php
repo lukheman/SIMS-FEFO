@@ -10,7 +10,6 @@ use App\Http\Controllers\PimpinanController;
 use App\Http\Controllers\PersediaanController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\ProdukController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResellerController;
 use App\Http\Controllers\RestockController;
 use App\Http\Controllers\TransaksiController;
@@ -31,18 +30,20 @@ Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
 // Authenticated Routes (umum untuk semua guard)
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AuthController::class, 'index'])->name('dashboard');
-    Route::resource('profile', ProfileController::class)->only(['index', 'update']);
 });
+
+Route::get('/profile', \App\Livewire\Profile::class)->middleware('auth')->name('profile');
 
 // Routes untuk Reseller (guard: reseller)
 Route::middleware(['auth:reseller', 'role:reseller,reseller'])->prefix('reseller')->name('reseller.')->group(function () {
     Route::controller(ResellerController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/dashboard', 'index')->name('dashboard');
-        Route::get('/katalog', 'katalog')->name('katalog');
-        Route::get('/keranjang', 'keranjang')->name('keranjang');
-        Route::get('/transaksi', 'transaksi')->name('transaksi');
+        Route::get('/katalog', \App\Livewire\Katalog::class)->name('katalog');
+        Route::get('/keranjang', \App\Livewire\Keranjang::class)->name('keranjang');
         Route::get('/pengiriman', 'pengiriman')->name('pengiriman');
+
+        Route::get('/transaksi', \App\Livewire\Transaksi::class)->name('transaksi');
     });
 });
 
@@ -51,13 +52,17 @@ Route::middleware(['auth:web', 'role:web,admintoko'])->prefix('admintoko')->name
     Route::controller(AdminTokoController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/dashboard', 'index')->name('dashboard');
-        Route::get('/kasir', 'kasir')->name('kasir');
+        // Route::get('/kasir', 'kasir')->name('kasir');
         Route::post('/transaksi', 'transaksi')->name('transaksi');
-        Route::get('/pesanan', 'pesanan')->name('pesanan');
+        Route::get('/pesanan', \App\Livewire\Table\PesananTable::class)->name('pesanan');
         Route::get('/persediaan', 'persediaan')->name('persediaan');
         Route::post('/nota', 'nota')->name('nota');
         Route::get('/laporan-penjualan', 'laporanPenjualan')->name('laporan-penjualan');
         Route::get('/laporan-pesanan', 'laporanPesanan')->name('laporan-pesanan');
+
+
+        Route::get('/kasir', \App\Livewire\Kasir::class)->name('kasir');
+
     });
 });
 
@@ -66,10 +71,7 @@ Route::middleware(['auth:web', 'role:web,admingudang'])->prefix('admingudang')->
     Route::controller(AdminGudangController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/dashboard', 'index')->name('dashboard');
-        Route::get('/produk', 'produk')->name('produk');
         Route::get('/produk/persediaan', 'persediaan')->name('produk.persediaan');
-        Route::get('/produk/biaya-pemesanan', 'biayaPemesanan')->name('produk.biaya-pemesanan');
-        Route::get('/produk/biaya-penyimpanan', 'biayaPenyimpanan')->name('produk.biaya-penyimpanan');
         Route::get('/eoq', 'eoq')->name('eoq');
         Route::post('/hitung', 'hitung')->name('hitung');
         Route::get('/pesanan', 'pesanan')->name('pesanan');
@@ -77,6 +79,10 @@ Route::middleware(['auth:web', 'role:web,admingudang'])->prefix('admingudang')->
         Route::get('/laporan-barang-masuk', 'laporanBarangMasuk')->name('laporan-barang-masuk');
         Route::get('/laporan-penjualan', 'laporanPenjualan')->name('laporan-penjualan');
         Route::get('/scan-barang-masuk', 'scanBarangMasuk')->name('scan-barang-masuk');
+
+        // NOTE: LIVEWIRE
+        Route::get('/produk', \App\Livewire\Table\ProdukTable::class)->name('produk');
+
     });
 });
 
@@ -99,7 +105,7 @@ Route::middleware(['auth:web', 'role:web,kurir'])->prefix('kurir')->name('kurir.
     Route::controller(KurirController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/dashboard', 'index')->name('dashboard');
-        Route::get('/pesanan', 'pesanan')->name('pesanan');
+        Route::get('/pesanan', \App\Livewire\Table\PesananTable::class)->name('pesanan');
         Route::get('/konfirmasi-pembayaran', 'konfirmasiPembayaranPage')->name('konfirmasi-pembayaran-page');
         Route::post('/konfirmasi-pembayaran/{id}', 'konfirmasiPembayaran')->name('konfirmasi-pembayaran');
     });
