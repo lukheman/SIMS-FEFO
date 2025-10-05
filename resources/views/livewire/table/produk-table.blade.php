@@ -1,6 +1,26 @@
 <div class="card mb-4">
 
-<div class="modal fade" id="modal-produk" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" wire:ignore.self>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-scanner" tabindex="-1" wire:ignore.self>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modal-scanner">Scanner Barcode</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+                <div id="scanner"></div>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-produk" tabindex="-1" wire:ignore.self>
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
@@ -240,3 +260,72 @@
                         <x-pagination :items="$this->produkList" />
                   </div>
                 </div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let scannerStarted = false;
+
+    // Fungsi untuk memulai scanner
+    function startScanner() {
+        if (scannerStarted) return; // Cegah inisialisasi ganda
+
+        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: document.querySelector('#scanner'),
+                constraints: {
+                    facingMode: "environment" // Kamera belakang (HP)
+                }
+            },
+            decoder: {
+                readers: ["code_128_reader", "ean_reader", "upc_reader"]
+            },
+        }, function(err) {
+            if (err) {
+                console.error("Quagga init error:", err);
+                return;
+            }
+            Quagga.start();
+            scannerStarted = true;
+            console.log("Scanner dimulai.");
+        });
+
+        Quagga.onDetected(function(result) {
+            const barcode = result.codeResult.code;
+            console.log("Barcode terdeteksi:", barcode);
+
+            @this.set('form.kode_produk', barcode);
+
+            // Tutup modal scanner dan buka modal produk
+            const scannerModal = bootstrap.Modal.getInstance(document.getElementById('modal-scanner'));
+            scannerModal.hide();
+
+            // Berhenti scanning setelah deteksi pertama
+            Quagga.stop();
+            scannerStarted = false;
+
+            Livewire.dispatch('openModal', {id: 'modal-produk'});
+        });
+    }
+
+    // Saat modal scanner dibuka
+    const modalScanner = document.getElementById('modal-scanner');
+    modalScanner.addEventListener('shown.bs.modal', function() {
+        console.log("Modal scanner dibuka");
+        setTimeout(startScanner, 500); // Delay agar elemen #scanner sudah ter-render
+    });
+
+    // Saat modal scanner ditutup
+    modalScanner.addEventListener('hidden.bs.modal', function() {
+        console.log("Modal scanner ditutup");
+        if (scannerStarted) {
+            Quagga.stop();
+            scannerStarted = false;
+        }
+    });
+});
+</script>
+@endpush

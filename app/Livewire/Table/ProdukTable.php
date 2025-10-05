@@ -50,7 +50,7 @@ class ProdukTable extends Component
     {
         $this->form->reset();
         $this->modalFormState = 'create';
-        $this->openModal($this->modalId);
+        $this->openModal('modal-scanner');
     }
 
     public function cancel(): void
