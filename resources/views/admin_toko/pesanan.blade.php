@@ -60,7 +60,7 @@
 
                                     <form>
                                         <select data-id-transaksi="{{ $item->id }}" class="form-control pilih-kurir"
-                                            {{ $item->status === \App\Enums\StatusTransaksi::DIPROSES || $item->status === \App\Constants\StatusTransaksi::DIKIRIM ? '' : 'disabled'  }}>
+                                            {{ $item->status === \App\Enums\StatusTransaksi::DIPROSES || $item->status === \App\Enums\StatusTransaksi::DIKIRIM ? '' : 'disabled'  }}>
                                             @if (!$item->id_kurir)
                                                 <option value="">Pilih Kurir</option>
                                             @endif

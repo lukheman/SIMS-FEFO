@@ -40,8 +40,8 @@
             <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Daftar Sebagai</label>
             <div class="relative">
                 <select name="role" id="role" class="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-200 @error('role') border-red-500 @enderror">
-                    <option value="{{ \App\Enums\Role::RESELLER }}" {{ old('role') == \App\Constants\Role::RESELLER ? 'selected' : '' }}>Reseller</option>
-                    <option value="{{ \App\Enums\Role::KURIR }}" {{ old('role') == \App\Constants\Role::KURIR ? 'selected' : '' }}>Kurir</option>
+                    <option value="{{ \App\Enums\Role::RESELLER }}" {{ old('role') == \App\Enums\Role::RESELLER ? 'selected' : '' }}>Reseller</option>
+                    <option value="{{ \App\Enums\Role::KURIR }}" {{ old('role') == \App\Enums\Role::KURIR ? 'selected' : '' }}>Kurir</option>
                 </select>
                 <span class="absolute inset-y-0 right-0 flex items-center pr-3">
                     <i class="fas fa-vector-square text-gray-400"></i>
