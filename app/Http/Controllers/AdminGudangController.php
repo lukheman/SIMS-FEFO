@@ -98,17 +98,6 @@ class AdminGudangController extends Controller
 
     }
 
-    public function eoq()
-    {
-
-        $produk = Produk::with('persediaan')->get();
-
-        return view("{$this->role}.eoq", [
-            'page' => 'EOQ',
-            'produk' => $produk,
-        ]);
-    }
-
     public function laporanPenjualan()
     {
 

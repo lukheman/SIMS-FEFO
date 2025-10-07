@@ -63,7 +63,6 @@ Route::middleware(['auth:web', 'role:web,admingudang'])->prefix('admingudang')->
     Route::controller(AdminGudangController::class)->group(function () {
         Route::get('/', \App\Livewire\Dashboard\Index::class)->name('index');
         Route::get('/produk/persediaan', 'persediaan')->name('produk.persediaan');
-        Route::get('/eoq', 'eoq')->name('eoq');
         Route::post('/hitung', 'hitung')->name('hitung');
         Route::get('/pesanan', 'pesanan')->name('pesanan');
         Route::get('/barang-masuk', \App\Livewire\BarangMasuk::class)->name('barang-masuk');
@@ -126,4 +125,3 @@ Route::post('/laporan/laporan-penjualan', [LaporanController::class, 'laporanPen
 Route::post('/laporan/laporan-pesanan', [LaporanController::class, 'laporanPesanan'])->name('laporan.laporan-pesanan')->middleware('auth');
 Route::post('/laporan/laporan-barang-masuk', [LaporanController::class, 'laporanBarangMasuk'])->name('laporan.laporan-barang-masuk')->middleware('auth');
 Route::get('/laporan/laporan-persediaan-produk', [LaporanController::class, 'laporanPersediaanProduk'])->name('laporan.laporan-persediaan-produk')->middleware('auth');
-Route::post('/laporan/laporan-eoq', [LaporanController::class, 'laporanEOQ'])->name('laporan.laporan-eoq')->middleware('auth');

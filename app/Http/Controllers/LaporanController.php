@@ -12,26 +12,6 @@ use App\Enums\StatusTransaksi;
 
 class LaporanController extends Controller
 {
-    public function laporanEOQ(Request $request)
-    {
-
-        $request->validate([
-            'periode' => ['required', 'date_format:Y-m'],
-            'ttd' => 'required|string|max:255',
-        ]);
-
-        $periode = Carbon::createFromFormat('Y-m', $request->periode)->startOfMonth();
-
-        $data_eoq = Produk::EOQPerBulan($request->periode);
-
-        return view('invoices.laporan-eoq', [
-            'periode' => $periode->format('Y-m'),
-            'ttd' => $request->ttd,
-            'data_eoq' => $data_eoq,
-        ]);
-
-    }
-
     public function laporanPenjualan(Request $request)
     {
         // Validate input
