@@ -167,13 +167,6 @@ public function transaksi(Request $request)
         ]);
     }
 
-    public function laporanPenjualan()
-    {
-        return view('admin_toko.laporan-penjualan', [
-            'page' => 'Laporan Penjualan',
-        ]);
-    }
-
     public function laporanPesanan() {
         return view('admin_toko.laporan-pesanan', [
             'page' => 'Laporan Pesanan'

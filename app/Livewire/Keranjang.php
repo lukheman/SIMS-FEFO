@@ -7,7 +7,7 @@ use App\Enums\StatusTransaksi;
 use App\Livewire\Forms\PesananForm;
 use App\Models\Pesanan;
 use App\Models\Produk;
-use App\Models\TransaksiMode;
+use App\Models\Transaksi;
 use App\Traits\WithConfirmation;
 use App\Traits\WithModal;
 use App\Traits\WithNotify;
@@ -75,7 +75,7 @@ class Keranjang extends Component
 
     public function checkout() {
 
-        $transaksi = TransaksiMode::query()->create([
+        $transaksi = Transaksi::query()->create([
             'id_reseller' => $this->user->id,
             'metode_pembayaran' => $this->metode_pembayaran,
             'status' => $this->metode_pembayaran === MetodePembayaran::COD ? StatusTransaksi::DIPROSES : StatusTransaksi::PENDING,

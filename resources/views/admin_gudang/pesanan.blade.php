@@ -1,14 +1,5 @@
-@extends('layouts.main')
+<x-layout>
 
-@section('title', 'Admin Gudang')
-
-@section('sidebar-menu')
-
-@include('admin_gudang.menu')
-
-@endsection
-
-@section('content')
 <div class="card">
     <div class="card-header">
 
@@ -115,10 +106,12 @@
     </div>
 </div>
 <!-- end modal-pesanan -->
+</x-layout>
 
-@endsection
 
-@section('custom-script')
+
+@push('scripts')
+
 <script>
 
 $(document).ready(function () {
@@ -253,4 +246,4 @@ $('#kode-produk').select2({
 
 </script>
 
-@endsection
+@endpush

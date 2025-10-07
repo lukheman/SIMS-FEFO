@@ -12,4 +12,17 @@ enum MetodePembayaran: string
     {
         return array_map(fn ($case) => $case->value, self::cases());
     }
+
+    /**
+     * Mengembalikan warna yang sesuai dengan metode pembayaran.
+     * Warna bisa digunakan untuk badge atau status UI.
+     */
+    public function getColor(): string
+    {
+        return match ($this) {
+            self::COD => 'warning',   // misalnya kuning
+            self::TRANSFER => 'primary', // biru
+            self::TUNAI => 'success',   // hijau
+        };
+    }
 }

@@ -38,6 +38,7 @@ class ProdukTable extends Component
     public function produkList()
     {
         return Produk::query()
+            ->with('persediaan')
             ->when($this->search, function ($query) {
                 $query->where('nama_produk', 'like', '%' . $this->search . '%')
                       ->orWhere('kode_produk', 'like', '%' . $this->search . '%');

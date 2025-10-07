@@ -258,9 +258,9 @@ dark:      "#212529",
 
                 Toastify({
                     text: message,
-                    duration: 3000,
+                    duration: 5000,
                     close: false,
-                    gravity: "bottom",
+                    gravity: "top",
                     position: "right",
                     stopOnFocus: true,
                     style: {

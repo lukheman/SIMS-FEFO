@@ -73,8 +73,8 @@
                     <th>No</th>
                     <th>Kode Produk</th>
                     <th>Nama Produk</th>
-                    <th>Harga Beli (Rp.)</th>
-                    <th>Harga Jual (Rp.)</th>
+                    <th>Harga Beli</th>
+                    <th>Harga Jual</th>
                     <th>Persediaan</th>
 
 
@@ -89,8 +89,8 @@
                     <td>{{ $loop->index + 1 }}</td>
                     <td style="text-align: center;">{{ $item->kode_produk }}</td>
                     <td>{{ $item->nama_produk }}</td>
-                    <td style="text-align: right;"> {{ number_format($item->harga_beli, 0, ',', '.') }}</td>
-                    <td style="text-align: right;"> {{ number_format($item->harga_jual, 0, ',', '.') }}</td>
+                    <td style="text-align: right;">{{ $item->label_harga_beli}}</td>
+                    <td style="text-align: right;">{{ $item->label_harga_jual}}</td>
                     <td style="text-align: center;">{{ $item->persediaan->jumlah }}</td>
                 </tr>
                 @endforeach

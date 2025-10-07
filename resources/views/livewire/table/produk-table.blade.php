@@ -222,6 +222,7 @@
                           <th scope="col">Tanggal Kadaluarsa</th>
                           <th scope="col">Harga Beli/bal (Rp.)</th>
                           <th scope="col">Harga Jual/bal (Rp.)</th>
+                          <th scope="col">Persediaan</th>
                           <th scope="col" class="text-end">Aksi</th>
                         </tr>
                       </thead>
@@ -235,6 +236,7 @@
                                 <td>{{ $produk->exp }}</td>
                                 <td>{{ number_format($produk->harga_beli, 0, ',', '.') }}</td>
                                 <td>{{ number_format($produk->harga_jual, 0, ',', '.') }}</td>
+                                <td>{{ $produk->persediaan->jumlah}}</td>
 <td class="text-end">
     <button wire:click="detail({{ $produk->id }})" class="btn btn-sm btn-outline-info me-1">
         <i class="bi bi-eye"></i> Lihat

@@ -86,4 +86,10 @@ class Produk extends Model
         return "{$persediaanKecil} {$unitKecil} ({$persediaanBesar}/{$unitBesar})";
 
     }
+
+    public static function booted() {
+        static::created(function($produk) {
+            $produk->persediaan()->create();
+        });
+    }
 }

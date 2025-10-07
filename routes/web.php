@@ -57,7 +57,9 @@ Route::middleware(['auth:web', 'role:web,admintoko'])->prefix('admintoko')->name
         Route::get('/pesanan', \App\Livewire\Table\PesananTable::class)->name('pesanan');
         Route::get('/persediaan', 'persediaan')->name('persediaan');
         Route::post('/nota', 'nota')->name('nota');
-        Route::get('/laporan-penjualan', 'laporanPenjualan')->name('laporan-penjualan');
+
+        Route::get('/laporan-penjualan', \App\Livewire\Laporan\LaporanPenjualan::class)->name('laporan-penjualan');
+
         Route::get('/laporan-pesanan', 'laporanPesanan')->name('laporan-pesanan');
 
 
@@ -75,7 +77,8 @@ Route::middleware(['auth:web', 'role:web,admingudang'])->prefix('admingudang')->
         Route::get('/eoq', 'eoq')->name('eoq');
         Route::post('/hitung', 'hitung')->name('hitung');
         Route::get('/pesanan', 'pesanan')->name('pesanan');
-        Route::get('/barang-masuk', 'barangMasuk')->name('barang-masuk');
+        // Route::get('/barang-masuk', 'barangMasuk')->name('barang-masuk');
+        Route::get('/barang-masuk', \App\Livewire\BarangMasuk::class)->name('barang-masuk');
         Route::get('/laporan-barang-masuk', 'laporanBarangMasuk')->name('laporan-barang-masuk');
         Route::get('/laporan-penjualan', 'laporanPenjualan')->name('laporan-penjualan');
         Route::get('/scan-barang-masuk', 'scanBarangMasuk')->name('scan-barang-masuk');
@@ -92,9 +95,9 @@ Route::middleware(['auth:web', 'role:web,pimpinan'])->prefix('pimpinan')->name('
         Route::get('/', 'index')->name('index');
         Route::get('/dashboard', 'index')->name('dashboard');
         Route::get('/persediaan', 'persediaan')->name('persediaan');
-        Route::get('/laporan-penjualan', 'laporanPenjualan')->name('laporan-penjualan');
-        Route::get('/laporan-persediaan-produk', 'laporanPersediaanProduk')->name('laporan-persediaan-produk');
-        Route::get('/laporan-barang-masuk', 'laporanBarangMasuk')->name('laporan-barang-masuk');
+        Route::get('/laporan-penjualan', \App\Livewire\Laporan\LaporanPenjualan::class)->name('laporan-penjualan');
+        Route::get('/laporan-persediaan', \App\Livewire\Laporan\LaporanPersediaan::class)->name('laporan-persediaan');
+        Route::get('/laporan-barang-masuk', \App\Livewire\BarangMasuk::class)->name('laporan-barang-masuk');
         Route::get('/laporan-eoq', 'laporanEOQ')->name('laporan-eoq');
         Route::get('/laporan-pesanan', 'laporanPesanan')->name('laporan-pesanan');
     });

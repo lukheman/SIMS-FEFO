@@ -8,7 +8,7 @@
     Penjualan
 </x-nav-link>
 
-<x-nav-link href="{{ route('pimpinan.laporan-persediaan-produk') }}" icon="bi-box-seam">
+<x-nav-link href="{{ route('pimpinan.laporan-persediaan') }}" icon="bi-box-seam">
     Persediaan Produk
 </x-nav-link>
 

@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Enums\StatusTransaksi;
-use App\Models\Transaksi as TransaksiModel;
+use App\Models\Transaksi as Transaksil;
 use App\Traits\WithModal;
 use App\Traits\WithNotify;
 use Livewire\Attributes\Computed;
@@ -28,7 +28,7 @@ class Transaksi extends Component
     }
 
     public function pesananSelesai($id) {
-        TransaksiModel::query()->find($id)->update([
+        Transaksil::query()->find($id)->update([
             'status' => StatusTransaksi::SELESAI
         ]);
 
@@ -36,7 +36,7 @@ class Transaksi extends Component
     }
 
     public function detailTransaksi($id) {
-        $this->selectedTransaksi = TransaksiModel::query()->with('pesanan', 'pesanan.produk')->findOrFail($id);
+        $this->selectedTransaksi = Transaksil::query()->with('pesanan', 'pesanan.produk')->findOrFail($id);
         $this->openModal('modal-detail-transaksi');
     }
 
@@ -44,7 +44,7 @@ class Transaksi extends Component
     public function transaksiList() {
 
 
-        return TransaksiModel::query()
+        return Transaksil::query()
             ->where('id_reseller', $this->user->id)
             ->paginate(10);
 

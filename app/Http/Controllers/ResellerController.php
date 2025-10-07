@@ -7,7 +7,7 @@ use App\Enums\StatusTransaksi;
 use App\Models\Keranjang;
 use App\Models\Pesanan;
 use App\Models\Produk;
-use App\Models\TransaksiMode;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,7 +24,7 @@ class ResellerController extends Controller
 
         $keranjang = Pesanan::where('id_keranjang_belanja', $keranjang->id)->count();
 
-        $pesanan = TransaksiMode::where('id_reseller', Auth::guard('reseller')->id())->where('status', '!=', 'selesai')->count();
+        $pesanan = Transaksi::where('id_reseller', Auth::guard('reseller')->id())->where('status', '!=', 'selesai')->count();
 
         return view('reseller.index', [
             'page' => 'Dashboard',
@@ -62,7 +62,7 @@ class ResellerController extends Controller
         $dikirim = $request->query('dikirim');
         $selesai = $request->query('selesai');
 
-        $transaksi = TransaksiMode::where('id_reseller', Auth::guard('reseller')->id());
+        $transaksi = Transaksi::where('id_reseller', Auth::guard('reseller')->id());
 
         if ($belumbayar === '0') {
 

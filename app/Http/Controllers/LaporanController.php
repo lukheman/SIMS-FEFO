@@ -7,7 +7,7 @@ use App\Models\Produk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\TransaksiMode;
+use App\Models\Transaksi;
 use App\Constants\StatusTransaksi;
 
 class LaporanController extends Controller
@@ -116,13 +116,13 @@ class LaporanController extends Controller
         // Parse periode
         $periode = Carbon::createFromFormat('Y-m', $request->periode)->startOfMonth();
 
-        $pesanan = TransaksiMode::with('user')->whereHas('user')->get();
+        $pesanan = Transaksi::with('user')->whereHas('user')->get();
 
 
         $counts = [];
 
         foreach (StatusTransaksi::cases() as $status) {
-            $counts[$status->value] = TransaksiMode::where('status', $status->value)->count();
+            $counts[$status->value] = Transaksi::where('status', $status->value)->count();
         }
 
         return view('invoices.laporan-pesanan', [

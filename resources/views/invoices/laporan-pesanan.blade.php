@@ -197,17 +197,17 @@
                     <td>{{ $item->tanggal }}</td>
                     <td>{{ $item->user->name }}</td>
                     <td>
-                        {{-- Assuming x-status-transaksi renders a badge or similar --}}
-                        <x-status-transaksi :status="$item->status" />
+
+                        <span class="badge bg-{{ $item->status->getColor() }}">{{ $item->status}}</span>
                     </td>
                     <td>
-                        <span class="badge bg-success">{{ $item->metode_pembayaran }}</span>
+                            <span class="badge bg-success">{{ $item->metode_pembayaran }}</span>
                     </td>
                     <td>
                         {{-- This button should ideally not be part of a printed report --}}
                         <button class="btn btn-sm btn-success btn-status-pembayaran-lunas"
                             data-id-transaksi="{{ $item->id }}"
-                            {{ $item->metode_pembayaran === \App\Constants\MetodePembayaran::COD ? 'disabled' : '' }}>
+                            {{ $item->metode_pembayaran === \App\Enums\MetodePembayaran::COD ? 'disabled' : '' }}>
                             <i class="fas fa-money-check"></i> Lunas
                         </button>
                     </td>

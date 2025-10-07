@@ -1,27 +1,9 @@
-<div class="card card-outline card-warning">
-    <div class="card-header">
-        <h3 class="card-title">Perhatian</h3>
-
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-            </button>
-        </div>
-        <!-- /.card-tools -->
-    </div>
-    <!-- /.card-header -->
-    <div class="card-body">
-        Catatan pesanan dibuat secara otomatis ketika pesanan diterima.
-    </div>
-    <!-- /.card-body -->
-</div>
-
 <div class="card">
     <div class="card-header">
 
-<button class="btn btn-outline-danger" id="btn-cetak-laporan-pesanan"
+<button class="btn btn-sm btn-outline-danger" id="btn-cetak-laporan-pesanan"
     data-bs-toggle="modal" data-bs-target="#modal-cetak-laporan-pesanan">
-    <i class="fas fa-print"></i>
+    <i class="bi bi-printer"></i>
     Cetak Laporan Pesanan
 </button>
 
@@ -40,7 +22,7 @@
                     <table id="datatable" class="table table-bordered table-striped dataTable dtr-inline"
                         aria-describedby="datatable_info">
                         <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th>Tanggal </th>
                                 <th>Pemesan </th>
                                 <th>Status Transaksi</th>
@@ -51,20 +33,19 @@
                         <tbody>
 
                             @foreach ($pesanan as $item)
-                            <tr>
+                            <tr class="text-center">
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->user->name }}</td>
                                 <td>
-                                    <x-status-transaksi :status="$item->status" />
+                                    <span class="badge bg-{{ $item->status->getColor() }}">{{ $item->status}}</span>
                                 </td>
                                 <td>
-                                    <span class="badge bg-success">{{ $item->metode_pembayaran }}</span>
+                                    <span class="badge bg-{{ $item->metode_pembayaran->getColor() }}">{{ $item->metode_pembayaran }}</span>
 
                                 </td>
                                 <td>
+                                    <span class="badge bg-{{ $item->status_pembayaran->getColor()}}">{{ $item->status_pembayaran->label() }}</span>
 
-                                    <button class="btn btn-sm btn-success btn-status-pembayaran-lunas" data-id-transaksi="{{ $item->id }}" {{ $item->metode_pembayaran === \App\Enums\MetodePembayaran::COD ? 'disabled' : ''}} >
-                                        <i class="fas fa-money-check"></i> Lunas</button>
                                 </td>
 
                             </tr>
@@ -112,8 +93,8 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-print"></i>
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-printer"></i>
                         Cetak
                     </button>
                 </div>

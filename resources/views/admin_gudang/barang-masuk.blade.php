@@ -1,12 +1,5 @@
-@extends('layouts.main')
+<x-layout>
 
-@section('title', 'Admin Gudang')
-
-@section('sidebar-menu')
-    @include('admin_gudang.menu')
-@endsection
-
-@section('content')
 <div class="card">
     <div class="card-header">
         <button class="btn btn-outline-primary" data-toggle="modal" data-target="#modal-scan-barcode" id="btn-add-mutasi">
@@ -164,9 +157,10 @@
         </div>
     </div>
 </div>
-@endsection
+</x-layout>
 
-@section('custom-script')
+@push('scripts')
+
 <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
 <script>
 $(document).ready(function () {
@@ -335,5 +329,5 @@ $(document).ready(function () {
 
     startScanner();
 });
-</script>
-@endsection
+
+@endpush

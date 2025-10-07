@@ -21,11 +21,11 @@ class User extends Authenticatable
 
     public function transaksi()
     {
-        return $this->hasMany(TransaksiMode::class, 'id_user');
+        return $this->hasMany(Transaksi::class, 'id_user');
     }
 
     public function transaksiKurir()
     {
-        return $this->hasMany(TransaksiMode::class, 'id_kurir');
+        return $this->hasMany(Transaksi::class, 'id_kurir');
     }
 }

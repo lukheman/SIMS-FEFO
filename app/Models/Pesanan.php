@@ -16,6 +16,7 @@ class Pesanan extends Model
         'harga_satuan',
         'label_harga_satuan',
         'label_jumlah_pesanan',
+        'jumlah_pcs'
     ];
 
     public function transaksi()
@@ -38,7 +39,7 @@ class Pesanan extends Model
         return $this->produk ? $this->produk->isPersediaanMencukupi($this->jumlah) : false;
     }
 
-    public function getJumlahPcsAttribtue() {
+    public function getJumlahPcsAttribute() {
         return $this->jumlah * $this->produk->tingkat_konversi;
     }
 

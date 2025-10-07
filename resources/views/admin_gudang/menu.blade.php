@@ -30,14 +30,15 @@
     Barang Masuk
 </x-nav-link>
 
+
+
+{{--
+
 <x-nav-link
     :href="route('admingudang.pesanan')"
     icon="bi-clipboard-check">
     Pesanan
 </x-nav-link>
-
-
-{{--
 
 <li class="nav-header">EOQ</li>
 
@@ -60,5 +61,6 @@
     icon="bi-bar-chart">
     Penjualan
 </x-nav-link>
+
 --}}
 
