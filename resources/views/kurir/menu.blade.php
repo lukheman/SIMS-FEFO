@@ -1,4 +1,4 @@
-<x-nav-link href="{{ route('kurir.dashboard') }}" icon="bi-speedometer2">
+<x-nav-link href="{{ route('kurir.index') }}" icon="bi-speedometer2">
     Dashboard
 </x-nav-link>
 

@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Constants\MetodePembayaran;
+use App\Enums\MetodePembayaran;
 use App\Enums\StatusTransaksi;
 use App\Models\Pesanan;
 use App\Models\Produk;
@@ -44,14 +44,14 @@ class Kasir extends Component
         $produk = Produk::query()->with('persediaan')->find($id);
         if (!$produk) return;
 
-        // Jika produk sudah ada di daftar, tambah qty
+        // Jika produk sudah ada di daftar, tambah jumlah
         foreach ($this->daftarBelanja as &$item) {
             if ($item['id'] === $produk->id) {
 
-                if($item['qty'] < $produk->persediaan->jumlah) {
+                if($item['jumlah'] < $produk->persediaan->jumlah) {
 
-                    $item['qty'] += 1;
-                    $item['total'] = $item['qty'] * $item['harga'];
+                    $item['jumlah'] += 1;
+                    $item['total'] = $item['jumlah'] * $item['harga'];
                     return;
                 } else {
                     $this->notifyError('Persediaan tidak mencukupi');
@@ -66,7 +66,7 @@ class Kasir extends Component
             'kode'  => $produk->kode_produk,
             'nama'  => $produk->nama_produk,
             'harga' => $produk->harga_jual_unit_kecil,
-            'qty'   => 1,
+            'jumlah'   => 1,
             'total' => $produk->harga_jual_unit_kecil,
         ];
     }
@@ -79,7 +79,7 @@ class Kasir extends Component
     #[Computed]
     public function totalItem()
     {
-        return collect($this->daftarBelanja)->sum('qty');
+        return collect($this->daftarBelanja)->sum('jumlah');
     }
 
     #[Computed]
@@ -109,14 +109,21 @@ class Kasir extends Component
         foreach($this->daftarBelanja as $item) {
             $pesanan = Pesanan::query()->create([
                 'id_produk' => $item['id'],
-                'jumlah' => $item['qty'],
+                'jumlah' => $item['jumlah'],
                 'id_transaksi' => $transaksi->id,
                 'satuan' => 1
-            ])->load('produk', 'produk.persediaan');
+            ])->load('produk', 'produk.persediaan', 'produk.mutasi');
 
             // kurangi persediaan barang setelah transaksi dibuat
-            $pesanan->produk->persediaan->jumlah -= $item['qty'];
+            $pesanan->produk->persediaan->jumlah -= $item['jumlah'];
             $pesanan->produk->persediaan->save();
+
+            // Catat mutasi barang keluar
+            $pesanan->produk->mutasi()->create([
+                'jumlah' => $item['jumlah'],
+                'satuan' => 1,
+                'jenis' => 'keluar',
+            ]);
 
         }
 

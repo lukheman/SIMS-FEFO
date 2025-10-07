@@ -112,7 +112,7 @@
                 <th>Metode Pembayaran</th>
                 <th>Status Pembayaran</th>
 
-                @if (getActiveUser()->role === Role::ADMINTOKO)
+                @if (getActiveUser()->role === Role::KASIR)
                   <th>Ubah Status Pembayaran</th>
                   <th>Pilih Kurir</th>
                   <th>Nota</th>
@@ -147,7 +147,7 @@
                   </td>
 
                   {{-- ADMIN TOKO --}}
-                  @if (getActiveUser()->role === Role::ADMINTOKO)
+                  @if (getActiveUser()->role === Role::KASIR)
                     <td>
                       <button wire:click="transaksiLunas({{ $item->id }})"
                               class="btn btn-sm btn-success"
@@ -165,7 +165,7 @@
                     </td>
 
                     <td>
-                      <form action="{{ route('admintoko.nota') }}" method="POST">
+                      <form action="{{ route('kasir.nota') }}" method="POST">
                         @csrf
                         <input type="hidden" name="id_transaksi" value="{{ $item->id }}">
                         <button type="submit" class="btn btn-sm btn-outline-danger">

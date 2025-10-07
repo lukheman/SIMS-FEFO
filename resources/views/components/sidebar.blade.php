@@ -37,7 +37,7 @@ use App\Enums\Role;
 
                       @if (auth('web')->check())
 
-                          @if ( getActiveUser()->role === Role::ADMINTOKO)
+                          @if ( getActiveUser()->role === Role::KASIR)
                                 @include('admin_toko.menu')
                           @elseif (getActiveUser()->role === \App\Enums\Role::ADMINGUDANG)
                                 @include('admin_gudang.menu')

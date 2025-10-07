@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
         // Daftar role dengan nama berbeda untuk setiap role
         $roles = [
-            'admin toko' => 'admintoko',
+            'Kasir' => 'kasir',
             'admin gudang' => 'admingudang',
             'pimpinan' => 'pimpinan',
             'Kurir 1' => 'kurir',

@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Transaksi;
-use App\Constants\StatusTransaksi;
+use App\Enums\StatusTransaksi;
 
 class LaporanController extends Controller
 {

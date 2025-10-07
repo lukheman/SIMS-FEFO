@@ -125,7 +125,7 @@
                                         <label for="unit-kecil">Unit Kecil</label>
                                         <select name="unit_kecil" class="form-control" id="unit-kecil">
 
-                                            @foreach (\App\Constants\UnitKecilProduk::values() as $item)
+                                            @foreach (\App\Enums\UnitKecilProduk::values() as $item)
 
                                             <option value="{{ $item }}">{{ $item}}</option>
                                             @endforeach
@@ -140,7 +140,7 @@
                                         <label for="unit-besar">Unit Besar</label>
                                         <select name="unit_besar" class="form-control" id="unit-besar">
 
-                                            @foreach (\App\Constants\UnitBesarProduk::values() as $item)
+                                            @foreach (\App\Enums\UnitBesarProduk::values() as $item)
 
                                             <option value="{{ $item }}">{{ $item}}</option>
                                             @endforeach

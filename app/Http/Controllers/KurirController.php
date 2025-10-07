@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\StatusPembayaran;
-use App\Constants\StatusTransaksi;
+use App\Enums\StatusPembayaran;
+use App\Enums\StatusTransaksi;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;

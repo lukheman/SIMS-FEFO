@@ -1,4 +1,6 @@
-<div>
+<div class="card">
+
+<div class="card-body">
 
 
 
@@ -36,4 +38,5 @@
         </table>
     <!-- /.card-body -->
         <x-pagination :items="$this->penjualanList" />
+</div>
 </div>

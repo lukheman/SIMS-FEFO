@@ -7,9 +7,11 @@ use App\Traits\WithConfirmation;
 use App\Traits\WithNotify;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+#[Title('Penjualan')]
 class PenjualanTable extends Component
 {
     use WithPagination;

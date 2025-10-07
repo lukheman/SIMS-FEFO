@@ -106,7 +106,7 @@ class TransaksiController extends Controller
             'id_kurir' => ['required', 'exists:users,id'],
         ]);
 
-        if (Role::from(Auth::user()->role) === Role::ADMINTOKO) {
+        if (Role::from(Auth::user()->role) === Role::KASIR) {
 
             $transaksi = Transaksi::findOrFail($id);
             $kurir = User::find($request->id_kurir);
@@ -143,7 +143,7 @@ class TransaksiController extends Controller
 
         $transaksi = Transaksi::findOrFail($id);
 
-        if (Role::from(Auth::user()->role) === Role::ADMINTOKO) {
+        if (Role::from(Auth::user()->role) === Role::KASIR) {
             if (StatusPembayaran::from($request->status_pembayaran) === StatusPembayaran::LUNAS) {
 
                 // jika lunas maka status pengiriman otomatis jadi diproses
@@ -175,7 +175,7 @@ class TransaksiController extends Controller
 
         $user_role = Auth::guard('reseller')->user()->role ?? Auth::user()->role;
 
-        if (Role::from($user_role) === Role::ADMINTOKO) {
+        if (Role::from($user_role) === Role::KASIR) {
             return $this->handleAdminTokoActions($request, $transaksi);
         } elseif (Role::from($user_role) === Role::KURIR) {
             return $this->handleKurirActions($request, $transaksi);

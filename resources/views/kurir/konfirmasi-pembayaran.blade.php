@@ -72,7 +72,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            data: { status_pembayaran: '{{ \App\Constants\StatusPembayaran::LUNAS }}' },
+            data: { status_pembayaran: '{{ \App\Enums\StatusPembayaran::LUNAS }}' },
             success: function (data) {
                 let infoPesanan = $('#info-pesanan');
 

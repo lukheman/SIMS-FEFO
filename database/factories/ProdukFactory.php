@@ -6,8 +6,8 @@ use App\Models\Persediaan;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Produk;
-use App\Constants\UnitKecilProduk;
-use App\Constants\UnitBesarProduk;
+use App\Enums\UnitKecilProduk;
+use App\Enums\UnitBesarProduk;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Produk>

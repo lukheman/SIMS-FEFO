@@ -4,8 +4,10 @@ namespace App\Livewire\Table;
 
 use App\Models\Produk;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Persediaan Produk')]
 class PersediaanTable extends Component
 {
 

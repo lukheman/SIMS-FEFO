@@ -155,7 +155,7 @@ $(document).ready(function() {
 
     $('#btn-simpan-transaksi').click(function() {
         $.ajax({
-            url: "{{ route('admintoko.transaksi') }}",
+            url: "{{ route('kasir.transaksi') }}",
             method: 'POST',
             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
             data: { pesanan },

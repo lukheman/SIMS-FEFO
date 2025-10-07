@@ -6,8 +6,10 @@ use App\Models\Produk;
 use App\Traits\WithModal;
 use App\Traits\WithNotify;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Katalog Produk')]
 class Katalog extends Component
 {
     use WithModal;

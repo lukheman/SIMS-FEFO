@@ -1,5 +1,5 @@
 <x-nav-link
-    :href="route('admingudang.dashboard')"
+    :href="route('admingudang.index')"
     icon="bi-speedometer2">
     Dashboard
 </x-nav-link>
@@ -12,15 +12,11 @@
     Data Produk
 </x-nav-link>
 
-{{--
-
 <x-nav-link
-    :href="route('admingudang.produk.persediaan')"
-    icon="bi-archive">
-    Persediaan Produk
+    :href="route('admingudang.penjualan')"
+    icon="bi-receipt">
+    Penjualan
 </x-nav-link>
-
---}}
 
 <li class="nav-header">RESTOK</li>
 

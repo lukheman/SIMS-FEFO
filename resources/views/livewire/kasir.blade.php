@@ -56,7 +56,7 @@
               <th>#</th>
               <th>Kode</th>
               <th>Nama Barang</th>
-              <th>Qty</th>
+              <th>jumlah</th>
               <th>Harga</th>
               <th>Total</th>
               <th class="text-end">Aksi</th>
@@ -68,7 +68,7 @@
               <td>{{ $loop->iteration }}</td>
               <td>{{ $item['kode'] }}</td>
               <td>{{ $item['nama'] }}</td>
-              <td>{{ $item['qty'] }}</td>
+              <td>{{ $item['jumlah'] }}</td>
               <td>Rp {{ number_format($item['harga'], 0, ',', '.') }}</td>
               <td>Rp {{ number_format($item['total'], 0, ',', '.') }}</td>
               <td class="text-end">
@@ -93,7 +93,7 @@
         Ringkasan Transaksi
       </div>
       <div class="card-body">
-        <p><strong>Total Item:</strong> {{ collect($daftarBelanja)->sum('qty') }}</p>
+        <p><strong>Total Item:</strong> {{ collect($daftarBelanja)->sum('jumlah') }}</p>
         <p><strong>Total Harga:</strong> Rp {{ number_format(collect($daftarBelanja)->sum('total'), 0, ',', '.') }}</p>
 
         <div class="mb-3">

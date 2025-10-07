@@ -118,7 +118,7 @@ class PesananTable extends Component
     public function transaksiList() {
         $user = getActiveUser();
 
-        if ($user->role === Role::ADMINTOKO) {
+        if ($user->role === Role::KASIR) {
             return Transaksi::query()
                 ->withWhereHas('user')
                 ->paginate();

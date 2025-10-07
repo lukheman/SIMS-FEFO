@@ -1,4 +1,4 @@
-<x-nav-link href="{{ route('pimpinan.dashboard') }}" icon="bi-speedometer2">
+<x-nav-link href="{{ route('pimpinan.index') }}" icon="bi-speedometer2">
     Dashboard
 </x-nav-link>
 

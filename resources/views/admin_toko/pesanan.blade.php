@@ -51,7 +51,7 @@
                                 </td>
                                 <td>
 
-                                    <button class="btn btn-sm btn-success btn-status-pembayaran-lunas" data-id-transaksi="{{ $item->id }}" {{ $item->metode_pembayaran === \App\Constants\MetodePembayaran::COD ? 'disabled' : ''}} >
+                                    <button class="btn btn-sm btn-success btn-status-pembayaran-lunas" data-id-transaksi="{{ $item->id }}" {{ $item->metode_pembayaran === \App\Enums\MetodePembayaran::COD ? 'disabled' : ''}} >
                                         <i class="fas fa-money-check"></i> Lunas</button>
                                 </td>
 
@@ -60,7 +60,7 @@
 
                                     <form>
                                         <select data-id-transaksi="{{ $item->id }}" class="form-control pilih-kurir"
-                                            {{ $item->status === \App\Constants\StatusTransaksi::DIPROSES || $item->status === \App\Constants\StatusTransaksi::DIKIRIM ? '' : 'disabled'  }}>
+                                            {{ $item->status === \App\Enums\StatusTransaksi::DIPROSES || $item->status === \App\Constants\StatusTransaksi::DIKIRIM ? '' : 'disabled'  }}>
                                             @if (!$item->id_kurir)
                                                 <option value="">Pilih Kurir</option>
                                             @endif
@@ -75,7 +75,7 @@
 
                                 <td>
 
-                                    @if ($item->metode_pembayaran === \App\Constants\MetodePembayaran::TRANSFER)
+                                    @if ($item->metode_pembayaran === \App\Enums\MetodePembayaran::TRANSFER)
 
                                         @if (isset($item->bukti_pembayaran))
 
@@ -92,7 +92,7 @@
 
                                 <td>
 
-                                    <form action="{{ route('admintoko.nota') }}" method="post">
+                                    <form action="{{ route('kasir.nota') }}" method="post">
                                         @csrf
                                         <input type="hidden" name="id_transaksi" value="{{ $item->id }}">
                                         <button type="submit" class="btn btn-sm btn-danger">
@@ -242,7 +242,7 @@
 
         $('.btn-status-pembayaran-lunas').click(function () {
             let idTransaksi = $(this).data('id-transaksi');
-            updateStatusPembayaran(idTransaksi, '{{ \App\Constants\StatusPembayaran::LUNAS }}', 'Status pembayaran berhasil diubah menjadi lunas');
+            updateStatusPembayaran(idTransaksi, '{{ \App\Enums\StatusPembayaran::LUNAS }}', 'Status pembayaran berhasil diubah menjadi lunas');
         });
 
 
@@ -280,7 +280,7 @@
                         $("#table-detail-transaksi tbody").empty();
                         data.data.forEach((item, index) => {
 
-                            const isPending = data.data.status === '{{ \App\Constants\StatusTransaksi::PENDING }}';
+                            const isPending = data.data.status === '{{ \App\Enums\StatusTransaksi::PENDING }}';
                             const rowClass = isPending && !item.cukup ? 'text-danger' : '';
 
                             let newRow = `
@@ -307,7 +307,7 @@
             let idTransaksi = $(this).data('id-transaksi');
 
             $.ajax({
-                url: '{{route('admintoko.nota')}}',
+                url: '{{route('kasir.nota')}}',
                 method: 'POST',
                 data: {
                     'id_transaksi': idTransaksi

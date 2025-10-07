@@ -43,13 +43,13 @@
                                     <x-status-pembayaran :status="$item->status_pembayaran" />
                                 </td>
                                 <td>
-                                    @if ($item->status === \App\Constants\StatusTransaksi::PENDING)
+                                    @if ($item->status === \App\Enums\StatusTransaksi::PENDING)
                                     <span class="badge bg-secondary">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIPROSES)
+                                    @elseif($item->status === \App\Enums\StatusTransaksi::DIPROSES)
                                     <span class="badge bg-success">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIKIRIM)
+                                    @elseif($item->status === \App\Enums\StatusTransaksi::DIKIRIM)
                                     <span class="badge bg-warning">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::DITOLAK)
+                                    @elseif($item->status === \App\Enums\StatusTransaksi::DITOLAK)
                                     <span class="badge bg-danger">{{ $item->status }}</span>
                                     @endif
                                 </td>

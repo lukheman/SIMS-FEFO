@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum Role: string
 {
-    case ADMINTOKO = 'admintoko';
+    case KASIR = 'kasir';
     case ADMINGUDANG = 'admingudang';
     case PIMPINAN = 'pimpinan';
     case RESELLER = 'reseller';
