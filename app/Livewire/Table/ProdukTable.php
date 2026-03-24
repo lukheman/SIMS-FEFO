@@ -43,7 +43,7 @@ class ProdukTable extends Component
                 $query->where('nama_produk', 'like', '%' . $this->search . '%')
                       ->orWhere('kode_produk', 'like', '%' . $this->search . '%');
             })
-            ->latest()
+            ->orderByRaw('exp IS NULL, exp ASC')
             ->paginate(10);
     }
 
