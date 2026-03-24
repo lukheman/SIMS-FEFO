@@ -43,7 +43,7 @@ class ProdukTable extends Component
                 $query->where('nama_produk', 'like', '%' . $this->search . '%')
                       ->orWhere('kode_produk', 'like', '%' . $this->search . '%');
             })
-            ->orderByRaw('exp IS NULL, exp ASC')
+            ->orderByRaw('exp IS NULL, exp ASC') // ini penerapan metode FEFO
             ->paginate(10);
     }
 
