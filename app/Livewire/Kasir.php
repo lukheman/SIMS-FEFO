@@ -8,6 +8,7 @@ use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Transaksi;
 use App\Models\TransaksiItem;
+use App\Services\FefoService;
 use App\Traits\WithConfirmation;
 use App\Traits\WithNotify;
 use Livewire\Attributes\Computed;
@@ -25,13 +26,14 @@ class Kasir extends Component
     public $showNextTransactionButton = false;
 
     #[Computed]
-    public function produkList() {
+    public function produkList()
+    {
         return Produk::query()
             ->with('persediaan')
-            ->when($this->search, function($query){
+            ->when($this->search, function ($query) {
 
-                $query->where('nama_produk', 'like', '%'.$this->search.'%')
-                ->orWhere('kode_produk', 'like', '%'.$this->search.'%');
+                $query->where('nama_produk', 'like', '%' . $this->search . '%')
+                    ->orWhere('kode_produk', 'like', '%' . $this->search . '%');
 
             })
             ->latest()
@@ -42,13 +44,16 @@ class Kasir extends Component
     public function addProduk($id)
     {
         $produk = Produk::query()->with('persediaan')->find($id);
-        if (!$produk) return;
+        if (!$produk)
+            return;
+
+        $totalStok = $produk->totalPersediaan();
 
         // Jika produk sudah ada di daftar, tambah jumlah
         foreach ($this->daftarBelanja as &$item) {
             if ($item['id'] === $produk->id) {
 
-                if($item['jumlah'] < $produk->persediaan->jumlah) {
+                if ($item['jumlah'] < $totalStok) {
 
                     $item['jumlah'] += 1;
                     $item['total'] = $item['jumlah'] * $item['harga'];
@@ -62,11 +67,11 @@ class Kasir extends Component
 
         // Jika belum ada, tambahkan baru
         $this->daftarBelanja[] = [
-            'id'    => $produk->id,
-            'kode'  => $produk->kode_produk,
-            'nama'  => $produk->nama_produk,
+            'id' => $produk->id,
+            'kode' => $produk->kode_produk,
+            'nama' => $produk->nama_produk,
             'harga' => $produk->harga_jual_unit_kecil,
-            'jumlah'   => 1,
+            'jumlah' => 1,
             'total' => $produk->harga_jual_unit_kecil,
         ];
     }
@@ -100,38 +105,42 @@ class Kasir extends Component
             return;
         }
 
-        // buat transaksi
-        $transaksi = Transaksi::query()->create([
-            'metode_pembayaran' => MetodePembayaran::TUNAI,
-            'status' => StatusTransaksi::SELESAI,
-        ]);
-
-        foreach($this->daftarBelanja as $item) {
-            $pesanan = Pesanan::query()->create([
-                'id_produk' => $item['id'],
-                'jumlah' => $item['jumlah'],
-                'id_transaksi' => $transaksi->id,
-                'satuan' => 1
-            ])->load('produk', 'produk.persediaan', 'produk.mutasi');
-
-            // kurangi persediaan barang setelah transaksi dibuat
-            $pesanan->produk->persediaan->jumlah -= $item['jumlah'];
-            $pesanan->produk->persediaan->save();
-
-            // Catat mutasi barang keluar
-            $pesanan->produk->mutasi()->create([
-                'jumlah' => $item['jumlah'],
-                'satuan' => 1,
-                'jenis' => 'keluar',
+        DB::transaction(function () {
+            // buat transaksi
+            $transaksi = Transaksi::query()->create([
+                'metode_pembayaran' => MetodePembayaran::TUNAI,
+                'status' => StatusTransaksi::SELESAI,
             ]);
 
-        }
+            foreach ($this->daftarBelanja as $item) {
+                $pesanan = Pesanan::query()->create([
+                    'id_produk' => $item['id'],
+                    'jumlah' => $item['jumlah'],
+                    'id_transaksi' => $transaksi->id,
+                    'satuan' => 1
+                ])->load('produk', 'produk.persediaan', 'produk.mutasi');
+
+                // Kurangi stok menggunakan metode FEFO
+                $hasilFefo = FefoService::kurangiStok($pesanan->produk, $item['jumlah']);
+
+                // Catat mutasi barang keluar per batch
+                foreach ($hasilFefo as $hasil) {
+                    $pesanan->produk->mutasi()->create([
+                        'jumlah' => $hasil['jumlah_dikurangi'],
+                        'satuan' => 1,
+                        'jenis' => 'keluar',
+                        'id_persediaan' => $hasil['persediaan']->id,
+                    ]);
+                }
+            }
+        });
 
         $this->showNextTransactionButton = true;
         $this->notifySuccess('Transaksi berhasil disimpan!');
     }
 
-    public function clearTransaction() {
+    public function clearTransaction()
+    {
         // Reset keranjang
         $this->daftarBelanja = [];
         $this->bayar = 0;

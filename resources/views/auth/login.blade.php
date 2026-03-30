@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login | Toko Bintang Poleang Timur</title>
+    <title>Login | Toko Bintang Timur Poleang</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
@@ -18,7 +18,7 @@
             <div class="flex justify-center mb-6">
                 <i class="fas fa-store fa-3x text-teal-600"></i>
             </div>
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-2">Toko Bintang Poleang Timur</h2>
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-2">Toko Bintang Timur Poleang</h2>
             <p class="text-center text-gray-500 mb-6">Masuk ke akun Anda</p>
 
             @if (flash()->message)

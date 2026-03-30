@@ -21,8 +21,6 @@ class MutasiController extends Controller
 
         $produk = Produk::query()->with('persediaan')->find($request->id_produk);
 
-        $mutasi = Mutasi::create($validated);
-
         if ($request->jenis === 'masuk') {
             $restock = Restock::where('id_produk', $request->id_produk)->first();
 
@@ -32,17 +30,29 @@ class MutasiController extends Controller
             // Hitung selisih hari
             $leadTime = max(1, $tanggalPesan->diffInDays($tanggalSelesai));
 
-            $produk->persediaan->jumlah += $request->jumlah;
+            // Gunakan FefoService untuk tambah stok
+            $batch = \App\Services\FefoService::tambahStok($produk, $request->jumlah, $request->tanggal_exp ?? null);
 
             $produk->lead_time = $leadTime;
-            $produk->persediaan->save();
             $produk->save();
+
+            $mutasi = Mutasi::create(array_merge($validated, [
+                'id_persediaan' => $batch->id,
+            ]));
 
             $restock->delete();
 
         } else {
-            $produk->persediaan->jumlah -= $request->jumlah;
-            $produk->save();
+            // Gunakan FefoService untuk kurangi stok (FEFO)
+            $hasilFefo = \App\Services\FefoService::kurangiStok($produk, $request->jumlah);
+
+            // Catat mutasi per batch
+            foreach ($hasilFefo as $hasil) {
+                $mutasi = Mutasi::create(array_merge($validated, [
+                    'id_persediaan' => $hasil['persediaan']->id,
+                    'jumlah' => $hasil['jumlah_dikurangi'],
+                ]));
+            }
         }
 
         $message = $request->jenis == 'masuk' ? 'Berhasil menambahkan data barang masuk' : 'Berhasil menambahkan data barang keluar';

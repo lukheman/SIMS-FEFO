@@ -13,8 +13,6 @@
                 <div id="scanner"></div>
       </div>
       <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
       </div>
     </div>
   </div>
@@ -191,7 +189,6 @@
 </form>
       </div>
       <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
                         @if ($currentState === \App\Enums\State::CREATE)
                             <button type="button" wire:click="save" class="btn btn-primary">Tambahkan</button>
                         @elseif ($currentState === \App\Enums\State::UPDATE)
@@ -233,10 +230,29 @@
                             <tr>
                                 <td>{{ $produk->kode_produk }}</td>
                                 <td>{{ $produk->nama_produk }}</td>
-                                <td>{{ $produk->exp }}</td>
+                                <td>
+                                    @php
+                                        $batchAktif = $produk->persediaan->first();
+                                    @endphp
+                                    @if($batchAktif && $batchAktif->tanggal_exp)
+                                        <span class="{{ $batchAktif->is_expired ? 'text-danger fw-bold' : ($batchAktif->is_hampir_expired ? 'text-warning fw-bold' : 'text-success') }}">
+                                            {{ $batchAktif->tanggal_exp->format('d/m/Y') }}
+                                            @if($batchAktif->is_expired)
+                                                <span class="badge bg-danger">Expired</span>
+                                            @elseif($batchAktif->is_hampir_expired)
+                                                <span class="badge bg-warning text-dark">Hampir Exp</span>
+                                            @endif
+                                        </span>
+                                        @if($produk->persediaan->count() > 1)
+                                            <br><small class="text-muted">+{{ $produk->persediaan->count() - 1 }} batch lain</small>
+                                        @endif
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                                </td>
                                 <td>{{ number_format($produk->harga_beli, 0, ',', '.') }}</td>
                                 <td>{{ number_format($produk->harga_jual, 0, ',', '.') }}</td>
-                                <td>{{ $produk->persediaan->jumlah}}</td>
+                                <td>{{ $produk->totalPersediaan() }}</td>
 <td class="text-end">
     <button wire:click="detail({{ $produk->id }})" class="btn btn-sm btn-outline-info me-1">
         <i class="bi bi-eye"></i> Lihat

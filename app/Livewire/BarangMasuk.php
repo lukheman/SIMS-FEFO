@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Enums\Role;
 use App\Models\Mutasi;
 use App\Models\Produk;
+use App\Services\FefoService;
 use App\Traits\WithConfirmation;
 use App\Traits\WithModal;
 use App\Traits\WithNotify;
@@ -29,12 +30,15 @@ class BarangMasuk extends Component
 
     public int $jumlah = 1;
 
+    public ?string $tanggal_exp = null;
+
     public ?Mutasi $mutasi; // selected mutasi
 
-    public function mount() {
+    public function mount()
+    {
         $user = getActiveUser();
 
-        if($user->role === Role::PIMPINAN) {
+        if ($user->role === Role::PIMPINAN) {
             $this->isLaporan = true;
         } else {
             $this->isLaporan = false;
@@ -58,15 +62,21 @@ class BarangMasuk extends Component
     }
 
     #[On('deleteConfirmed')]
-    public function deleteSupplyProdukConfirmed() {
+    public function deleteSupplyProdukConfirmed()
+    {
 
-        $persediaan = $this->mutasi->produk->persediaan;
-
-        if($persediaan->jumlah > 0) {
-            $persediaan->jumlah -= $this->mutasi->jumlah;
-            $persediaan->save();
+        // Kembalikan stok ke batch persediaan yang sesuai
+        if ($this->mutasi->id_persediaan) {
+            $persediaan = $this->mutasi->persediaan;
+            if ($persediaan) {
+                $persediaan->jumlah -= $this->mutasi->jumlah;
+                if ($persediaan->jumlah <= 0) {
+                    $persediaan->delete();
+                } else {
+                    $persediaan->save();
+                }
+            }
         }
-
 
         $this->notifySuccess('Berhasil menghapus data mutasi');
         $this->notifySuccess("Berhasil mengurangi persediaan produk {$this->mutasi->produk->nama_produk} sebanyak {$this->mutasi->jumlah}");
@@ -77,23 +87,26 @@ class BarangMasuk extends Component
 
     }
 
-    public function addSupplyProduk() {
+    public function addSupplyProduk()
+    {
 
-        $persediaan = $this->produk->persediaan;
-        $persediaan->jumlah += $this->jumlah;
-        $persediaan->save();
+        // Gunakan FefoService untuk menambah stok ke batch
+        $batch = FefoService::tambahStok($this->produk, $this->jumlah, $this->tanggal_exp);
 
+        // Catat mutasi barang masuk dengan referensi batch
         $this->produk->mutasi()->create([
             'jumlah' => $this->jumlah,
             'jenis' => 'masuk',
+            'id_persediaan' => $batch->id,
         ]);
 
         $this->closeModal('modal-produk');
         $this->notifySuccess('Berhasil menambahkan barang masuk');
-        $this->reset();
+        $this->reset('jumlah', 'tanggal_exp');
     }
 
-    public function addProduk($id) {
+    public function addProduk($id)
+    {
 
         $this->produk = Produk::query()->with('persediaan', 'mutasi')->find($id);
         $this->closeModal('modal-cari-produk');
@@ -107,18 +120,19 @@ class BarangMasuk extends Component
         return Produk::query()
             ->when($this->search, function ($query) {
                 $query->where('nama_produk', 'like', '%' . $this->search . '%')
-                      ->orWhere('kode_produk', 'like', '%' . $this->search . '%');
+                    ->orWhere('kode_produk', 'like', '%' . $this->search . '%');
             })
             ->latest()
             ->paginate(10);
     }
 
     #[Computed]
-    public function produkMasuk() {
+    public function produkMasuk()
+    {
 
 
         return Mutasi::query()
-            ->with('produk')
+            ->with('produk', 'persediaan')
             ->where('jenis', 'masuk')
             ->paginate(10);
 

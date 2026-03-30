@@ -19,6 +19,11 @@ class Mutasi extends Model
         return $this->belongsTo(Produk::class, 'id_produk');
     }
 
+    public function persediaan()
+    {
+        return $this->belongsTo(Persediaan::class, 'id_persediaan');
+    }
+
     public function getLabelTotalHargaJualAttribute()
     {
 
@@ -32,11 +37,13 @@ class Mutasi extends Model
 
     }
 
-    public function getTotalHargaBeliAttribute() {
+    public function getTotalHargaBeliAttribute()
+    {
         return $this->produk->harga_beli * $this->jumlah;
     }
 
-    public function getLabelTotalHargaBeliAttribute() {
+    public function getLabelTotalHargaBeliAttribute()
+    {
         $formattedHarga = number_format($this->getTotalHargaBeliAttribute(), 0, ',', '.');
         return "Rp. {$formattedHarga}";
     }
@@ -106,7 +113,8 @@ class Mutasi extends Model
 
     }
 
-    public function getLabelJumlahUnitDipesanAttribute() {
+    public function getLabelJumlahUnitDipesanAttribute()
+    {
         $unitKecil = $this->produk->unit_kecil;
         $unitBesar = $this->produk->unit_besar;
 
@@ -116,7 +124,8 @@ class Mutasi extends Model
         return "{$jumlahUnitKecil} {$unitKecil} ({$jumlahUnitBesar} {$unitBesar})";
     }
 
-    public function getLabelJumlahUnitTerjualAttribute() {
+    public function getLabelJumlahUnitTerjualAttribute()
+    {
         $unit = $this->satuan ? $this->produk->unit_kecil : $this->produk->unit_besar;
 
         return "{$this->jumlah} {$unit}";

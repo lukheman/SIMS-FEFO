@@ -28,12 +28,14 @@ class PesananTable extends Component
 
     public $selectedTransaksi;
 
-    public function mount() {
+    public function mount()
+    {
         $this->kurirList = User::query()->where('role', Role::KURIR)->get();
         $this->closeModal('modal-pilih-kurir');
     }
 
-    public function pesananDiterima($id) {
+    public function pesananDiterima($id)
+    {
         Transaksi::query()->find($id)->update([
             'status' => StatusTransaksi::DITERIMA,
         ]);
@@ -42,52 +44,56 @@ class PesananTable extends Component
     }
 
 
-    public function saveKurir() {
-    if ($this->selectedTransaksi->status === StatusTransaksi::DIPROSES) {
+    public function saveKurir()
+    {
+        if ($this->selectedTransaksi->status === StatusTransaksi::DIPROSES) {
 
-        foreach ($this->selectedTransaksi->pesanan as $pesanan) {
-            $persediaan = $pesanan->produk->persediaan;
+            foreach ($this->selectedTransaksi->pesanan as $pesanan) {
+                // Hitung jumlah unit kecil yang perlu dikurangi
+                $jumlahKurangi = $pesanan->satuan
+                    ? $pesanan->jumlah
+                    : $pesanan->jumlah_pcs;
 
-            // Kurangi stok sesuai jenis satuan
-            $persediaan->jumlah -= $pesanan->satuan
-                ? $pesanan->jumlah
-                : $pesanan->jumlah_pcs;
+                // Kurangi stok menggunakan metode FEFO
+                $hasilFefo = \App\Services\FefoService::kurangiStok($pesanan->produk, $jumlahKurangi);
 
-            $persediaan->save();
+                $this->notifySuccess(
+                    "Stok produk {$pesanan->produk->nama_produk} telah diperbarui."
+                );
 
-            $this->notifySuccess(
-                "Stok produk {$pesanan->produk->nama_produk} telah diperbarui."
-            );
+                // Catat mutasi barang keluar per batch
+                foreach ($hasilFefo as $hasil) {
+                    $pesanan->produk->mutasi()->create([
+                        'jumlah' => $hasil['jumlah_dikurangi'],
+                        'satuan' => $pesanan->satuan,
+                        'jenis' => 'keluar',
+                        'id_persediaan' => $hasil['persediaan']->id,
+                    ]);
+                }
 
-            // Catat mutasi barang keluar
-            $pesanan->produk->mutasi()->create([
-                'jumlah' => $pesanan->jumlah,
-                'satuan' => $pesanan->satuan,
-                'jenis' => 'keluar',
-            ]);
-
-            $this->notifySuccess(
-                "Perubahan stok untuk {$pesanan->produk->nama_produk} telah dicatat dalam mutasi."
-            );
+                $this->notifySuccess(
+                    "Perubahan stok untuk {$pesanan->produk->nama_produk} telah dicatat dalam mutasi."
+                );
+            }
         }
+
+        // Perbarui status transaksi dan kurir
+        $this->selectedTransaksi->update([
+            'id_kurir' => $this->selectedKurir->id,
+            'status' => StatusTransaksi::DIKIRIM,
+        ]);
+
+        $this->closeModal('modal-pilih-kurir');
+
+        $this->notifySuccess(
+            "Kurir {$this->selectedKurir->name} telah ditugaskan untuk mengantar pesanan."
+        );
+
+        $this->reset('selectedKurir');
     }
 
-    // Perbarui status transaksi dan kurir
-    $this->selectedTransaksi->update([
-        'id_kurir' => $this->selectedKurir->id,
-        'status' => StatusTransaksi::DIKIRIM,
-    ]);
-
-    $this->closeModal('modal-pilih-kurir');
-
-    $this->notifySuccess(
-        "Kurir {$this->selectedKurir->name} telah ditugaskan untuk mengantar pesanan."
-    );
-
-    $this->reset('selectedKurir');
-}
-
-    public function openModalSelectKurir($id) {
+    public function openModalSelectKurir($id)
+    {
         $this->selectedTransaksi = Transaksi::query()
             ->with('kurir', 'pesanan', 'pesanan.produk', 'pesanan.produk.persediaan', 'pesanan.produk.mutasi')
             ->find($id);
@@ -97,11 +103,13 @@ class PesananTable extends Component
         $this->openModal('modal-pilih-kurir');
     }
 
-    public function selectKurir($id) {
+    public function selectKurir($id)
+    {
         $this->selectedKurir = User::query()->find($id);
     }
 
-    public function transaksiLunas($id) {
+    public function transaksiLunas($id)
+    {
         Transaksi::query()->find($id)->update([
             'status_pembayaran' => StatusPembayaran::LUNAS,
             'status' => StatusTransaksi::DIPROSES,
@@ -109,20 +117,22 @@ class PesananTable extends Component
         $this->notifySuccess('Status Pembayaran diubah menjadi Lunas');
     }
 
-    public function detailTransaksi($id) {
+    public function detailTransaksi($id)
+    {
         $this->selectedTransaksi = Transaksil::query()->with('pesanan', 'pesanan.produk')->findOrFail($id);
         $this->openModal('modal-detail-transaksi');
     }
 
     #[Computed]
-    public function transaksiList() {
+    public function transaksiList()
+    {
         $user = getActiveUser();
 
         if ($user->role === Role::KASIR) {
             return Transaksi::query()
                 ->withWhereHas('user')
                 ->paginate();
-        } elseif($user->role === Role::KURIR) {
+        } elseif ($user->role === Role::KURIR) {
             return Transaksi::query()
                 ->withWhereHas('user')
                 ->where('id_kurir', $user->id)

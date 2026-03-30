@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register | Toko Bintang Poleang Timur</title>
+    <title>Register | Toko Bintang Timur Poleang</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -20,7 +20,7 @@
             <div class="flex justify-center mb-6">
                 <i class="fas fa-user-plus fa-3x text-teal-600"></i>
             </div>
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-2">Toko Bintang Poleang Timur</h2>
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-2">Toko Bintang Timur Poleang</h2>
             <p class="text-center text-gray-500 mb-6">
                 Sudah punya akun? <a href="{{ route('login') }}" class="text-teal-600 hover:text-teal-800 hover:underline transition duration-200">Login</a>
             </p>

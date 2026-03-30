@@ -12,9 +12,10 @@ class PersediaanTable extends Component
 {
 
     #[Computed]
-    public function produkList() {
+    public function produkList()
+    {
         return Produk::query()
-            ->with('persediaan')
+            ->with(['persediaan' => fn($q) => $q->aktif()->fefoOrder()])
             ->paginate(10);
     }
 

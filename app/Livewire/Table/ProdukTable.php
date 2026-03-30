@@ -38,12 +38,13 @@ class ProdukTable extends Component
     public function produkList()
     {
         return Produk::query()
-            ->with('persediaan')
+            ->with(['persediaan' => fn($q) => $q->aktif()->fefoOrder()])
             ->when($this->search, function ($query) {
                 $query->where('nama_produk', 'like', '%' . $this->search . '%')
-                      ->orWhere('kode_produk', 'like', '%' . $this->search . '%');
+                    ->orWhere('kode_produk', 'like', '%' . $this->search . '%');
             })
-            ->orderByRaw('exp IS NULL, exp ASC') // ini penerapan metode FEFO
+            ->orderByRaw('(SELECT MIN(tanggal_exp) FROM persediaan WHERE persediaan.id_produk = produk.id AND persediaan.jumlah > 0 AND persediaan.tanggal_exp IS NOT NULL) IS NULL,
+                          (SELECT MIN(tanggal_exp) FROM persediaan WHERE persediaan.id_produk = produk.id AND persediaan.jumlah > 0 AND persediaan.tanggal_exp IS NOT NULL) ASC') // Penerapan metode FEFO
             ->paginate(10);
     }
 
@@ -85,7 +86,8 @@ class ProdukTable extends Component
         $this->closeModal($this->modalId);
     }
 
-    public function detail($id) {
+    public function detail($id)
+    {
 
         $this->currentState = State::SHOW;
 
@@ -95,7 +97,8 @@ class ProdukTable extends Component
 
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
 
         $this->detail($id);
         $this->currentState = State::UPDATE;

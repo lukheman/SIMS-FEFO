@@ -17,50 +17,50 @@ use Illuminate\Support\Facades\DB;
 
 class AdminTokoController extends Controller
 {
-public function transaksi(Request $request)
-{
-    $transaksi = Transaksi::create([
-        'metode_pembayaran' => MetodePembayaran::TUNAI,
-        'status' => StatusTransaksi::SELESAI,
-    ]);
+    public function transaksi(Request $request)
+    {
+        $transaksi = Transaksi::create([
+            'metode_pembayaran' => MetodePembayaran::TUNAI,
+            'status' => StatusTransaksi::SELESAI,
+        ]);
 
-    foreach ($request->pesanan as $barcode => $value) {
-        $produk = Produk::where('kode_produk', $barcode)->firstOrFail();
+        foreach ($request->pesanan as $barcode => $value) {
+            $produk = Produk::where('kode_produk', $barcode)->firstOrFail();
 
-        // Cek persediaan produk berdasarkan jumlah dan satuan
-        $permintaan = $value['satuan'] === $produk->unit_kecil ? $value['jumlah'] : $value['jumlah'] * $produk->tingkat_konversi;
-        if (!$produk->isPersediaanMencukupi($permintaan)) {
-            return response()->json([
-                'success' => false,
-                'message' => "Persediaan {$produk->nama_produk} tidak cukup untuk {$value['jumlah']} {$value['satuan']}",
-            ], 200);
+            // Cek persediaan produk berdasarkan jumlah dan satuan
+            $permintaan = $value['satuan'] === $produk->unit_kecil ? $value['jumlah'] : $value['jumlah'] * $produk->tingkat_konversi;
+            if (!$produk->isPersediaanMencukupi($permintaan)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Persediaan {$produk->nama_produk} tidak cukup untuk {$value['jumlah']} {$value['satuan']}",
+                ], 200);
+            }
+
+            // Tentukan harga berdasarkan satuan
+            $harga = $value['satuan'] === $produk->unit_kecil ? $produk->harga_jual_unit_kecil : $produk->harga_jual;
+
+            // Kalkulasi total harga
+            $total_harga = $harga * $value['jumlah'];
+
+            // Buat pesanan
+            Pesanan::create([
+                'id_produk' => $produk->id,
+                'jumlah' => $value['jumlah'],
+                'total_harga' => $total_harga,
+                'id_transaksi' => $transaksi->id,
+                'satuan' => $value['satuan'] === $produk->unit_kecil ? 1 : 0,
+            ]);
         }
 
-        // Tentukan harga berdasarkan satuan
-        $harga = $value['satuan'] === $produk->unit_kecil ? $produk->harga_jual_unit_kecil : $produk->harga_jual;
+        // Kurangi persediaan setelah semua pesanan dibuat
+        $this->kurangiPersediaan($transaksi);
 
-        // Kalkulasi total harga
-        $total_harga = $harga * $value['jumlah'];
-
-        // Buat pesanan
-        Pesanan::create([
-            'id_produk' => $produk->id,
-            'jumlah' => $value['jumlah'],
-            'total_harga' => $total_harga,
-            'id_transaksi' => $transaksi->id,
-            'satuan' => $value['satuan'] === $produk->unit_kecil ? 1 : 0,
-        ]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Transaksi berhasil dilakukan',
+            'transaksi' => $transaksi,
+        ], 200);
     }
-
-    // Kurangi persediaan setelah semua pesanan dibuat
-    $this->kurangiPersediaan($transaksi);
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Transaksi berhasil dilakukan',
-        'transaksi' => $transaksi,
-    ], 200);
-}
 
     private function kurangiPersediaan(Transaksi $transaksi)
     {
@@ -68,30 +68,30 @@ public function transaksi(Request $request)
 
         foreach ($pesanan as $item) {
 
-            if (! $item->produk->isPersediaanMencukupi($item->jumlah)) {
+            // Hitung jumlah unit kecil yang perlu dikurangi
+            $jumlahKurangi = $item->satuan ? $item->jumlah : $item->jumlah * $item->produk->tingkat_konversi;
+
+            if (!$item->produk->isPersediaanMencukupi($jumlahKurangi)) {
                 return response()->json([
                     'success' => false,
                     'message' => "Persediaan {$item->produk->nama_produk} tidak mencukupi",
                 ], 200);
             }
 
-            // kurangi persediaan produk
-            if($item->satuan) {
-                $item->produk->persediaan->jumlah -= $item->jumlah;
-            } else {
-                $item->produk->persediaan->jumlah -= $item->jumlah * $item->produk->tingkat_konversi;
+            // Kurangi stok menggunakan metode FEFO
+            $hasilFefo = \App\Services\FefoService::kurangiStok($item->produk, $jumlahKurangi);
+
+            // Catat log mutasi per batch
+            foreach ($hasilFefo as $hasil) {
+                Mutasi::create([
+                    'id_produk' => $item->produk->id,
+                    'jumlah' => $hasil['jumlah_dikurangi'],
+                    'jenis' => 'keluar',
+                    'keterangan' => 'Pembelian langsung',
+                    'satuan' => $item->satuan,
+                    'id_persediaan' => $hasil['persediaan']->id,
+                ]);
             }
-            $item->produk->persediaan->save();
-
-
-            // catat log mutasi
-            Mutasi::create([
-                'id_produk' => $item->produk->id,
-                'jumlah' => $item->jumlah,
-                'jenis' => 'keluar',
-                'keterangan' => 'Pembelian langsung',
-                'satuan' => $item->satuan
-            ]);
 
         }
 
@@ -114,7 +114,7 @@ public function transaksi(Request $request)
     {
         $pesanan = Transaksi::where('status', StatusTransaksi::PENDING)->count();
         $total_penjualan = Transaksi::where('status', StatusTransaksi::SELESAI)->count();
-        $persediaan_barang = Produk::with('persediaan')->get()->sum('persediaan.jumlah');
+        $persediaan_barang = \App\Models\Persediaan::sum('jumlah');
 
         return view('admin_toko.index', [
             'page' => 'Dashboard',
@@ -167,7 +167,8 @@ public function transaksi(Request $request)
         ]);
     }
 
-    public function laporanPesanan() {
+    public function laporanPesanan()
+    {
         return view('admin_toko.laporan-pesanan', [
             'page' => 'Laporan Pesanan'
         ]);

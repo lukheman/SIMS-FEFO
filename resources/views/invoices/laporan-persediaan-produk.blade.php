@@ -85,14 +85,14 @@
             <tbody>
 
                 @foreach ($produk as $item)
-                <tr>
-                    <td>{{ $loop->index + 1 }}</td>
-                    <td style="text-align: center;">{{ $item->kode_produk }}</td>
-                    <td>{{ $item->nama_produk }}</td>
-                    <td style="text-align: right;">{{ $item->label_harga_beli}}</td>
-                    <td style="text-align: right;">{{ $item->label_harga_jual}}</td>
-                    <td style="text-align: center;">{{ $item->persediaan->jumlah }}</td>
-                </tr>
+                    <tr>
+                        <td>{{ $loop->index + 1 }}</td>
+                        <td style="text-align: center;">{{ $item->kode_produk }}</td>
+                        <td>{{ $item->nama_produk }}</td>
+                        <td style="text-align: right;">{{ $item->label_harga_beli}}</td>
+                        <td style="text-align: right;">{{ $item->label_harga_jual}}</td>
+                        <td style="text-align: center;">{{ $item->totalPersediaan() }}</td>
+                    </tr>
                 @endforeach
 
             </tbody>
@@ -103,7 +103,7 @@
             <div class="col">
             </div>
             <div class="col" style="text-align: center;">
-                <p style="margin-bottom: 100px;"><b>Toko Bintang Poleang Timur</b></p>
+                <p style="margin-bottom: 100px;"><b>Toko Bintang Timur Poleang</b></p>
                 <p><b><u>{{ $ttd }}</u></b></p>
             </div>
         </div>
