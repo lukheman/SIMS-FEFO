@@ -99,14 +99,7 @@
         </div>
 
         <div class="col-md-6 col-12">
-            <div class="mb-3">
-                <label for="exp" class="form-label fw-semibold">Tanggal Expired</label>
-                <input wire:model="form.exp" type="date" class="form-control" id="exp"
-                    @if ($currentState === \App\Enums\State::SHOW) disabled @endif>
-                @error('form.exp')
-                    <small class="d-block mt-1 text-danger">{{ $message }}</small>
-                @enderror
-            </div>
+            <!-- Tempat field dihapus -->
         </div>
     </div>
 

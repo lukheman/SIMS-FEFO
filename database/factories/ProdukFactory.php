@@ -25,8 +25,7 @@ class ProdukFactory extends Factory
             'harga_jual' => $this->faker->randomFloat(2, 2000, 150000), // harga jual
             'lead_time' => $this->faker->numberBetween(0, 30), // hari
             'deskripsi' => $this->faker->sentence(),
-            'gambar' => $this->faker->imageUrl(400, 400, 'product', true, 'Produk'),
-            'exp' => $this->faker->optional()->dateTimeBetween('now', '+2 years'),
+            'gambar' => 'default.png',
             'harga_jual_unit_kecil' => $this->faker->randomFloat(2, 500, 50000),
             'tingkat_konversi' => $this->faker->numberBetween(1, 24), // misal 1 dus = 24 pcs
             'unit_kecil' => $this->faker->randomElement(UnitKecilProduk::values()),

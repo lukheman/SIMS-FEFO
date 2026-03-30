@@ -33,11 +33,10 @@ class ProdukController extends Controller
             'biaya_penyimpanan' => 'required|numeric|min:0',
             'biaya_pemesanan' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string',
-            'exp' => 'required',
             'harga_jual_unit_kecil' => 'required|numeric|min:0',
             'tingkat_konversi' => 'required|numeric|min:0',
-            'unit_kecil' =>  'required',
-            'unit_besar' =>  'required',
+            'unit_kecil' => 'required',
+            'unit_besar' => 'required',
         ]);
 
         $data = $request->all();
@@ -89,7 +88,6 @@ class ProdukController extends Controller
             'biaya_penyimpanan' => 'required|numeric:min:0',
             'biaya_pemesanan' => 'required|numeric:min:0',
             'deskripsi' => 'nullable|string',
-            'exp' => 'required',
         ]);
 
         $data = $request->all();

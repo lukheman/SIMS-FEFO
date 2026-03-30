@@ -17,7 +17,6 @@ class ProdukForm extends Form
     public int $lead_time = 0;
     public string $deskripsi = '';
     public ?string $gambar = null;
-    public ?string $exp = null;
     public string $harga_jual_unit_kecil = '';
     public int $tingkat_konversi = 0;
     public string $unit_kecil = '';
@@ -38,7 +37,6 @@ class ProdukForm extends Form
             'lead_time' => 'nullable|integer|min:0',
             'deskripsi' => 'nullable|string',
             'gambar' => 'nullable|string',
-            'exp' => 'nullable|date',
             'harga_jual_unit_kecil' => 'required|numeric|min:0',
             'tingkat_konversi' => 'required|integer|min:0',
             'unit_kecil' => 'required|string',
@@ -85,7 +83,8 @@ class ProdukForm extends Form
         $this->reset();
     }
 
-    public function fillFromModel(Produk $produk) {
+    public function fillFromModel(Produk $produk)
+    {
 
         $this->produk = $produk;
 
@@ -97,7 +96,6 @@ class ProdukForm extends Form
         $this->lead_time = $produk->lead_time;
         $this->deskripsi = $produk->deskripsi;
         $this->gambar = $produk->gambar;
-        $this->exp = $produk->exp;
         $this->harga_jual_unit_kecil = $produk->harga_jual_unit_kecil;
         $this->tingkat_konversi = $produk->tingkat_konversi;
         $this->unit_kecil = $produk->unit_kecil;
