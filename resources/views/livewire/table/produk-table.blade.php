@@ -86,22 +86,7 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6 col-12">
-            <div class="mb-3">
-                <label for="lead_time" class="form-label fw-semibold">Lead Time (Hari)</label>
-                <input wire:model="form.lead_time" type="number" class="form-control" id="lead_time"
-                    placeholder="Masukkan waktu tunggu (hari)" @if ($currentState === \App\Enums\State::SHOW) disabled @endif>
-                @error('form.lead_time')
-                    <small class="d-block mt-1 text-danger">{{ $message }}</small>
-                @enderror
-            </div>
-        </div>
 
-        <div class="col-md-6 col-12">
-            <!-- Tempat field dihapus -->
-        </div>
-    </div>
 
     <div class="mb-3">
         <label for="deskripsi" class="form-label fw-semibold">Deskripsi</label>

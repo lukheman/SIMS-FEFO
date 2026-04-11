@@ -14,7 +14,7 @@ class ProdukForm extends Form
     public string $kode_produk = '';
     public string $harga_beli = '';
     public string $harga_jual = '';
-    public int $lead_time = 0;
+
     public string $deskripsi = '';
     public ?string $gambar = null;
     public string $harga_jual_unit_kecil = '';
@@ -34,7 +34,7 @@ class ProdukForm extends Form
             ],
             'harga_beli' => 'required|numeric|min:0',
             'harga_jual' => 'required|numeric|min:0',
-            'lead_time' => 'nullable|integer|min:0',
+
             'deskripsi' => 'nullable|string',
             'gambar' => 'nullable|string',
             'harga_jual_unit_kecil' => 'required|numeric|min:0',
@@ -93,7 +93,7 @@ class ProdukForm extends Form
         $this->kode_produk = $produk->kode_produk;
         $this->harga_beli = $produk->harga_beli;
         $this->harga_jual = $produk->harga_jual;
-        $this->lead_time = $produk->lead_time;
+
         $this->deskripsi = $produk->deskripsi;
         $this->gambar = $produk->gambar;
         $this->harga_jual_unit_kecil = $produk->harga_jual_unit_kecil;

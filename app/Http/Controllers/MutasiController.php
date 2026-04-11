@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Mutasi;
 use App\Models\Produk;
 use App\Models\Restock;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class MutasiController extends Controller
@@ -24,17 +23,8 @@ class MutasiController extends Controller
         if ($request->jenis === 'masuk') {
             $restock = Restock::where('id_produk', $request->id_produk)->first();
 
-            $tanggalPesan = Carbon::parse($restock->created_at);
-            $tanggalSelesai = Carbon::now();
-
-            // Hitung selisih hari
-            $leadTime = max(1, $tanggalPesan->diffInDays($tanggalSelesai));
-
             // Gunakan FefoService untuk tambah stok
             $batch = \App\Services\FefoService::tambahStok($produk, $request->jumlah, $request->tanggal_exp ?? null);
-
-            $produk->lead_time = $leadTime;
-            $produk->save();
 
             $mutasi = Mutasi::create(array_merge($validated, [
                 'id_persediaan' => $batch->id,

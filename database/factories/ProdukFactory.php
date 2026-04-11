@@ -23,7 +23,7 @@ class ProdukFactory extends Factory
             'kode_produk' => strtoupper(Str::random(6)),  // contoh: "AB12CD"
             'harga_beli' => $this->faker->randomFloat(2, 1000, 100000), // harga beli
             'harga_jual' => $this->faker->randomFloat(2, 2000, 150000), // harga jual
-            'lead_time' => $this->faker->numberBetween(0, 30), // hari
+
             'deskripsi' => $this->faker->sentence(),
             'gambar' => 'default.png',
             'harga_jual_unit_kecil' => $this->faker->randomFloat(2, 500, 50000),

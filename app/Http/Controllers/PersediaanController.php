@@ -13,7 +13,7 @@ class PersediaanController extends Controller
         $data = $request->validate([
             'id_produk' => 'required|exists:produk,id',
             'periode' => 'required',
-            'lead_time' => 'required|numeric|min:0',
+
             'rata_rata_penggunaan' => 'required|numeric|min:0',
             'biaya_penyimpanan' => 'required|numeric|min:0',
             'biaya_pemesanan' => 'required|numeric|min:0',
@@ -67,7 +67,7 @@ class PersediaanController extends Controller
             // 'stock' => 'required|numeric|min:0',
             // 'stock_min' => 'required|numeric|min:0',
             // 'stock_max' => 'required|numeric|min:0',
-            'lead_time' => 'required|numeric|min:0',
+
             'rata_rata_penggunaan' => 'required|numeric|min:0',
             'biaya_penyimpanan' => 'required|numeric|min:0',
             'biaya_pemesanan' => 'required|numeric|min:0',

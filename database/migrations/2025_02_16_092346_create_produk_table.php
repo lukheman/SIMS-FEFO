@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('kode_produk', 20)->unique();
             $table->decimal('harga_beli', 10, 2); // perbal
             $table->decimal('harga_jual', 10, 2); // perbal
-            $table->integer('lead_time')->default(0); // waktu tunggu dalam satuan hari
+
             $table->text('deskripsi')->nullable();
             $table->string('gambar')->nullable();
             $table->decimal('harga_jual_unit_kecil', 10, 2);

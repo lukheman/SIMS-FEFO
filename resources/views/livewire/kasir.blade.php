@@ -19,7 +19,7 @@
                 <th>Kode</th>
                 <th>Nama Barang</th>
                 <th>Harga</th>
-                <!-- <th>Persediaan</th> -->
+                {{-- <th>Stok</th> --}}
                 <th class="text-end">Aksi</th>
               </tr>
             </thead>
@@ -29,7 +29,7 @@
                 <td>{{ $produk->kode_produk }}</td>
                 <td>{{ $produk->nama_produk }}</td>
                 <td>Rp {{ number_format($produk->harga_jual_unit_kecil, 0, ',', '.') }}</td>
-                <!-- <td>{{ $produk->persediaan->jumlah}}</td> -->
+                {{-- <td>{{ $produk->totalPersediaan() }}</td> --}}
                 <td class="text-end">
                   <button wire:click="addProduk({{ $produk->id }})" class="btn btn-sm btn-success">Tambah</button>
                 </td>
