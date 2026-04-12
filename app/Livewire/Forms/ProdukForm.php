@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Produk;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Livewire\Form;
 
@@ -16,7 +17,8 @@ class ProdukForm extends Form
     public string $harga_jual = '';
 
     public string $deskripsi = '';
-    public ?string $gambar = null;
+    public $gambar = null;       // Menyimpan TemporaryUploadedFile saat upload baru
+    public ?string $gambarPath = null; // Menyimpan path gambar yang sudah tersimpan di DB
     public string $harga_jual_unit_kecil = '';
     public int $tingkat_konversi = 0;
     public string $unit_kecil = '';
@@ -36,7 +38,7 @@ class ProdukForm extends Form
             'harga_jual' => 'required|numeric|min:0',
 
             'deskripsi' => 'nullable|string',
-            'gambar' => 'nullable|string',
+            'gambar' => 'nullable|image|max:2048',
             'harga_jual_unit_kecil' => 'required|numeric|min:0',
             'tingkat_konversi' => 'required|integer|min:0',
             'unit_kecil' => 'required|string',
@@ -73,13 +75,34 @@ class ProdukForm extends Form
 
     public function store()
     {
-        Produk::create($this->validate());
+        $validated = $this->validate();
+
+        if ($this->gambar) {
+            $validated['gambar'] = $this->gambar->store('photos', 'public');
+        } else {
+            unset($validated['gambar']);
+        }
+
+        Produk::create($validated);
         $this->reset();
     }
 
     public function update()
     {
-        $this->produk->update($this->validate());
+        $validated = $this->validate();
+
+        if ($this->gambar) {
+            // Hapus gambar lama jika ada
+            if ($this->produk->gambar) {
+                Storage::disk('public')->delete($this->produk->gambar);
+            }
+            $validated['gambar'] = $this->gambar->store('photos', 'public');
+        } else {
+            // Tidak ada upload baru, pertahankan gambar lama
+            $validated['gambar'] = $this->gambarPath;
+        }
+
+        $this->produk->update($validated);
         $this->reset();
     }
 
@@ -95,7 +118,8 @@ class ProdukForm extends Form
         $this->harga_jual = $produk->harga_jual;
 
         $this->deskripsi = $produk->deskripsi;
-        $this->gambar = $produk->gambar;
+        $this->gambar = null;             // Reset file upload
+        $this->gambarPath = $produk->gambar; // Simpan path existing untuk ditampilkan
         $this->harga_jual_unit_kecil = $produk->harga_jual_unit_kecil;
         $this->tingkat_konversi = $produk->tingkat_konversi;
         $this->unit_kecil = $produk->unit_kecil;

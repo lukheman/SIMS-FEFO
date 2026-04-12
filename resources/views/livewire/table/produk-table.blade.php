@@ -99,11 +99,39 @@
 
     <div class="mb-3">
         <label for="gambar" class="form-label fw-semibold">Gambar Produk</label>
-        <input wire:model="form.gambar" type="file" class="form-control" id="gambar"
-            @if ($currentState === \App\Enums\State::SHOW) disabled @endif>
-        @error('form.gambar')
-            <small class="d-block mt-1 text-danger">{{ $message }}</small>
-        @enderror
+
+        {{-- Preview gambar existing (dari database) --}}
+        @if ($form->gambarPath && !$form->gambar)
+            <div class="mb-2">
+                <img src="{{ asset('storage/' . $form->gambarPath) }}"
+                    alt="Gambar Produk"
+                    class="img-thumbnail"
+                    style="max-height: 160px; object-fit: contain;">
+                <div class="mt-1">
+                    <small class="text-muted">Gambar saat ini</small>
+                </div>
+            </div>
+        @endif
+
+        {{-- Preview gambar baru yang baru saja diupload --}}
+        @if ($form->gambar)
+            <div class="mb-2">
+                <img src="{{ $form->gambar->temporaryUrl() }}"
+                    alt="Preview Gambar"
+                    class="img-thumbnail"
+                    style="max-height: 160px; object-fit: contain;">
+                <div class="mt-1">
+                    <small class="text-success">Preview gambar baru</small>
+                </div>
+            </div>
+        @endif
+
+        @if ($currentState !== \App\Enums\State::SHOW)
+            <input wire:model="form.gambar" type="file" accept="image/*" class="form-control" id="gambar">
+            @error('form.gambar')
+                <small class="d-block mt-1 text-danger">{{ $message }}</small>
+            @enderror
+        @endif
     </div>
 
     <div class="row">
