@@ -57,7 +57,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        Selamat datang di AdminLTE dengan Laravel 11!
+        Selamat datang di SIMS-FEFO!
     </div>
 </div>
 @endsection

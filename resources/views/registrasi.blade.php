@@ -132,7 +132,7 @@
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 5 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
+    <!-- App -->
     <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 </body>
 </html>

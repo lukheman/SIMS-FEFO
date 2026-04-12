@@ -11,7 +11,7 @@ use App\Enums\Role;
             <!--begin::Brand Image-->
             <!-- <img -->
             <!--   src="{{ getActiveUser()->foto ? asset('storage/' . getActiveUser()->foto) : asset('assets/compiled/jpg/2.jpg') }}" -->
-            <!--   alt="AdminLTE Logo" -->
+            <!--   alt="Logo" -->
             <!--   class="brand-image opacity-75 shadow rounded-circle" -->
             <!-- /> -->
             <!--end::Brand Image-->
