@@ -105,38 +105,42 @@ class Kasir extends Component
             return;
         }
 
-        DB::transaction(function () {
-            // buat transaksi
-            $transaksi = Transaksi::query()->create([
-                'metode_pembayaran' => MetodePembayaran::TUNAI,
-                'status' => StatusTransaksi::SELESAI,
-            ]);
+        try {
+            DB::transaction(function () {
+                // buat transaksi
+                $transaksi = Transaksi::query()->create([
+                    'metode_pembayaran' => MetodePembayaran::TUNAI,
+                    'status' => StatusTransaksi::SELESAI,
+                ]);
 
-            foreach ($this->daftarBelanja as $item) {
-                $pesanan = Pesanan::query()->create([
-                    'id_produk' => $item['id'],
-                    'jumlah' => $item['jumlah'],
-                    'id_transaksi' => $transaksi->id,
-                    'satuan' => 1
-                ])->load('produk', 'produk.persediaan', 'produk.mutasi');
+                foreach ($this->daftarBelanja as $item) {
+                    $pesanan = Pesanan::query()->create([
+                        'id_produk' => $item['id'],
+                        'jumlah' => $item['jumlah'],
+                        'id_transaksi' => $transaksi->id,
+                        'satuan' => 1
+                    ])->load('produk', 'produk.persediaan', 'produk.mutasi');
 
-                // Kurangi stok menggunakan metode FEFO
-                $hasilFefo = FefoService::kurangiStok($pesanan->produk, $item['jumlah']);
+                    // Kurangi stok menggunakan metode FEFO
+                    $hasilFefo = FefoService::kurangiStok($pesanan->produk, $item['jumlah']);
 
-                // Catat mutasi barang keluar per batch
-                foreach ($hasilFefo as $hasil) {
-                    $pesanan->produk->mutasi()->create([
-                        'jumlah' => $hasil['jumlah_dikurangi'],
-                        'satuan' => 1,
-                        'jenis' => 'keluar',
-                        'id_persediaan' => $hasil['persediaan']->id,
-                    ]);
+                    // Catat mutasi barang keluar per batch
+                    foreach ($hasilFefo as $hasil) {
+                        $pesanan->produk->mutasi()->create([
+                            'jumlah' => $hasil['jumlah_dikurangi'],
+                            'satuan' => 1,
+                            'jenis' => 'keluar',
+                            'id_persediaan' => $hasil['persediaan']->id,
+                        ]);
+                    }
                 }
-            }
-        });
+            });
 
-        $this->showNextTransactionButton = true;
-        $this->notifySuccess('Transaksi berhasil disimpan!');
+            $this->showNextTransactionButton = true;
+            $this->notifySuccess('Transaksi berhasil disimpan!');
+        } catch (\Exception $e) {
+            $this->notifyError($e->getMessage());
+        }
     }
 
     public function clearTransaction()

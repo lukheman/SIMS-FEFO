@@ -46,50 +46,49 @@ class PesananTable extends Component
 
     public function saveKurir()
     {
-        if ($this->selectedTransaksi->status === StatusTransaksi::DIPROSES) {
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function () {
+                if ($this->selectedTransaksi->status === StatusTransaksi::DIPROSES) {
 
-            foreach ($this->selectedTransaksi->pesanan as $pesanan) {
-                // Hitung jumlah unit kecil yang perlu dikurangi
-                $jumlahKurangi = $pesanan->satuan
-                    ? $pesanan->jumlah
-                    : $pesanan->jumlah_pcs;
+                    foreach ($this->selectedTransaksi->pesanan as $pesanan) {
+                        // Hitung jumlah unit kecil yang perlu dikurangi
+                        $jumlahKurangi = $pesanan->satuan
+                            ? $pesanan->jumlah
+                            : $pesanan->jumlah_pcs;
 
-                // Kurangi stok menggunakan metode FEFO
-                $hasilFefo = \App\Services\FefoService::kurangiStok($pesanan->produk, $jumlahKurangi);
+                        // Kurangi stok menggunakan metode FEFO
+                        $hasilFefo = \App\Services\FefoService::kurangiStok($pesanan->produk, $jumlahKurangi);
 
-                $this->notifySuccess(
-                    "Stok produk {$pesanan->produk->nama_produk} telah diperbarui."
-                );
-
-                // Catat mutasi barang keluar per batch
-                foreach ($hasilFefo as $hasil) {
-                    $pesanan->produk->mutasi()->create([
-                        'jumlah' => $hasil['jumlah_dikurangi'],
-                        'satuan' => $pesanan->satuan,
-                        'jenis' => 'keluar',
-                        'id_persediaan' => $hasil['persediaan']->id,
-                    ]);
+                        // Catat mutasi barang keluar per batch
+                        foreach ($hasilFefo as $hasil) {
+                            $pesanan->produk->mutasi()->create([
+                                'jumlah' => $hasil['jumlah_dikurangi'],
+                                'satuan' => $pesanan->satuan,
+                                'jenis' => 'keluar',
+                                'id_persediaan' => $hasil['persediaan']->id,
+                            ]);
+                        }
+                    }
                 }
 
-                $this->notifySuccess(
-                    "Perubahan stok untuk {$pesanan->produk->nama_produk} telah dicatat dalam mutasi."
-                );
-            }
+                // Perbarui status transaksi dan kurir
+                $this->selectedTransaksi->update([
+                    'id_kurir' => $this->selectedKurir->id,
+                    'status' => StatusTransaksi::DIKIRIM,
+                ]);
+            });
+
+            $this->closeModal('modal-pilih-kurir');
+
+            $this->notifySuccess(
+                "Kurir {$this->selectedKurir->name} telah ditugaskan untuk mengantar pesanan."
+            );
+
+            $this->reset('selectedKurir');
+
+        } catch (\Exception $e) {
+            $this->notifyError($e->getMessage());
         }
-
-        // Perbarui status transaksi dan kurir
-        $this->selectedTransaksi->update([
-            'id_kurir' => $this->selectedKurir->id,
-            'status' => StatusTransaksi::DIKIRIM,
-        ]);
-
-        $this->closeModal('modal-pilih-kurir');
-
-        $this->notifySuccess(
-            "Kurir {$this->selectedKurir->name} telah ditugaskan untuk mengantar pesanan."
-        );
-
-        $this->reset('selectedKurir');
     }
 
     public function openModalSelectKurir($id)
