@@ -12,7 +12,9 @@
                     <th scope="col">Jumlah Terjual</th>
                     <th scope="col">Harga Jual</th>
                     <th scope="col">Total Harga</th>
-                    <th scope="col" class="text-end">Aksi</th>
+                    @if (getActiveUser()->role !== \App\Enums\Role::PIMPINAN)
+                        <th scope="col" class="text-end">Aksi</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -25,11 +27,13 @@
                     <td>{{ $item->label_jumlah_unit_terjual }}</td>
                     <td>{{ $item->produk->label_harga_jual}}</td>
                     <td>{{ $item->label_total_harga_jual}}</td>
-                    <td class="text-end">
-                        <button wire:click="deletePenjualan({{ $item->id}})" class="btn btn-sm btn-outline-danger">
-                            <i class="bi bi-trash"></i> Hapus
-                        </button>
-                    </td>
+                    @if (getActiveUser()->role !== \App\Enums\Role::PIMPINAN)
+                        <td class="text-end">
+                            <button wire:click="deletePenjualan({{ $item->id}})" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i> Hapus
+                            </button>
+                        </td>
+                    @endif
                 </tr>
 
                 @endforeach

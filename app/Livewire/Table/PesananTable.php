@@ -15,6 +15,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use App\Models\Transaksi as Transaksil;
 use Livewire\WithPagination;
+use Livewire\Attributes\Url;
 
 #[Title('Pesanan')]
 class PesananTable extends Component
@@ -27,6 +28,14 @@ class PesananTable extends Component
     public ?User $selectedKurir = null;
 
     public $selectedTransaksi;
+
+    #[Url]
+    public $activeTab = 'semua';
+
+    public function setTab($tab) {
+        $this->activeTab = $tab;
+        $this->resetPage();
+    }
 
     public function mount()
     {
@@ -128,17 +137,41 @@ class PesananTable extends Component
         $user = getActiveUser();
 
         if ($user->role === Role::KASIR) {
-            return Transaksi::query()
-                ->withWhereHas('user')
-                ->paginate();
+            $query = Transaksi::query()->withWhereHas('user');
         } elseif ($user->role === Role::KURIR) {
-            return Transaksi::query()
+            $query = Transaksi::query()
                 ->withWhereHas('user')
                 ->where('id_kurir', $user->id)
-                ->where('status', '!=', StatusTransaksi::SELESAI)
-                ->paginate();
-
+                ->where('status', '!=', StatusTransaksi::SELESAI);
+        } else {
+            $query = Transaksi::query();
         }
+
+        switch ($this->activeTab) {
+            case 'pending':
+                $query->where('status', StatusTransaksi::PENDING);
+                break;
+            case 'diproses':
+                $query->where('status', StatusTransaksi::DIPROSES);
+                break;
+            case 'dikirim':
+                $query->where('status', StatusTransaksi::DIKIRIM);
+                break;
+            case 'ditolak':
+                $query->where('status', StatusTransaksi::DITOLAK);
+                break;
+            case 'diterima':
+                $query->where('status', StatusTransaksi::DITERIMA);
+                break;
+            case 'selesai':
+                $query->where('status', StatusTransaksi::SELESAI);
+                break;
+            case 'batal':
+                $query->where('status', StatusTransaksi::BATAL);
+                break;
+        }
+
+        return $query->latest('tanggal')->paginate(10);
 
     }
 

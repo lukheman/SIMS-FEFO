@@ -43,18 +43,22 @@
 
                 <div class="d-flex align-items-center">
                   <div class="input-group input-group-sm w-auto">
-                    <button wire:click="tambahJumlahPesanan" type="button" class="btn btn-outline-secondary"
-                      id="btn-kurang-jumlah">
+                    <button wire:click="kurangiJumlahPesanan" type="button" class="btn btn-outline-secondary"
+                      id="btn-kurang-jumlah" {{ $jumlahPesanan <= 1 ? 'disabled' : '' }}>
                       <i class="bi bi-dash"></i>
                     </button>
-                    <input wire:model="jumlahPesanan" type="number" name="jumlah" id="jumlah"
-                      class="form-control text-center" value="1" style="max-width: 80px;">
-                    <button wire:click="kurangiJumlahPesanan" type="button" class="btn btn-outline-secondary"
+                    <input wire:model.live="jumlahPesanan" type="number" name="jumlah" id="jumlah"
+                      class="form-control text-center" style="max-width: 80px;" min="1" max="{{ $this->getMaxPesanan() }}">
+                    <button wire:click="tambahJumlahPesanan" type="button" class="btn btn-outline-secondary"
                       id="btn-tambah-jumlah">
                       <i class="bi bi-plus"></i>
                     </button>
                   </div>
-                  <small class="text-muted ms-2">(atur jumlah)</small>
+                  @if($showMentokWarning)
+                    <small class="text-danger fw-bold ms-2">Pembelian telah mencapai batas maksimum.</small>
+                  @else
+                    <small class="text-muted ms-2">(atur jumlah)</small>
+                  @endif
                 </div>
               </div>
             </div>
@@ -64,7 +68,7 @@
 
         </div>
         <div class="modal-footer">
-          <button wire:click="addToCart" type="button" class="btn btn-primary">
+          <button wire:click="addToCart" type="button" class="btn btn-primary" {{ !$this->isStokCukup($jumlahPesanan, $satuan) ? 'disabled' : '' }}>
             <i class="bi bi-cart-plus"></i>
             Tambahkan ke Keranjang
           </button>

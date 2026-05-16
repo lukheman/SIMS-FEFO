@@ -22,6 +22,10 @@ class PenjualanTable extends Component
 
     public function deletePenjualan($id): void
     {
+        if (getActiveUser()->role === \App\Enums\Role::PIMPINAN) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $this->penjualan = Mutasi::query()
             ->with('produk', 'produk.persediaan')
             ->find($id);

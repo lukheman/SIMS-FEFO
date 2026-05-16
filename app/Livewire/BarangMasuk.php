@@ -28,7 +28,9 @@ class BarangMasuk extends Component
 
     public ?Produk $produk;
 
-    public int $jumlah = 1;
+    public $jumlah = 1;
+
+    public $jumlah_bal = '';
 
     public ?string $tanggal_exp = null;
 
@@ -54,6 +56,10 @@ class BarangMasuk extends Component
 
     public function deleteSupplyProduk($id): void
     {
+        if (getActiveUser()->role === Role::PIMPINAN) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $this->mutasi = Mutasi::query()
             ->with('produk', 'produk.persediaan')
             ->find($id);
@@ -89,6 +95,9 @@ class BarangMasuk extends Component
 
     public function addSupplyProduk()
     {
+        if (getActiveUser()->role === Role::PIMPINAN) {
+            abort(403, 'Unauthorized action.');
+        }
 
         // Gunakan FefoService untuk menambah stok ke batch
         $batch = FefoService::tambahStok($this->produk, $this->jumlah, $this->tanggal_exp);
@@ -109,9 +118,28 @@ class BarangMasuk extends Component
     {
 
         $this->produk = Produk::query()->with('persediaan', 'mutasi')->find($id);
+        
+        if ($this->produk && $this->produk->tingkat_konversi > 0) {
+            $this->jumlah_bal = $this->jumlah / $this->produk->tingkat_konversi;
+        }
+
         $this->closeModal('modal-cari-produk');
         $this->openModal('modal-produk');
 
+    }
+
+    public function updatedJumlah($value)
+    {
+        if ($this->produk && $this->produk->tingkat_konversi > 0) {
+            $this->jumlah_bal = $value !== '' ? ((float)$value / $this->produk->tingkat_konversi) : '';
+        }
+    }
+
+    public function updatedJumlahBal($value)
+    {
+        if ($this->produk && $this->produk->tingkat_konversi > 0) {
+            $this->jumlah = $value !== '' ? ((float)$value * $this->produk->tingkat_konversi) : '';
+        }
     }
 
     #[Computed]

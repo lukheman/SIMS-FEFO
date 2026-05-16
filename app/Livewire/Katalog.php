@@ -18,7 +18,7 @@ class Katalog extends Component
 
     public string $search = '';
 
-    public ?Produk $produk;
+    public ?Produk $produk = null;
 
     public string $modalId = 'modal-pesan-produk';
 
@@ -26,9 +26,38 @@ class Katalog extends Component
 
     public int $jumlahPesanan = 1;
 
+    public bool $showMentokWarning = false;
+
+    public function getSisaStok()
+    {
+        if (!isset($this->produk)) return 0;
+        return $this->produk->totalPersediaan();
+    }
+
+    public function isStokCukup($jumlah, $satuan)
+    {
+        if (!isset($this->produk)) return false;
+        
+        $multiplier = $satuan ? 1 : $this->produk->tingkat_konversi;
+        $totalPcsRequested = $jumlah * $multiplier;
+        
+        return $this->getSisaStok() >= $totalPcsRequested;
+    }
+
+    public function getMaxPesanan()
+    {
+        if (!isset($this->produk)) return 1;
+        $multiplier = $this->satuan ? 1 : $this->produk->tingkat_konversi;
+        return $multiplier > 0 ? floor($this->getSisaStok() / $multiplier) : 1;
+    }
+
     public function addToCart() {
 
-        // TODO:  cek ketersediaan produk sebelum menambahkan ke keranjang
+        if (!$this->isStokCukup($this->jumlahPesanan, $this->satuan)) {
+            $this->notifyError('Stok tidak mencukupi!');
+            return;
+        }
+
         $user = getActiveUser();
         $user->loadMissing('keranjang');
 
@@ -45,15 +74,55 @@ class Katalog extends Component
     }
 
     public function tambahJumlahPesanan() {
-        $this->jumlahPesanan++;
+        if ($this->isStokCukup($this->jumlahPesanan + 1, $this->satuan)) {
+            $this->jumlahPesanan++;
+            $this->showMentokWarning = false;
+        } else {
+            $this->showMentokWarning = true;
+        }
     }
     public function kurangiJumlahPesanan() {
-        $this->jumlahPesanan++;
+        $this->showMentokWarning = false;
+        if ($this->jumlahPesanan > 1) {
+            $this->jumlahPesanan--;
+            if (!$this->isStokCukup($this->jumlahPesanan, $this->satuan)) {
+                $multiplier = $this->satuan ? 1 : $this->produk->tingkat_konversi;
+                if ($multiplier > 0) {
+                    $this->jumlahPesanan = max(1, floor($this->getSisaStok() / $multiplier));
+                }
+            }
+        }
+    }
+
+    public function updatedJumlahPesanan($value) {
+        $this->showMentokWarning = false;
+        if (!$this->isStokCukup((int) $value, $this->satuan)) {
+            $this->notifyError('Stok tidak mencukupi!');
+            $multiplier = $this->satuan ? 1 : $this->produk->tingkat_konversi;
+            if ($multiplier > 0) {
+                $this->jumlahPesanan = max(1, floor($this->getSisaStok() / $multiplier));
+            } else {
+                $this->jumlahPesanan = 1;
+            }
+        }
+    }
+
+    public function updatedSatuan($value) {
+        if (!$this->isStokCukup($this->jumlahPesanan, $this->satuan)) {
+            $this->notifyError('Stok tidak mencukupi untuk satuan ini!');
+            $multiplier = $this->satuan ? 1 : $this->produk->tingkat_konversi;
+            if ($multiplier > 0) {
+                $this->jumlahPesanan = max(1, floor($this->getSisaStok() / $multiplier));
+            } else {
+                $this->jumlahPesanan = 1;
+            }
+        }
     }
 
     public function infoProduk($id) {
         $this->produk = Produk::query()->findOrFail($id);
-
+        $this->showMentokWarning = false;
+        $this->jumlahPesanan = 1;
         $this->openModal($this->modalId);
     }
 

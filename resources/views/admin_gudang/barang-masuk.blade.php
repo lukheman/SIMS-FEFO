@@ -96,11 +96,11 @@
                     </div>
                     <div class="form-group">
                         <label for="jumlah">Jumlah (<span class="unit-kecil"></span>)</label>
-                        <input type="number" name="jumlah" id="jumlah" class="form-control" min="1" required>
+                        <input type="number" name="jumlah" id="jumlah" class="form-control" min="0" step="any" required>
                     </div>
                     <div class="form-group">
                         <label for="jumlah-bal">Jumlah (<span class="unit-besar"></span>)</label>
-                        <input type="number" name="jumlah_bal" id="jumlah-bal" class="form-control" min="1" required>
+                        <input type="number" name="jumlah_bal" id="jumlah-bal" class="form-control" min="0" step="any" required>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -140,11 +140,11 @@
                     </div>
                     <div class="form-group">
                         <label for="jumlah">Jumlah (<span class="unit-kecil"></span>)</label>
-                        <input type="number" name="jumlah" id="jumlah" class="form-control" min="1" required>
+                        <input type="number" name="jumlah" id="jumlah" class="form-control" min="0" step="any" required>
                     </div>
                     <div class="form-group">
                         <label for="jumlah-bal">Jumlah (<span class="unit-besar"></span>)</label>
-                        <input type="number" name="jumlah_bal" id="jumlah-bal" class="form-control" min="1" required>
+                        <input type="number" name="jumlah_bal" id="jumlah-bal" class="form-control" min="0" step="any" required>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -183,13 +183,13 @@ $(document).ready(function () {
     };
 
     const setupJumlahConversion = (formId, tingkatKonversi) => {
-        $(`${formId} #jumlah`).on('change', function() {
+        $(`${formId} #jumlah`).off('input').on('input', function() {
             const pcs = $(this).val();
-            $(`${formId} #jumlah-bal`).val(pcs / tingkatKonversi);
+            $(`${formId} #jumlah-bal`).val(pcs ? (pcs / tingkatKonversi) : '');
         });
-        $(`${formId} #jumlah-bal`).on('change', function() {
+        $(`${formId} #jumlah-bal`).off('input').on('input', function() {
             const bal = $(this).val();
-            $(`${formId} #jumlah`).val(bal * tingkatKonversi);
+            $(`${formId} #jumlah`).val(bal ? (bal * tingkatKonversi) : '');
         });
     };
 

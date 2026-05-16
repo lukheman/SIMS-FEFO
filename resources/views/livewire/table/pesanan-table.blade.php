@@ -94,9 +94,72 @@
   </div>
 
   {{-- Card Body --}}
-  <div class="card-body">
-    <div id="datatable_wrapper" class="dataTables_wrapper dt-bootstrap5">
-      <div class="row mb-3">
+  <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+    @if (getActiveUser()->role === Role::KURIR || getActiveUser()->role === Role::KASIR)
+    <div class="card-header bg-white border-bottom p-0">
+        <ul class="nav nav-pills nav-fill d-flex flex-nowrap overflow-auto" style="font-weight: 500; font-size: 0.95rem; white-space: nowrap; border-bottom: 1px solid #e9ecef; cursor: pointer;">
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('semua')" class="nav-link rounded-0 py-3 {{ $activeTab === 'semua' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">All</a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('pending')" class="nav-link rounded-0 py-3 {{ $activeTab === 'pending' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
+                    Pending 
+                    @php 
+                        $q = \App\Models\Transaksi::where('status', 'pending');
+                        if (getActiveUser()->role === Role::KURIR) $q->where('id_kurir', getActiveUser()->id);
+                        $c = $q->count(); 
+                    @endphp 
+                    @if($c > 0) <span class="text-danger">({{ $c }})</span> @endif
+                </a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('diproses')" class="nav-link rounded-0 py-3 {{ $activeTab === 'diproses' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
+                    Diproses
+                    @php 
+                        $q = \App\Models\Transaksi::where('status', 'diproses');
+                        if (getActiveUser()->role === Role::KURIR) $q->where('id_kurir', getActiveUser()->id);
+                        $c = $q->count(); 
+                    @endphp 
+                    @if($c > 0) <span class="text-danger">({{ $c }})</span> @endif
+                </a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('dikirim')" class="nav-link rounded-0 py-3 {{ $activeTab === 'dikirim' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
+                    Dikirim
+                    @php 
+                        $q = \App\Models\Transaksi::where('status', 'dikirim');
+                        if (getActiveUser()->role === Role::KURIR) $q->where('id_kurir', getActiveUser()->id);
+                        $c = $q->count(); 
+                    @endphp 
+                    @if($c > 0) <span class="text-danger">({{ $c }})</span> @endif
+                </a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('diterima')" class="nav-link rounded-0 py-3 {{ $activeTab === 'diterima' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
+                    Diterima
+                    @php 
+                        $q = \App\Models\Transaksi::where('status', 'diterima');
+                        if (getActiveUser()->role === Role::KURIR) $q->where('id_kurir', getActiveUser()->id);
+                        $c = $q->count(); 
+                    @endphp 
+                    @if($c > 0) <span class="text-danger">({{ $c }})</span> @endif
+                </a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('selesai')" class="nav-link rounded-0 py-3 {{ $activeTab === 'selesai' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">Selesai</a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('ditolak')" class="nav-link rounded-0 py-3 {{ $activeTab === 'ditolak' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">Ditolak</a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('batal')" class="nav-link rounded-0 py-3 {{ $activeTab === 'batal' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">Batal</a>
+            </li>
+        </ul>
+    </div>
+    @endif
+    <div class="card-body">
+      <div id="datatable_wrapper" class="dataTables_wrapper dt-bootstrap5">
+        <div class="row mb-3">
         <div class="col-md-6"></div>
         <div class="col-md-6"></div>
       </div>
@@ -204,6 +267,11 @@
               @endforelse
             </tbody>
           </table>
+        </div>
+        <div class="row">
+          <div class="col-12">
+              <x-pagination :items="$this->transaksiList" />
+          </div>
         </div>
       </div>
 

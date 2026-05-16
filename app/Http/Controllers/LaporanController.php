@@ -16,29 +16,51 @@ class LaporanController extends Controller
     {
         // Validate input
         $request->validate([
-            'periode' => 'required|date_format:Y-m',
+            'filter_type' => 'nullable|in:harian,mingguan,bulanan,tahunan',
+            'periode' => 'required|string',
             'ttd' => 'required|string|max:255',
         ]);
 
-        // Parse periode
-        $periode = Carbon::createFromFormat('Y-m', $request->periode)->startOfMonth();
-        $year = $periode->year;
-        $month = $periode->month;
-        $jumlahHari = $periode->daysInMonth;
+        $filterType = $request->input('filter_type', 'bulanan');
+        $periodeStr = $request->periode;
+
+        $query = Mutasi::with('produk')->where('jenis', 'keluar');
+        $jumlahHari = 1;
+
+        if ($filterType === 'harian') {
+            $date = Carbon::createFromFormat('Y-m-d', $periodeStr);
+            $query->whereDate('tanggal', $date->format('Y-m-d'));
+            $periodeFormat = $date->format('d/m/Y');
+        } elseif ($filterType === 'mingguan') {
+            $year = substr($periodeStr, 0, 4);
+            $week = substr($periodeStr, 6);
+            $date = Carbon::now()->setISODate((int)$year, (int)$week);
+            $query->whereBetween('tanggal', [
+                $date->copy()->startOfWeek()->format('Y-m-d'),
+                $date->copy()->endOfWeek()->format('Y-m-d')
+            ]);
+            $jumlahHari = 7;
+            $periodeFormat = "Minggu ke-{$week} {$year}";
+        } elseif ($filterType === 'tahunan') {
+            $query->whereYear('tanggal', $periodeStr);
+            $jumlahHari = Carbon::createFromDate($periodeStr)->daysInYear;
+            $periodeFormat = "Tahun {$periodeStr}";
+        } else {
+            $date = Carbon::createFromFormat('Y-m', $periodeStr)->startOfMonth();
+            $query->whereYear('tanggal', $date->year)
+                  ->whereMonth('tanggal', $date->month);
+            $jumlahHari = $date->daysInMonth;
+            $periodeFormat = $date->format('m/Y');
+        }
 
         // Fetch and group sales data
-        $penjualan = Mutasi::with('produk')
-            ->select(
+        $penjualan = $query->select(
                 'mutasi.*',
-                DB::raw('SUM(mutasi.jumlah) OVER (PARTITION BY mutasi.id_produk) / ? AS rata_rata_harian'),
+                DB::raw("SUM(mutasi.jumlah) OVER (PARTITION BY mutasi.id_produk) / {$jumlahHari} AS rata_rata_harian"),
                 DB::raw('COUNT(*) OVER (PARTITION BY mutasi.id_produk) AS total_mutasi')
             )
-            ->where('jenis', 'keluar')
-            ->whereYear('tanggal', $year)
-            ->whereMonth('tanggal', $month)
             ->orderBy('id_produk')
             ->orderBy('tanggal')
-            ->setBindings([$jumlahHari, 'keluar', $year, $month])
             ->get();
 
         // Group sales by product and format rata_rata_harian
@@ -79,9 +101,64 @@ class LaporanController extends Controller
         return view('invoices.laporan-penjualan', [
             'groupedPenjualan' => $groupedPenjualan,
             'total' => $total,
-            'periode' => $periode->format('Y-m'),
+            'periode' => $periodeFormat,
             'ttd' => $request->ttd,
             'top5' => $top5
+        ]);
+    }
+
+    public function laporanPenjualanReseller(Request $request)
+    {
+        $request->validate([
+            'id_reseller' => 'required',
+            'filter_type' => 'nullable|in:harian,mingguan,bulanan,tahunan',
+            'periode' => 'required|string',
+            'ttd' => 'required|string|max:255',
+        ]);
+
+        $filterType = $request->input('filter_type', 'bulanan');
+        $periodeStr = $request->periode;
+        $id_reseller = $request->id_reseller;
+
+        $query = Transaksi::with('user')->whereHas('user');
+
+        if ($id_reseller !== 'semua') {
+            $query->where('id_reseller', $id_reseller);
+            $reseller_nama = \App\Models\Reseller::find($id_reseller)->nama_lengkap ?? 'Semua Reseller';
+        } else {
+            $reseller_nama = 'Semua Reseller';
+        }
+
+        if ($filterType === 'harian') {
+            $date = Carbon::createFromFormat('Y-m-d', $periodeStr);
+            $query->whereDate('tanggal', $date->format('Y-m-d'));
+            $periodeFormat = $date->format('d/m/Y');
+        } elseif ($filterType === 'mingguan') {
+            $year = substr($periodeStr, 0, 4);
+            $week = substr($periodeStr, 6);
+            $date = Carbon::now()->setISODate((int)$year, (int)$week);
+            $query->whereBetween('tanggal', [
+                $date->copy()->startOfWeek()->format('Y-m-d'),
+                $date->copy()->endOfWeek()->format('Y-m-d')
+            ]);
+            $periodeFormat = "Minggu ke-{$week} {$year}";
+        } elseif ($filterType === 'tahunan') {
+            $query->whereYear('tanggal', $periodeStr);
+            $periodeFormat = "Tahun {$periodeStr}";
+        } else {
+            $date = Carbon::createFromFormat('Y-m', $periodeStr)->startOfMonth();
+            $query->whereYear('tanggal', $date->year)
+                  ->whereMonth('tanggal', $date->month);
+            $periodeFormat = $date->format('m/Y');
+        }
+
+        $transaksi = $query->orderBy('tanggal', 'asc')->get();
+
+        return view('invoices.laporan-penjualan-reseller', [
+            'transaksi' => $transaksi,
+            'periode' => $periodeFormat,
+            'reseller_nama' => $reseller_nama,
+            'ttd' => $request->ttd,
         ]);
     }
 

@@ -61,6 +61,9 @@ class ResellerController extends Controller
         $diproses = $request->query('diproses');
         $dikirim = $request->query('dikirim');
         $selesai = $request->query('selesai');
+        $batal = $request->query('batal');
+        $retur = $request->query('retur');
+        $semua = $request->query('semua');
 
         $transaksi = Transaksi::where('id_reseller', Auth::guard('reseller')->id());
 
@@ -81,6 +84,16 @@ class ResellerController extends Controller
                 StatusTransaksi::DITERIMA,
                 StatusTransaksi::SELESAI,
             ]);
+        } elseif ($batal === '1') {
+            $transaksi = $transaksi->whereIn('status', [
+                StatusTransaksi::BATAL,
+                StatusTransaksi::DITOLAK,
+            ]);
+        } elseif ($retur === '1') {
+            // handle retur if there is a status for it in the future, for now just empty
+            $transaksi = $transaksi->where('status', 'retur');
+        } elseif ($semua === '1') {
+            // don't filter status, show all history
         } else {
             $transaksi = $transaksi
                 ->where('metode_pembayaran', MetodePembayaran::TRANSFER)

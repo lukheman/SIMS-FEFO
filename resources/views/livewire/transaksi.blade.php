@@ -1,4 +1,4 @@
-<div class="card">
+<div>
 
 <div class="modal fade" id="modal-detail-transaksi" tabindex="-1">
   <div class="modal-dialog modal-lg">
@@ -45,11 +45,46 @@
   </div>
 </div>
 
-    <div class="card-header"></div>
+
+<div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+    <div class="card-header bg-white border-bottom p-0">
+        <ul class="nav nav-pills nav-fill d-flex flex-nowrap overflow-auto" style="font-weight: 500; font-size: 0.95rem; white-space: nowrap; border-bottom: 1px solid #e9ecef; cursor: pointer;">
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('semua')" class="nav-link rounded-0 py-3 {{ $activeTab === 'semua' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">All</a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('pending')" class="nav-link rounded-0 py-3 {{ $activeTab === 'pending' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
+                    Pending @php $cPending = \App\Models\Transaksi::where('id_reseller', $this->user->id)->where('status', 'pending')->count(); @endphp @if($cPending > 0) <span class="text-danger">({{ $cPending }})</span> @endif
+                </a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('diproses')" class="nav-link rounded-0 py-3 {{ $activeTab === 'diproses' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
+                    Diproses @php $cDiproses = \App\Models\Transaksi::where('id_reseller', $this->user->id)->where('status', 'diproses')->count(); @endphp @if($cDiproses > 0) <span class="text-danger">({{ $cDiproses }})</span> @endif
+                </a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('dikirim')" class="nav-link rounded-0 py-3 {{ $activeTab === 'dikirim' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
+                    Dikirim @php $cDikirim = \App\Models\Transaksi::where('id_reseller', $this->user->id)->where('status', 'dikirim')->count(); @endphp @if($cDikirim > 0) <span class="text-danger">({{ $cDikirim }})</span> @endif
+                </a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('diterima')" class="nav-link rounded-0 py-3 {{ $activeTab === 'diterima' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
+                    Diterima @php $cDiterima = \App\Models\Transaksi::where('id_reseller', $this->user->id)->where('status', 'diterima')->count(); @endphp @if($cDiterima > 0) <span class="text-danger">({{ $cDiterima }})</span> @endif
+                </a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('selesai')" class="nav-link rounded-0 py-3 {{ $activeTab === 'selesai' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">Selesai</a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('ditolak')" class="nav-link rounded-0 py-3 {{ $activeTab === 'ditolak' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">Ditolak</a>
+            </li>
+            <li class="nav-item">
+                <a wire:click.prevent="setTab('batal')" class="nav-link rounded-0 py-3 {{ $activeTab === 'batal' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">Batal</a>
+            </li>
+        </ul>
+    </div>
     <div class="card-body">
         <div id="datatable_wrapper" class="dataTables_wrapper dt-bootstrap5">
-            <div class="row">
-            </div>
             <div class="row">
                 <div class="col-12">
                     <!-- TODO: buat menjadi lebih estetik -->
@@ -59,7 +94,6 @@
                                 <th>Tanggal</th>
                                 <th>Status Transaksi</th>
                                 <th>Metode Pembayaran</th>
-                                <th>Status Pembayaran</th>
                                 <th>Konfirmasi</th>
                                 <th>Info</th>
                             </tr>
@@ -76,12 +110,6 @@
                                 <td>
                                     <span class="badge bg-success">{{ $item->metode_pembayaran }}</span>
                                 </td>
-
-                                <td>
-                                <div class="badge bg-{{ $item->status_pembayaran->getColor()}}">{{ $item->status_pembayaran->label() }}</div>
-
-                                </td>
-
 
                                 <td>
                                     <button wire:click="pesananSelesai({{ $item->id}})" type="button" class="btn btn-sm btn-outline-success" {{ $item->status === \App\Enums\StatusTransaksi::DITERIMA ? '' : 'disabled' }}>

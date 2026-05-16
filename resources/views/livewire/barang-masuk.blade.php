@@ -123,9 +123,15 @@
 
                   {{-- Input jumlah --}}
                   <div class="mb-3">
-                    <label for="jumlah" class="form-label small mb-1">Jumlah</label>
-                    <input type="number" wire:model="jumlah" min="1" class="form-control form-control-sm rounded-3"
+                    <label for="jumlah" class="form-label small mb-1">Jumlah ({{ $produk->unit_kecil ?? 'Unit Kecil' }})</label>
+                    <input type="number" wire:model.live="jumlah" min="0" step="any" class="form-control form-control-sm rounded-3"
                       placeholder="Masukkan jumlah">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="jumlah_bal" class="form-label small mb-1">Jumlah ({{ $produk->unit_besar ?? 'Unit Besar' }})</label>
+                    <input type="number" wire:model.live="jumlah_bal" min="0" step="any" class="form-control form-control-sm rounded-3"
+                      placeholder="Masukkan jumlah unit besar">
                   </div>
 
                   {{-- Input tanggal expired --}}

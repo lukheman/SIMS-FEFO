@@ -84,6 +84,7 @@ Route::middleware(['auth:web', 'role:web,pimpinan'])->prefix('pimpinan')->name('
         Route::get('/', \App\Livewire\Dashboard\Index::class)->name('index');
         Route::get('/persediaan', 'persediaan')->name('persediaan');
         Route::get('/laporan-penjualan', \App\Livewire\Laporan\LaporanPenjualan::class)->name('laporan-penjualan');
+        Route::get('/laporan-penjualan-reseller', \App\Livewire\Laporan\LaporanPenjualanReseller::class)->name('laporan-penjualan-reseller');
         Route::get('/laporan-persediaan', \App\Livewire\Laporan\LaporanPersediaan::class)->name('laporan-persediaan');
         Route::get('/laporan-barang-masuk', \App\Livewire\BarangMasuk::class)->name('laporan-barang-masuk');
         Route::get('/laporan-pesanan', 'laporanPesanan')->name('laporan-pesanan');
@@ -122,6 +123,7 @@ Route::resource('restock', RestockController::class)->only(['store', 'update', '
 Route::get('restock/exist/{barcode}', [RestockController::class, 'exist'])->name('restock.exist')->middleware('auth');
 
 Route::post('/laporan/laporan-penjualan', [LaporanController::class, 'laporanPenjualan'])->name('laporan.laporan-penjualan')->middleware('auth');
+Route::post('/laporan/laporan-penjualan-reseller', [LaporanController::class, 'laporanPenjualanReseller'])->name('laporan.laporan-penjualan-reseller')->middleware('auth');
 Route::post('/laporan/laporan-pesanan', [LaporanController::class, 'laporanPesanan'])->name('laporan.laporan-pesanan')->middleware('auth');
 Route::post('/laporan/laporan-barang-masuk', [LaporanController::class, 'laporanBarangMasuk'])->name('laporan.laporan-barang-masuk')->middleware('auth');
 Route::get('/laporan/laporan-persediaan-produk', [LaporanController::class, 'laporanPersediaanProduk'])->name('laporan.laporan-persediaan-produk')->middleware('auth');

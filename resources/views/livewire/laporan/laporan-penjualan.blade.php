@@ -13,8 +13,19 @@
                 <input type="hidden" name="ttd" value="Kasir">
                 <div class="modal-body">
                     <div class="mb-3">
+                        <label for="filter_type" class="form-label">Tipe Filter</label>
+                        <select name="filter_type" class="form-select filter-type" required>
+                            <option value="harian">Harian</option>
+                            <option value="mingguan">Mingguan</option>
+                            <option value="bulanan" selected>Bulanan</option>
+                            <option value="tahunan">Tahunan</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="periode" class="form-label">Periode</label>
-                        <input type="month" class="form-control" name="periode" id="periode">
+                        <div class="input-container">
+                            <input type="month" class="form-control input-periode" name="periode" required>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -46,3 +57,31 @@
     </div>
 
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterTypes = document.querySelectorAll('.filter-type');
+    filterTypes.forEach(function(select) {
+        select.addEventListener('change', function() {
+            const container = this.closest('.modal-body').querySelector('.input-container');
+            const val = this.value;
+            let inputHtml = '';
+            const today = new Date();
+            const year = today.getFullYear();
+            
+            if (val === 'harian') {
+                inputHtml = '<input type="date" class="form-control" name="periode" required>';
+            } else if (val === 'mingguan') {
+                inputHtml = '<input type="week" class="form-control" name="periode" required>';
+            } else if (val === 'bulanan') {
+                inputHtml = '<input type="month" class="form-control" name="periode" required>';
+            } else if (val === 'tahunan') {
+                inputHtml = '<input type="number" class="form-control" name="periode" min="2000" max="2100" step="1" value="'+year+'" required>';
+            }
+            container.innerHTML = inputHtml;
+        });
+    });
+});
+</script>
+@endpush

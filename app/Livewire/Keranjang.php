@@ -75,6 +75,18 @@ class Keranjang extends Component
 
     public function checkout() {
 
+        $pesananList = Pesanan::query()->with('produk')->whereIn('id', $this->selectedIdPesanan)->where('id_keranjang_belanja', $this->user->keranjang->id)->get();
+        
+        foreach($pesananList as $pesanan) {
+            $multiplier = $pesanan->satuan ? 1 : $pesanan->produk->tingkat_konversi;
+            $totalPcsRequested = $pesanan->jumlah * $multiplier;
+            if ($pesanan->produk->totalPersediaan() < $totalPcsRequested) {
+                $this->notifyError("Stok produk {$pesanan->produk->nama_produk} tidak mencukupi!");
+                $this->closeModal('modal-metode-pembayaran');
+                return;
+            }
+        }
+
         $transaksi = Transaksi::query()->create([
             'id_reseller' => $this->user->id,
             'metode_pembayaran' => $this->metode_pembayaran,
@@ -102,17 +114,19 @@ class Keranjang extends Component
 
     public function saveToCart() {
 
-        // TODO:  cek ketersediaan produk sebelum menambahkan ke keranjang
-        $this->form->update();
-
-        $this->notifySuccess('Berhasil menambahkan pesanan ke keranjang');
-        $this->closeModal($this->modalId);
+        if ($this->form->update()) {
+            $this->notifySuccess('Berhasil mengubah pesanan di keranjang');
+            $this->closeModal($this->modalId);
+        } else {
+            $this->notifyError('Stok tidak mencukupi untuk jumlah ini!');
+        }
 
     }
 
     public function tambahJumlahPesanan() {
-        // TODO: buat validasi apakah persediaan produk mencukupi atau tidak
-        $this->form->tambahJumlahPesanan();
+        if (!$this->form->tambahJumlahPesanan()) {
+            $this->notifyError('Stok tidak mencukupi!');
+        }
     }
     public function kurangiJumlahPesanan() {
         $this->form->kurangiJumlahPesanan();
@@ -123,9 +137,31 @@ class Keranjang extends Component
         $pesanan = Pesanan::query()->findOrFail($id);
 
         $this->form->fillFromModel($pesanan);
-
+        $this->form->showMentokWarning = false;
 
         $this->openModal($this->modalId);
+    }
+
+    public function updatedFormJumlah($value) {
+        $this->form->showMentokWarning = false;
+        if (!$this->form->isStokCukup()) {
+            $this->notifyError('Stok tidak mencukupi!');
+            $multiplier = $this->form->satuan ? 1 : $this->form->pesanan->produk->tingkat_konversi;
+            if ($multiplier > 0) {
+                $this->form->jumlah = floor($this->form->pesanan->produk->totalPersediaan() / $multiplier);
+            }
+        }
+    }
+
+    public function updatedFormSatuan($value) {
+        $this->form->showMentokWarning = false;
+        if (!$this->form->isStokCukup()) {
+            $this->notifyError('Stok tidak mencukupi untuk satuan ini!');
+            $multiplier = $value ? 1 : $this->form->pesanan->produk->tingkat_konversi;
+            if ($multiplier > 0) {
+                $this->form->jumlah = floor($this->form->pesanan->produk->totalPersediaan() / $multiplier);
+            }
+        }
     }
 
     #[Computed]

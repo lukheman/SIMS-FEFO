@@ -14,6 +14,34 @@
           <!--end::Start Navbar Links-->
           <!--begin::End Navbar Links-->
           <ul class="navbar-nav ms-auto">
+            @if(isset($produkMenipis))
+            <!--begin::Notifications Dropdown Menu-->
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                <i class="bi bi-bell"></i>
+                @if($produkMenipis->count() > 0)
+                <span class="navbar-badge badge text-bg-warning">{{ $produkMenipis->count() }}</span>
+                @endif
+              </a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end" style="max-height: 300px; overflow-y: auto;">
+                <span class="dropdown-item dropdown-header">{{ $produkMenipis->count() }} Notifikasi Stok Menipis</span>
+                <div class="dropdown-divider"></div>
+                @forelse($produkMenipis as $p)
+                <a href="#" class="dropdown-item">
+                  <i class="bi bi-exclamation-triangle text-warning me-2"></i> {{ $p->nama_produk }}
+                  <span class="float-end text-muted text-sm">{{ $p->totalPersediaan() }} tersisa</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                @empty
+                <a href="#" class="dropdown-item text-center text-muted">
+                    Tidak ada notifikasi
+                </a>
+                <div class="dropdown-divider"></div>
+                @endforelse
+              </div>
+            </li>
+            <!--end::Notifications Dropdown Menu-->
+            @endif
             <!--begin::Fullscreen Toggle-->
             <li class="nav-item">
               <a class="nav-link" href="#" data-lte-toggle="fullscreen">

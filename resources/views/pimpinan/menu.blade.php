@@ -8,6 +8,10 @@
     Penjualan
 </x-nav-link>
 
+<x-nav-link href="{{ route('pimpinan.laporan-penjualan-reseller') }}" icon="bi-shop">
+    Penjualan Reseller
+</x-nav-link>
+
 <x-nav-link href="{{ route('pimpinan.laporan-persediaan') }}" icon="bi-box-seam">
     Persediaan Produk
 </x-nav-link>

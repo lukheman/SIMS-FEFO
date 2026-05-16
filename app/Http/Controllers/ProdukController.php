@@ -37,6 +37,7 @@ class ProdukController extends Controller
             'tingkat_konversi' => 'required|numeric|min:0',
             'unit_kecil' => 'required',
             'unit_besar' => 'required',
+            'batas_stok_minimum' => 'nullable|numeric|min:0',
         ]);
 
         $data = $request->all();
@@ -88,6 +89,7 @@ class ProdukController extends Controller
             'biaya_penyimpanan' => 'required|numeric:min:0',
             'biaya_pemesanan' => 'required|numeric:min:0',
             'deskripsi' => 'nullable|string',
+            'batas_stok_minimum' => 'nullable|numeric|min:0',
         ]);
 
         $data = $request->all();

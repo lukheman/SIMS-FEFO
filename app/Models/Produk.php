@@ -67,6 +67,11 @@ class Produk extends Model
         return $this->totalPersediaan() >= $permintaan;
     }
 
+    public function getIsStokMenipisAttribute(): bool
+    {
+        return $this->totalPersediaan() <= ($this->batas_stok_minimum ?? 10);
+    }
+
     public function getLabelHargaBeliAttribute()
     {
         $hargaBeli = $this->harga_beli ?? 0;
