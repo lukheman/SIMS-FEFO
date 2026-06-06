@@ -13,6 +13,12 @@
 </x-nav-link>
 
 <x-nav-link
+    :href="route('admingudang.produk')"
+    icon="bi-box-seam">
+    Data Kategori
+</x-nav-link>
+
+<x-nav-link
     :href="route('admingudang.penjualan')"
     icon="bi-receipt">
     Penjualan
