@@ -38,7 +38,7 @@ class ProdukTable extends Component
     public function produkList()
     {
         return Produk::query()
-            ->with(['persediaan' => fn($q) => $q->aktif()->fefoOrder()])
+            ->with(['persediaan' => fn($q) => $q->aktif()->fefoOrder(), 'kategori'])
             ->when($this->search, function ($query) {
                 $query->where('nama_produk', 'like', '%' . $this->search . '%')
                     ->orWhere('kode_produk', 'like', '%' . $this->search . '%');
@@ -51,8 +51,9 @@ class ProdukTable extends Component
     public function add(): void
     {
         $this->form->reset();
+        $this->currentState = State::CREATE;
         $this->modalFormState = 'create';
-        $this->openModal('modal-scanner');
+        $this->openModal('modal-pilih-metode');
     }
 
     public function cancel(): void
@@ -107,6 +108,8 @@ class ProdukTable extends Component
 
     public function render()
     {
-        return view('livewire.table.produk-table');
+        return view('livewire.table.produk-table', [
+            'kategoris' => \App\Models\Kategori::all()
+        ]);
     }
 }

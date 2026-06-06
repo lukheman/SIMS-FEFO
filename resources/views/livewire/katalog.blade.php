@@ -68,9 +68,13 @@
 
         </div>
         <div class="modal-footer">
-          <button wire:click="addToCart" type="button" class="btn btn-primary" {{ !$this->isStokCukup($jumlahPesanan, $satuan) ? 'disabled' : '' }}>
+          <button wire:click="addToCart" type="button" class="btn btn-outline-primary" {{ !$this->isStokCukup($jumlahPesanan, $satuan) ? 'disabled' : '' }}>
             <i class="bi bi-cart-plus"></i>
             Tambahkan ke Keranjang
+          </button>
+          <button wire:click="pesanSekarang" type="button" class="btn btn-primary" {{ !$this->isStokCukup($jumlahPesanan, $satuan) ? 'disabled' : '' }}>
+            <i class="bi bi-cart-check"></i>
+            Pesan Langsung
           </button>
         </div>
       </div>
@@ -110,9 +114,9 @@
             </p>
             <p class="fw-bold text-primary mb-3">Rp {{ number_format($item->harga_jual, 0, ',', '.') }}</p>
 
-            <div class="mt-auto text-end">
+            <div class="mt-auto d-flex justify-content-between">
               <button wire:click="infoProduk({{ $item->id }})" type="button"
-                class="btn btn-sm btn-outline-primary rounded-pill px-3 btn-tambah-pesanan" {{ $item->totalPersediaan() == 0 ? 'disabled' : '' }}>
+                class="btn btn-info rounded-pill px-3" {{ $item->totalPersediaan() == 0 ? 'disabled' : '' }}>
                 <i class="bi bi-cart-plus me-1"></i> Pesan
               </button>
             </div>

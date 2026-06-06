@@ -123,4 +123,9 @@ class Produk extends Model
         return "{$persediaanKecil} {$unitKecil} ({$persediaanBesar}/{$unitBesar})";
 
     }
+
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class, 'id_kategori');
+    }
 }

@@ -1,13 +1,33 @@
 <div class="card mb-4">
 
 
+<!-- Modal Pilih Metode -->
+<div class="modal fade" id="modal-pilih-metode" tabindex="-1" wire:ignore.self>
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Metode Input Produk</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <button class="btn btn-primary w-100 mb-3" data-bs-target="#modal-scanner" data-bs-toggle="modal">
+            <i class="bi bi-upc-scan"></i> Scan Barcode
+        </button>
+        <button class="btn btn-secondary w-100" data-bs-target="#modal-produk" data-bs-toggle="modal">
+            <i class="bi bi-keyboard"></i> Tulis Manual
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="modal-scanner" tabindex="-1" wire:ignore.self>
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="modal-scanner">Scanner Barcode</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-target="#modal-pilih-metode" data-bs-toggle="modal" aria-label="Kembali"></button>
       </div>
       <div class="modal-body">
                 <div id="scanner"></div>
@@ -39,7 +59,22 @@
       <div class="modal-body">
 <form>
     <div class="row">
-        <div class="col-md-6 col-12">
+        <div class="col-md-4 col-12">
+            <div class="mb-3">
+                <label for="id_kategori" class="form-label fw-semibold">Kategori</label>
+                <select wire:model="form.id_kategori" class="form-select" id="id_kategori" @if ($currentState === \App\Enums\State::SHOW) disabled @endif>
+                    <option value="">-- Pilih Kategori --</option>
+                    @foreach($kategoris as $kategori)
+                        <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+                    @endforeach
+                </select>
+                @error('form.id_kategori')
+                    <small class="d-block mt-1 text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
+
+        <div class="col-md-4 col-12">
             <div class="mb-3">
                 <label for="nama_produk" class="form-label fw-semibold">Nama Produk</label>
                 <input wire:model="form.nama_produk" type="text" class="form-control" id="nama_produk"
@@ -50,11 +85,18 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-12">
+        <div class="col-md-4 col-12">
             <div class="mb-3">
                 <label for="kode_produk" class="form-label fw-semibold">Kode Produk</label>
-                <input wire:model="form.kode_produk" type="text" class="form-control" id="kode_produk"
-                    placeholder="Masukkan kode produk" @if ($currentState === \App\Enums\State::SHOW) disabled @endif>
+                <div class="input-group">
+                    <input wire:model="form.kode_produk" type="text" class="form-control" id="kode_produk"
+                        placeholder="Scan atau Manual" @if ($currentState === \App\Enums\State::SHOW) disabled @endif>
+                    @if ($currentState !== \App\Enums\State::SHOW)
+                        <button class="btn btn-outline-secondary" type="button" data-bs-target="#modal-scanner" data-bs-toggle="modal">
+                            <i class="bi bi-upc-scan"></i> Scan
+                        </button>
+                    @endif
+                </div>
                 @error('form.kode_produk')
                     <small class="d-block mt-1 text-danger">{{ $message }}</small>
                 @enderror
@@ -222,6 +264,7 @@
                         <tr>
                           <th scope="col">Kode Produk</th>
                           <th scope="col">Nama Produk</th>
+                          <th scope="col">Kategori</th>
                           <th scope="col">Tanggal Kadaluarsa</th>
                           <th scope="col">Harga Beli/bal (Rp.)</th>
                           <th scope="col">Harga Jual/bal (Rp.)</th>
@@ -236,6 +279,7 @@
                             <tr>
                                 <td>{{ $produk->kode_produk }}</td>
                                 <td>{{ $produk->nama_produk }}</td>
+                                <td>{{ $produk->kategori->nama_kategori ?? '-' }}</td>
                                 <td>
                                     @php
                                         $batchAktif = $produk->persediaan->first();

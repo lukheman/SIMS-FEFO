@@ -51,8 +51,33 @@ class Katalog extends Component
         return $multiplier > 0 ? floor($this->getSisaStok() / $multiplier) : 1;
     }
 
-    public function addToCart() {
+    public function pesanSekarang() {
+        if (!$this->isStokCukup($this->jumlahPesanan, $this->satuan)) {
+            $this->notifyError('Stok tidak mencukupi!');
+            return;
+        }
 
+        $user = getActiveUser();
+
+        $transaksi = \App\Models\Transaksi::create([
+            'id_reseller' => $user->id,
+            'metode_pembayaran' => \App\Enums\MetodePembayaran::TRANSFER,
+            'status' => \App\Enums\StatusTransaksi::PENDING,
+        ]);
+
+        \App\Models\Pesanan::create([
+            'id_produk' => $this->produk->id,
+            'id_reseller' => $user->id,
+            'id_transaksi' => $transaksi->id,
+            'jumlah' => $this->jumlahPesanan,
+            'satuan' => $this->satuan
+        ]);
+
+        $this->notifySuccess('Berhasil pesan langsung. Lihat di menu Transaksi.');
+        $this->closeModal($this->modalId);
+    }
+
+    public function addToCart() {
         if (!$this->isStokCukup($this->jumlahPesanan, $this->satuan)) {
             $this->notifyError('Stok tidak mencukupi!');
             return;
@@ -70,7 +95,6 @@ class Katalog extends Component
 
         $this->notifySuccess('Berhasil menambahkan pesanan ke keranjang');
         $this->closeModal($this->modalId);
-
     }
 
     public function tambahJumlahPesanan() {
@@ -124,6 +148,35 @@ class Katalog extends Component
         $this->showMentokWarning = false;
         $this->jumlahPesanan = 1;
         $this->openModal($this->modalId);
+    }
+
+    public function pesanLangsung($id) {
+        $this->produk = Produk::query()->findOrFail($id);
+        $this->jumlahPesanan = 1;
+        $this->satuan = 0;
+
+        if (!$this->isStokCukup($this->jumlahPesanan, $this->satuan)) {
+            $this->notifyError('Stok tidak mencukupi!');
+            return;
+        }
+
+        $user = getActiveUser();
+
+        $transaksi = \App\Models\Transaksi::create([
+            'id_reseller' => $user->id,
+            'metode_pembayaran' => \App\Enums\MetodePembayaran::TRANSFER,
+            'status' => \App\Enums\StatusTransaksi::PENDING,
+        ]);
+
+        \App\Models\Pesanan::create([
+            'id_produk' => $this->produk->id,
+            'id_reseller' => $user->id,
+            'id_transaksi' => $transaksi->id,
+            'jumlah' => $this->jumlahPesanan,
+            'satuan' => $this->satuan
+        ]);
+
+        $this->notifySuccess('Berhasil pesan langsung. Lihat di menu Transaksi.');
     }
 
     #[Computed]

@@ -11,6 +11,7 @@ class ProdukForm extends Form
 {
     public ?Produk $produk = null;
 
+    public ?int $id_kategori = null;
     public string $nama_produk = '';
     public string $kode_produk = '';
     public string $harga_beli = '';
@@ -27,6 +28,7 @@ class ProdukForm extends Form
     protected function rules(): array
     {
         return [
+            'id_kategori' => 'nullable|exists:kategoris,id',
             'nama_produk' => 'required|string|max:100',
             'kode_produk' => [
                 'required',
@@ -111,7 +113,7 @@ class ProdukForm extends Form
 
         $this->produk = $produk;
 
-
+        $this->id_kategori = $produk->id_kategori;
         $this->nama_produk = $produk->nama_produk;
         $this->kode_produk = $produk->kode_produk;
         $this->harga_beli = $produk->harga_beli;

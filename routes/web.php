@@ -74,6 +74,7 @@ Route::middleware(['auth:web', 'role:web,admingudang'])->prefix('admingudang')->
 
         // NOTE: LIVEWIRE
         Route::get('/produk', \App\Livewire\Table\ProdukTable::class)->name('produk');
+        Route::get('/kategori', \App\Livewire\Table\KategoriTable::class)->name('kategori');
 
     });
 });

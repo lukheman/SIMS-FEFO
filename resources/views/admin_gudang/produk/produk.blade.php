@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-6">
                     <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
-                        data-bs-target="#modal-scanner">
+                        data-bs-target="#modal-pilih-metode">
                         <i class="fas fa-plus"></i> Tambah Produk
                     </button>
                 </div>
@@ -53,13 +53,33 @@
         </div>
     </div>
 
+    <!-- Modal Pilih Metode -->
+    <div class="modal fade" id="modal-pilih-metode" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Metode Input Produk</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <button class="btn btn-primary w-100 mb-3" data-bs-target="#modal-scanner" data-bs-toggle="modal">
+                        <i class="fas fa-barcode"></i> Scan Barcode
+                    </button>
+                    <button class="btn btn-secondary w-100" data-bs-target="#modal-add-produk" data-bs-toggle="modal">
+                        <i class="fas fa-keyboard"></i> Tulis Manual
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Scanner -->
     <div class="modal fade" id="modal-scanner" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Scan Barcode</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    <button type="button" class="btn-close" data-bs-target="#modal-pilih-metode" data-bs-toggle="modal" aria-label="Kembali"></button>
                 </div>
                 <div class="modal-body">
                     <div id="scanner"></div>
@@ -84,7 +104,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="kode-produk">Barcode Produk</label>
-                                    <input type="text" class="form-control" name="kode_produk" id="kode-produk">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="kode_produk" id="kode-produk" placeholder="Scan atau Ketik Manual">
+                                        <button class="btn btn-outline-secondary" type="button" data-bs-target="#modal-scanner" data-bs-toggle="modal">
+                                            <i class="fas fa-barcode"></i> Scan
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
