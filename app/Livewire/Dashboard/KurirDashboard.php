@@ -11,7 +11,10 @@ class KurirDashboard extends Component
 
     public function mount() {
         $this->jumlahPesanan = Transaksi::query()
-            ->whereHas('kurir', getActiveUserId())
+            ->whereHas('kurir', function($q) {
+                $q->where('id', getActiveUserId());
+            })
+            ->whereDate('created_at', \Carbon\Carbon::today())
             ->count();
     }
 

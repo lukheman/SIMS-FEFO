@@ -13,7 +13,10 @@ class AdminGudangDashboard extends Component
 
     public function mount() {
         $this->jumlahProduk = Produk::query()->count();
-        $this->jumlahPenjualan = Mutasi::query()->where('jenis', 'keluar')->count();
+        $this->jumlahPenjualan = Mutasi::query()
+            ->where('jenis', 'keluar')
+            ->whereDate('created_at', \Carbon\Carbon::today())
+            ->count();
     }
 
     public function render()
