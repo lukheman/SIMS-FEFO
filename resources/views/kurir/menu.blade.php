@@ -2,6 +2,8 @@
     Dashboard
 </x-nav-link>
 
+<li class="nav-header">TUGAS</li>
+
 <x-nav-link href="{{ route('kurir.pesanan') }}" icon="bi-clipboard-check">
     Pesanan
 </x-nav-link>

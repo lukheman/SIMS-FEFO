@@ -4,7 +4,7 @@
     Dashboard
 </x-nav-link>
 
-<li class="nav-header">DATA PRODUK</li>
+<li class="nav-header">MASTER DATA</li>
 
 <x-nav-link
     :href="route('admingudang.produk')"
@@ -14,20 +14,22 @@
 
 <x-nav-link
     :href="route('admingudang.kategori')"
-    icon="bi-box-seam">
+    icon="bi-tags">
     Data Kategori
 </x-nav-link>
 
-<x-nav-link
-    :href="route('admingudang.penjualan')"
-    icon="bi-receipt">
-    Penjualan
-</x-nav-link>
-
-<li class="nav-header">RESTOK</li>
+<li class="nav-header">MANAJEMEN GUDANG</li>
 
 <x-nav-link
     :href="route('admingudang.barang-masuk')"
     icon="bi-box-arrow-in-down">
     Barang Masuk
+</x-nav-link>
+
+<li class="nav-header">TRANSAKSI</li>
+
+<x-nav-link
+    :href="route('admingudang.penjualan')"
+    icon="bi-receipt">
+    Penjualan
 </x-nav-link>
