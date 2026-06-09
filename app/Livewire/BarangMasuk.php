@@ -32,8 +32,6 @@ class BarangMasuk extends Component
 
     public $jumlah_bal = '';
 
-    public ?string $tanggal_exp = null;
-
     public ?Mutasi $mutasi; // selected mutasi
 
     public function mount()
@@ -100,7 +98,7 @@ class BarangMasuk extends Component
         }
 
         // Gunakan FefoService untuk menambah stok ke batch
-        $batch = FefoService::tambahStok($this->produk, $this->jumlah, $this->tanggal_exp);
+        $batch = FefoService::tambahStok($this->produk, $this->jumlah);
 
         // Catat mutasi barang masuk dengan referensi batch
         $this->produk->mutasi()->create([
@@ -111,7 +109,50 @@ class BarangMasuk extends Component
 
         $this->closeModal('modal-produk');
         $this->notifySuccess('Berhasil menambahkan barang masuk');
-        $this->reset('jumlah', 'tanggal_exp');
+        $this->reset('jumlah');
+    }
+
+    public function detailSupplyProduk($id)
+    {
+        $this->mutasi = Mutasi::with('produk')->find($id);
+        $this->openModal('modal-detail-mutasi');
+    }
+
+    public function editSupplyProduk($id)
+    {
+        $this->mutasi = Mutasi::with('produk', 'persediaan')->find($id);
+        $this->produk = $this->mutasi->produk;
+        $this->jumlah = $this->mutasi->jumlah;
+        if ($this->produk && $this->produk->tingkat_konversi > 0) {
+            $this->jumlah_bal = $this->jumlah / $this->produk->tingkat_konversi;
+        }
+        $this->openModal('modal-edit-mutasi');
+    }
+
+    public function updateSupplyProduk()
+    {
+        if (getActiveUser()->role === Role::PIMPINAN) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($this->mutasi) {
+            $diff = $this->jumlah - $this->mutasi->jumlah;
+            if ($diff != 0 && $this->mutasi->id_persediaan) {
+                $persediaan = $this->mutasi->persediaan;
+                if ($persediaan) {
+                    $persediaan->jumlah += $diff;
+                    $persediaan->save();
+                }
+            }
+
+            $this->mutasi->update([
+                'jumlah' => $this->jumlah,
+            ]);
+
+            $this->notifySuccess('Berhasil memperbarui data mutasi');
+            $this->closeModal('modal-edit-mutasi');
+            $this->reset('mutasi', 'jumlah', 'jumlah_bal');
+        }
     }
 
     public function addProduk($id)

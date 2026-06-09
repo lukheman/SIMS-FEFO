@@ -55,6 +55,20 @@ class PesananTable extends Component
 
     public function saveKurir()
     {
+        if ($this->selectedTransaksi->status === StatusTransaksi::DIPROSES) {
+            // Pengecekan stok sebelum transaksi
+            foreach ($this->selectedTransaksi->pesanan as $pesanan) {
+                $jumlahKurangi = $pesanan->satuan
+                    ? $pesanan->jumlah
+                    : $pesanan->jumlah_pcs;
+
+                if ($pesanan->produk->totalPersediaan() < $jumlahKurangi) {
+                    $this->notifyError("Stok produk {$pesanan->produk->nama_produk} tidak mencukupi. Tersedia: {$pesanan->produk->totalPersediaan()}, diminta: {$jumlahKurangi}");
+                    return;
+                }
+            }
+        }
+
         try {
             \Illuminate\Support\Facades\DB::transaction(function () {
                 if ($this->selectedTransaksi->status === StatusTransaksi::DIPROSES) {
@@ -120,7 +134,6 @@ class PesananTable extends Component
     {
         Transaksi::query()->find($id)->update([
             'status_pembayaran' => StatusPembayaran::LUNAS,
-            'status' => StatusTransaksi::DIPROSES,
         ]);
         $this->notifySuccess('Status Pembayaran diubah menjadi Lunas');
     }
@@ -129,6 +142,17 @@ class PesananTable extends Component
     {
         $this->selectedTransaksi = Transaksil::query()->with('pesanan', 'pesanan.produk')->findOrFail($id);
         $this->openModal('modal-detail-transaksi');
+    }
+
+    public function updateStatusTransaksi($id, $status)
+    {
+        $transaksi = Transaksi::find($id);
+        if ($transaksi) {
+            $transaksi->update([
+                'status' => $status
+            ]);
+            $this->notifySuccess('Status transaksi berhasil diperbarui');
+        }
     }
 
     #[Computed]

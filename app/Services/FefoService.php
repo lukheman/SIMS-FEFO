@@ -27,7 +27,7 @@ class FefoService
 
         $batchList = $produk->persediaan()
             ->where('jumlah', '>', 0)
-            ->orderByRaw('tanggal_exp IS NULL, tanggal_exp ASC')
+            ->orderBy('created_at', 'ASC')
             ->get();
 
         $sisaPermintaan = $jumlah;
@@ -66,10 +66,10 @@ class FefoService
      */
     public static function tambahStok(Produk $produk, int $jumlah, ?string $tanggalExp = null): Persediaan
     {
-        return DB::transaction(function () use ($produk, $jumlah, $tanggalExp) {
-            // Cari batch dengan tanggal_exp yang sama
+        return DB::transaction(function () use ($produk, $jumlah) {
+            // Cari batch dengan tanggal_masuk yang sama (hari ini)
             $batch = $produk->persediaan()
-                ->where('tanggal_exp', $tanggalExp)
+                ->where('tanggal_masuk', now()->toDateString())
                 ->first();
 
             if ($batch) {
@@ -78,7 +78,6 @@ class FefoService
             } else {
                 $batch = $produk->persediaan()->create([
                     'jumlah' => $jumlah,
-                    'tanggal_exp' => $tanggalExp,
                     'tanggal_masuk' => now()->toDateString(),
                 ]);
             }

@@ -37,6 +37,6 @@ class Transaksi extends Model
 
     public function getTotalHargaAttribute()
     {
-        return Pesanan::where('id_transaksi', $this->id)->sum('total_harga');
+        return $this->pesanan->sum('total_harga');
     }
 }

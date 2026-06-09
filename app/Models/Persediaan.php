@@ -36,18 +36,18 @@ class Persediaan extends Model
     // Scope: urutan FEFO (expired terdekat duluan, NULL di belakang)
     public function scopeFefoOrder($query)
     {
-        return $query->orderByRaw('tanggal_exp IS NULL, tanggal_exp ASC');
+        return $query->orderBy('created_at', 'ASC');
     }
 
     // Cek apakah batch sudah expired
     public function getIsExpiredAttribute(): bool
     {
-        return $this->tanggal_exp && $this->tanggal_exp->isPast();
+        return $this->produk->tanggal_exp && $this->produk->tanggal_exp->isPast();
     }
 
     // Cek apakah batch hampir expired (< 30 hari)
     public function getIsHampirExpiredAttribute(): bool
     {
-        return $this->tanggal_exp && !$this->tanggal_exp->isPast() && $this->tanggal_exp->diffInDays(now()) <= 30;
+        return $this->produk->tanggal_exp && !$this->produk->tanggal_exp->isPast() && $this->produk->tanggal_exp->diffInDays(now()) <= 30;
     }
 }

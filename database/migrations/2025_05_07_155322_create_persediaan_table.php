@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_produk')->constrained('produk')->cascadeOnDelete();
             $table->integer('jumlah')->default(0); // jumlah dalam satuan pcs
+            $table->date('tanggal_masuk')->default(now());
             $table->timestamps();
         });
     }

@@ -131,7 +131,7 @@
                 @foreach ($transaksi as $item)
                 <tr>
                     <td>{{ $item->tanggal ? $item->tanggal->format('d/m/Y') : '-' }}</td>
-                    <td>{{ $item->user->nama_lengkap ?? '-' }}</td>
+                    <td>{{ $item->user->name ?? '-' }}</td>
                     <td>{{ ucfirst($item->status->value ?? '-') }}</td>
                     <td>{{ ucfirst($item->status_pembayaran->value ?? '-') }}</td>
                     <td>Rp {{ number_format($item->total_harga, 0, ',', '.') }}</td>

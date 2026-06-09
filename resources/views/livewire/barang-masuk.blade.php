@@ -32,7 +32,6 @@
           <th scope="col">Tanggal</th>
           <th scope="col">Nama Produk</th>
           <th scope="col">Jumlah Dipesan</th>
-          <th scope="col">Tanggal Exp</th>
           <th scope="col">Harga Beli</th>
           <th scope="col">Total Harga</th>
 
@@ -51,27 +50,18 @@
             <td>{{ $item->tanggal }}</td>
             <td>{{ $item->produk->nama_produk }}</td>
             <td>{{ $item->label_jumlah_unit_dipesan}}</td>
-            <td>
-              @if($item->persediaan?->tanggal_exp)
-                <span
-                  class="{{ $item->persediaan->is_expired ? 'text-danger fw-bold' : ($item->persediaan->is_hampir_expired ? 'text-warning fw-bold' : '') }}">
-                  {{ $item->persediaan->tanggal_exp->format('d/m/Y') }}
-                  @if($item->persediaan->is_expired)
-                    <i class="bi bi-exclamation-triangle-fill text-danger"></i>
-                  @elseif($item->persediaan->is_hampir_expired)
-                    <i class="bi bi-exclamation-triangle text-warning"></i>
-                  @endif
-                </span>
-              @else
-                <span class="text-muted">-</span>
-              @endif
-            </td>
             <td>{{ $item->produk->label_harga_beli}}</td>
             <td>{{ $item->label_total_harga_beli}}</td>
 
             @if (!@$isLaporan)
               <td class="text-end">
-                <button wire:click="deleteSupplyProduk({{ $item->id}})" class="btn btn-sm btn-outline-danger">
+                <button wire:click="detailSupplyProduk({{ $item->id }})" class="btn btn-sm btn-outline-info" title="Detail">
+                  <i class="bi bi-info-circle"></i> Detail
+                </button>
+                <button wire:click="editSupplyProduk({{ $item->id }})" class="btn btn-sm btn-outline-warning" title="Edit">
+                  <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button wire:click="deleteSupplyProduk({{ $item->id}})" class="btn btn-sm btn-outline-danger" title="Hapus">
                   <i class="bi bi-trash"></i> Hapus
                 </button>
               </td>
@@ -134,12 +124,6 @@
                       placeholder="Masukkan jumlah unit besar">
                   </div>
 
-                  {{-- Input tanggal expired --}}
-                  <div class="mb-3">
-                    <label for="tanggal_exp" class="form-label small mb-1">Tanggal Expired</label>
-                    <input type="date" wire:model="tanggal_exp" class="form-control form-control-sm rounded-3">
-                  </div>
-
                   <button wire:click="addSupplyProduk" type="button"
                     class="btn btn-sm btn-outline-primary w-full px-3 btn-tambah-pesanan">
                     <i class="bi bi-box-arrow-in-down me-1"></i> Tambahkan Barang Masuk
@@ -148,6 +132,90 @@
               </div>
             @endisset
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-edit-mutasi" tabindex="-1" wire:ignore.self>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Update Barang Masuk</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            @if($mutasi && $produk)
+              <div class="col-12">
+                <div class="mb-3">
+                  <label class="form-label small mb-1">Produk</label>
+                  <input type="text" class="form-control form-control-sm rounded-3" value="{{ $produk->kode_produk }} - {{ $produk->nama_produk }}" readonly>
+                </div>
+                <div class="mb-3">
+                  <label for="jumlah" class="form-label small mb-1">Jumlah ({{ $produk->unit_kecil ?? 'Unit Kecil' }})</label>
+                  <input type="number" wire:model.live="jumlah" min="0" step="any" class="form-control form-control-sm rounded-3">
+                </div>
+                <div class="mb-3">
+                  <label for="jumlah_bal" class="form-label small mb-1">Jumlah ({{ $produk->unit_besar ?? 'Unit Besar' }})</label>
+                  <input type="number" wire:model.live="jumlah_bal" min="0" step="any" class="form-control form-control-sm rounded-3">
+                </div>
+                <button wire:click="updateSupplyProduk" type="button" class="btn btn-sm btn-outline-warning w-full px-3">
+                  <i class="bi bi-save me-1"></i> Simpan Perubahan
+                </button>
+              </div>
+            @endif
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-detail-mutasi" tabindex="-1" wire:ignore.self>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Detail Barang Masuk</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            @if($mutasi)
+              <div class="col-12">
+                <table class="table table-borderless table-sm">
+                  <tbody>
+                    <tr>
+                      <td class="text-muted" width="40%">Tanggal</td>
+                      <td class="fw-semibold">{{ $mutasi->tanggal }}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">Kode Produk</td>
+                      <td class="fw-semibold">{{ $mutasi->produk->kode_produk }}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">Nama Produk</td>
+                      <td class="fw-semibold">{{ $mutasi->produk->nama_produk }}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">Jumlah Dipesan</td>
+                      <td class="fw-semibold">{{ $mutasi->label_jumlah_unit_dipesan }}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">Harga Beli</td>
+                      <td class="fw-semibold">{{ $mutasi->produk->label_harga_beli }}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">Total Harga Beli</td>
+                      <td class="fw-semibold">{{ $mutasi->label_total_harga_beli }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            @endif
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Tutup</button>
         </div>
       </div>
     </div>

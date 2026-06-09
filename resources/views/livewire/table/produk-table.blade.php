@@ -126,6 +126,8 @@
                 @enderror
             </div>
         </div>
+
+
     </div>
 
 
@@ -265,7 +267,6 @@
                           <th scope="col">Kode Produk</th>
                           <th scope="col">Nama Produk</th>
                           <th scope="col">Kategori</th>
-                          <th scope="col">Tanggal Kadaluarsa</th>
                           <th scope="col">Harga Beli/bal (Rp.)</th>
                           <th scope="col">Harga Jual/bal (Rp.)</th>
                           <th scope="col">Persediaan</th>
@@ -280,26 +281,6 @@
                                 <td>{{ $produk->kode_produk }}</td>
                                 <td>{{ $produk->nama_produk }}</td>
                                 <td>{{ $produk->kategori->nama_kategori ?? '-' }}</td>
-                                <td>
-                                    @php
-                                        $batchAktif = $produk->persediaan->first();
-                                    @endphp
-                                    @if($batchAktif && $batchAktif->tanggal_exp)
-                                        <span class="{{ $batchAktif->is_expired ? 'text-danger fw-bold' : ($batchAktif->is_hampir_expired ? 'text-warning fw-bold' : 'text-success') }}">
-                                            {{ $batchAktif->tanggal_exp->format('d/m/Y') }}
-                                            @if($batchAktif->is_expired)
-                                                <span class="badge bg-danger">Expired</span>
-                                            @elseif($batchAktif->is_hampir_expired)
-                                                <span class="badge bg-warning text-dark">Hampir Exp</span>
-                                            @endif
-                                        </span>
-                                        @if($produk->persediaan->count() > 1)
-                                            <br><small class="text-muted">+{{ $produk->persediaan->count() - 1 }} batch lain</small>
-                                        @endif
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
                                 <td>{{ number_format($produk->harga_beli, 0, ',', '.') }}</td>
                                 <td>{{ number_format($produk->harga_jual, 0, ',', '.') }}</td>
                                 <td>{{ $produk->totalPersediaan() }}</td>

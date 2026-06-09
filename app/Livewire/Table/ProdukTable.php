@@ -43,8 +43,7 @@ class ProdukTable extends Component
                 $query->where('nama_produk', 'like', '%' . $this->search . '%')
                     ->orWhere('kode_produk', 'like', '%' . $this->search . '%');
             })
-            ->orderByRaw('(SELECT MIN(tanggal_exp) FROM persediaan WHERE persediaan.id_produk = produk.id AND persediaan.jumlah > 0 AND persediaan.tanggal_exp IS NOT NULL) IS NULL,
-                          (SELECT MIN(tanggal_exp) FROM persediaan WHERE persediaan.id_produk = produk.id AND persediaan.jumlah > 0 AND persediaan.tanggal_exp IS NOT NULL) ASC') // Penerapan metode FEFO
+            ->orderByRaw('tanggal_exp IS NULL, tanggal_exp ASC') // Penerapan metode FEFO
             ->paginate(10);
     }
 

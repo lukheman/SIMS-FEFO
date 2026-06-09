@@ -105,6 +105,15 @@ class Kasir extends Component
             return;
         }
 
+        // Pengecekan stok sebelum transaksi
+        foreach ($this->daftarBelanja as $item) {
+            $produk = Produk::find($item['id']);
+            if ($produk && $produk->totalPersediaan() < $item['jumlah']) {
+                $this->notifyError("Stok produk {$item['nama']} tidak mencukupi. Tersedia: {$produk->totalPersediaan()}, diminta: {$item['jumlah']}");
+                return;
+            }
+        }
+
         try {
             DB::transaction(function () {
                 // buat transaksi

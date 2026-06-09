@@ -7,7 +7,9 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            @isset($produk) Pesan: {{ $produk->nama_produk }} @else Detail Pemesanan @endisset
+          </h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -26,7 +28,12 @@
                 <div class="mb-3">
                   <h5 class="fw-semibold mb-1" id="nama-produk">{{ $produk->nama_produk }}</h5>
                   <p class="text-muted small mb-2" id="deskripsi-produk">{{ $produk->deskripsi}}</p>
-                  <p class="fs-5 fw-bold text-primary mb-1" id="total-harga-display">{{ $produk->label_harga_jual}}</p>
+                  <div class="mb-2">
+                    <p class="fs-5 fw-bold text-primary mb-0">Rp {{ number_format($produk->harga_jual, 0, ',', '.') }} / {{ $produk->unit_besar }}</p>
+                    @if($produk->tingkat_konversi > 0)
+                      <p class="fs-6 fw-semibold text-secondary mb-0">Rp {{ number_format($produk->harga_jual_unit_kecil, 0, ',', '.') }} / {{ $produk->unit_kecil }}</p>
+                    @endif
+                  </div>
                   <p class="text-info small mb-3">
                     <i class="bi bi-info-circle"></i>
                     Pemesanan dalam satuan <strong id="satuan-text">{{ $satuan ?? $produk->unit_besar }}</strong>
@@ -41,7 +48,7 @@
                   </select>
                 </div>
 
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center mb-3">
                   <div class="input-group input-group-sm w-auto">
                     <button wire:click="kurangiJumlahPesanan" type="button" class="btn btn-outline-secondary"
                       id="btn-kurang-jumlah" {{ $jumlahPesanan <= 1 ? 'disabled' : '' }}>
@@ -59,6 +66,11 @@
                   @else
                     <small class="text-muted ms-2">(atur jumlah)</small>
                   @endif
+                </div>
+
+                <div class="p-3 bg-light rounded-3 border">
+                    <span class="text-muted small d-block mb-1">Total Harga:</span>
+                    <span class="fs-4 fw-bold text-success">Rp {{ number_format($this->totalHargaPesanan, 0, ',', '.') }}</span>
                 </div>
               </div>
             </div>
@@ -109,9 +121,7 @@
               <span class="badge bg-info">{{ $item->label_persediaan }}</span>
             </div>
 
-            <p class="mb-1 text-muted small">Exp:
-              {{ $item->tanggal_exp_terdekat ? \Carbon\Carbon::parse($item->tanggal_exp_terdekat)->format('d/m/Y') : '-' }}
-            </p>
+
             <p class="fw-bold text-primary mb-3">Rp {{ number_format($item->harga_jual, 0, ',', '.') }}</p>
 
             <div class="mt-auto d-flex justify-content-between">

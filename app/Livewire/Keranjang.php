@@ -28,8 +28,6 @@ class Keranjang extends Component
 
     public $user;
 
-    public ?MetodePembayaran $metode_pembayaran;
-
     public PesananForm $form;
 
     public string $modalId = 'modal-pesan-produk';
@@ -68,48 +66,19 @@ class Keranjang extends Component
     }
 
     public function mount() {
-        $this->metode_pembayaran = MetodePembayaran::TRANSFER;
         $this->user = getActiveUser();
         $this->user->load('keranjang');
     }
 
-    public function checkout() {
-
-        $pesananList = Pesanan::query()->with('produk')->whereIn('id', $this->selectedIdPesanan)->where('id_keranjang_belanja', $this->user->keranjang->id)->get();
-        
-        foreach($pesananList as $pesanan) {
-            $multiplier = $pesanan->satuan ? 1 : $pesanan->produk->tingkat_konversi;
-            $totalPcsRequested = $pesanan->jumlah * $multiplier;
-            if ($pesanan->produk->totalPersediaan() < $totalPcsRequested) {
-                $this->notifyError("Stok produk {$pesanan->produk->nama_produk} tidak mencukupi!");
-                $this->closeModal('modal-metode-pembayaran');
-                return;
-            }
+    public function prosesCheckoutKeranjang() {
+        if (empty($this->selectedIdPesanan)) {
+            $this->notifyError('Pilih minimal satu pesanan untuk checkout!');
+            return;
         }
 
-        $transaksi = Transaksi::query()->create([
-            'id_reseller' => $this->user->id,
-            'metode_pembayaran' => $this->metode_pembayaran,
-            'status' => $this->metode_pembayaran === MetodePembayaran::COD ? StatusTransaksi::DIPROSES : StatusTransaksi::PENDING,
+        return redirect()->route('reseller.checkout-keranjang', [
+            'pesanan_ids' => implode(',', $this->selectedIdPesanan)
         ]);
-
-        // Update pesanan terkait
-        Pesanan::query()->whereIn('id', $this->selectedIdPesanan)
-            ->where('id_keranjang_belanja', $this->user->keranjang->id)
-            ->update([
-                'id_transaksi' => $transaksi->id,
-                'id_keranjang_belanja' => null,
-            ]);
-
-        $this->notifySuccess('Berhasil melakukan checkout');
-        $this->closeModal('modal-metode-pembayaran');
-        $this->reset('selectedIdPesanan', 'selectAll');
-
-
-    }
-
-    public function setMetodePembayaran($metode) {
-        $this->metode_pembayaran = MetodePembayaran::from($metode);
     }
 
     public function saveToCart() {

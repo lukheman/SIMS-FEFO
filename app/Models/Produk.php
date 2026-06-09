@@ -14,6 +14,10 @@ class Produk extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'tanggal_exp' => 'date',
+    ];
+
     public function persediaan()
     {
         return $this->hasMany(Persediaan::class, 'id_produk');
@@ -55,11 +59,7 @@ class Produk extends Model
      */
     public function getTanggalExpTerdekatAttribute()
     {
-        return $this->persediaan()
-            ->aktif()
-            ->whereNotNull('tanggal_exp')
-            ->orderBy('tanggal_exp', 'ASC')
-            ->value('tanggal_exp');
+        return $this->tanggal_exp;
     }
 
     public function isPersediaanMencukupi(int $permintaan): bool
@@ -93,7 +93,7 @@ class Produk extends Model
         $persediaanKecil = $this->totalPersediaan();
 
         $tingkatKonversi = $this->tingkat_konversi ?? 1;
-        $persediaanBesar = round($persediaanKecil / $tingkatKonversi, 2);
+        $persediaanBesar = floor($persediaanKecil / $tingkatKonversi);
 
         $unitBesar = $this->unit_besar ?? 'unit';
         $unitKecil = $this->unit_kecil ?? 'unit';

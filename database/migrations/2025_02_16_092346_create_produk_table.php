@@ -26,6 +26,7 @@ return new class extends Migration {
             $table->integer('tingkat_konversi')->default(0); // jumlah unit kecil dalam satu unit besar
             $table->enum('unit_kecil', UnitKecilProduk::values());
             $table->enum('unit_besar', UnitBesarProduk::values());
+            $table->date('tanggal_exp')->nullable();
             $table->timestamps();
         });
     }

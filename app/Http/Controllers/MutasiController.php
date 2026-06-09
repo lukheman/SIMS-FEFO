@@ -24,7 +24,7 @@ class MutasiController extends Controller
             $restock = Restock::where('id_produk', $request->id_produk)->first();
 
             // Gunakan FefoService untuk tambah stok
-            $batch = \App\Services\FefoService::tambahStok($produk, $request->jumlah, $request->tanggal_exp ?? null);
+            $batch = \App\Services\FefoService::tambahStok($produk, $request->jumlah);
 
             $mutasi = Mutasi::create(array_merge($validated, [
                 'id_persediaan' => $batch->id,

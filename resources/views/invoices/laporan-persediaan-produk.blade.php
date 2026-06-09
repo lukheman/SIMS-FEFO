@@ -91,7 +91,7 @@
                         <td>{{ $item->nama_produk }}</td>
                         <td style="text-align: right;">{{ $item->label_harga_beli}}</td>
                         <td style="text-align: right;">{{ $item->label_harga_jual}}</td>
-                        <td style="text-align: center;">{{ $item->totalPersediaan() }}</td>
+                        <td style="text-align: center;">{{ $item->label_persediaan }}</td>
                     </tr>
                 @endforeach
 

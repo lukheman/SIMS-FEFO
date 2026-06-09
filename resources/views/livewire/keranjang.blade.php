@@ -75,58 +75,12 @@
   </div>
 </div>
 
-<!-- Metode Pembayaran -->
-<div class="modal fade" id="modal-metode-pembayaran" tabindex="-1"  wire:ignore.self>
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content shadow-lg border-0 rounded-4">
-      <div class="modal-header">
-        <h5 class="modal-title fw-semibold" id="modalMetodePembayaranLabel">Pilih Metode Pembayaran</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-      </div>
 
-<form wire:submit.prevent="checkout">
-  <div class="modal-body">
-    <div class="row g-3">
-      <div class="col-6">
-        <div wire:click="setMetodePembayaran('transfer')"
-             class="card {{ $metode_pembayaran === MetodePembayaran::TRANSFER ? 'border-2 border-primary' : 'border' }} shadow-sm text-center py-3"
-             style="cursor:pointer;">
-          <div class="card-body">
-            <div class="text-warning fs-1 mb-2">
-              <i class="bi bi-cash-stack"></i>
-            </div>
-            <h6 class="mb-0 fw-semibold">Transfer</h6>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-6">
-        <div wire:click="setMetodePembayaran('cod')"
-             class="card {{ $metode_pembayaran === MetodePembayaran::COD ? 'border-2 border-primary' : 'border' }} shadow-sm text-center py-3"
-             style="cursor:pointer;">
-          <div class="card-body">
-            <div class="text-success fs-1 mb-2">
-              <i class="bi bi-cash-coin"></i>
-            </div>
-            <h6 class="mb-0 fw-semibold">COD</h6>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-footer border-0">
-    <button type="submit" class="btn btn-primary">Pesan</button>
-  </div>
-</form>
-    </div>
-  </div>
-</div>
 
     <div class="card-header d-flex justify-content-between align-items-center">
         <div>
-            <button wire:click="$dispatch('openModal', {id : 'modal-metode-pembayaran'})" type="button" class="btn btn-outline-primary me-2"
-                    {{ $this->pesananList->count() == 0 ? 'disabled' : '' }}>
+            <button wire:click="prosesCheckoutKeranjang" type="button" class="btn btn-outline-primary me-2"
+                    {{ empty($this->selectedIdPesanan) ? 'disabled' : '' }}>
                 <i class="bi bi-cash-stack me-1"></i> Checkout
             </button>
 

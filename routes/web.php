@@ -44,6 +44,8 @@ Route::middleware(['auth:reseller', 'role:reseller,reseller'])->prefix('reseller
 
         Route::get('/transaksi', \App\Livewire\Transaksi::class)->name('transaksi');
     });
+    Route::get('/checkout-langsung', \App\Livewire\CheckoutLangsung::class)->name('checkout-langsung');
+    Route::get('/checkout-keranjang', \App\Livewire\CheckoutKeranjang::class)->name('checkout-keranjang');
 });
 
 // Routes untuk Admin Toko (guard: web)

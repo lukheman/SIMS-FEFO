@@ -57,24 +57,13 @@ class Katalog extends Component
             return;
         }
 
-        $user = getActiveUser();
-
-        $transaksi = \App\Models\Transaksi::create([
-            'id_reseller' => $user->id,
-            'metode_pembayaran' => \App\Enums\MetodePembayaran::TRANSFER,
-            'status' => \App\Enums\StatusTransaksi::PENDING,
-        ]);
-
-        \App\Models\Pesanan::create([
-            'id_produk' => $this->produk->id,
-            'id_reseller' => $user->id,
-            'id_transaksi' => $transaksi->id,
+        $this->closeModal($this->modalId);
+        
+        return redirect()->route('reseller.checkout-langsung', [
+            'produk_id' => $this->produk->id,
             'jumlah' => $this->jumlahPesanan,
             'satuan' => $this->satuan
         ]);
-
-        $this->notifySuccess('Berhasil pesan langsung. Lihat di menu Transaksi.');
-        $this->closeModal($this->modalId);
     }
 
     public function addToCart() {
@@ -160,23 +149,19 @@ class Katalog extends Component
             return;
         }
 
-        $user = getActiveUser();
-
-        $transaksi = \App\Models\Transaksi::create([
-            'id_reseller' => $user->id,
-            'metode_pembayaran' => \App\Enums\MetodePembayaran::TRANSFER,
-            'status' => \App\Enums\StatusTransaksi::PENDING,
-        ]);
-
-        \App\Models\Pesanan::create([
-            'id_produk' => $this->produk->id,
-            'id_reseller' => $user->id,
-            'id_transaksi' => $transaksi->id,
+        return redirect()->route('reseller.checkout-langsung', [
+            'produk_id' => $this->produk->id,
             'jumlah' => $this->jumlahPesanan,
             'satuan' => $this->satuan
         ]);
+    }
 
-        $this->notifySuccess('Berhasil pesan langsung. Lihat di menu Transaksi.');
+    #[Computed]
+    public function totalHargaPesanan()
+    {
+        if (!isset($this->produk)) return 0;
+        $harga = $this->satuan == 1 ? $this->produk->harga_jual_unit_kecil : $this->produk->harga_jual;
+        return $harga * $this->jumlahPesanan;
     }
 
     #[Computed]

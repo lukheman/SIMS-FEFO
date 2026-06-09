@@ -103,45 +103,45 @@
             </li>
             <li class="nav-item">
                 <a wire:click.prevent="setTab('pending')" class="nav-link rounded-0 py-3 {{ $activeTab === 'pending' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
-                    Pending 
-                    @php 
+                    Pending
+                    @php
                         $q = \App\Models\Transaksi::where('status', 'pending');
                         if (getActiveUser()->role === Role::KURIR) $q->where('id_kurir', getActiveUser()->id);
-                        $c = $q->count(); 
-                    @endphp 
+                        $c = $q->count();
+                    @endphp
                     @if($c > 0) <span class="text-danger">({{ $c }})</span> @endif
                 </a>
             </li>
             <li class="nav-item">
                 <a wire:click.prevent="setTab('diproses')" class="nav-link rounded-0 py-3 {{ $activeTab === 'diproses' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
                     Diproses
-                    @php 
+                    @php
                         $q = \App\Models\Transaksi::where('status', 'diproses');
                         if (getActiveUser()->role === Role::KURIR) $q->where('id_kurir', getActiveUser()->id);
-                        $c = $q->count(); 
-                    @endphp 
+                        $c = $q->count();
+                    @endphp
                     @if($c > 0) <span class="text-danger">({{ $c }})</span> @endif
                 </a>
             </li>
             <li class="nav-item">
                 <a wire:click.prevent="setTab('dikirim')" class="nav-link rounded-0 py-3 {{ $activeTab === 'dikirim' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
                     Dikirim
-                    @php 
+                    @php
                         $q = \App\Models\Transaksi::where('status', 'dikirim');
                         if (getActiveUser()->role === Role::KURIR) $q->where('id_kurir', getActiveUser()->id);
-                        $c = $q->count(); 
-                    @endphp 
+                        $c = $q->count();
+                    @endphp
                     @if($c > 0) <span class="text-danger">({{ $c }})</span> @endif
                 </a>
             </li>
             <li class="nav-item">
                 <a wire:click.prevent="setTab('diterima')" class="nav-link rounded-0 py-3 {{ $activeTab === 'diterima' ? 'active bg-transparent text-danger border-bottom border-danger border-2' : 'text-dark' }}">
                     Diterima
-                    @php 
+                    @php
                         $q = \App\Models\Transaksi::where('status', 'diterima');
                         if (getActiveUser()->role === Role::KURIR) $q->where('id_kurir', getActiveUser()->id);
-                        $c = $q->count(); 
-                    @endphp 
+                        $c = $q->count();
+                    @endphp
                     @if($c > 0) <span class="text-danger">({{ $c }})</span> @endif
                 </a>
             </li>
@@ -177,10 +177,11 @@
 
                 @if (getActiveUser()->role === Role::KASIR)
                   <th>Ubah Status Pembayaran</th>
+                  <th>Ubah Status Pesanan</th>
                   <th>Pilih Kurir</th>
                   <th>Nota</th>
                 @elseif(getActiveUser()->role === Role::KURIR)
-                  <th>Konfirmasi</th>
+                  <th>Ubah Status</th>
                 @endif
 
                 <th>Info</th>
@@ -195,7 +196,11 @@
 
                   <td>
                     <div class="badge bg-{{ $item->status->getColor() }}">
-                      {{ $item->status }}
+                      @if($item->status === \App\Enums\StatusTransaksi::DIPROSES)
+                        dikemas
+                      @else
+                        {{ $item->status }}
+                      @endif
                     </div>
                   </td>
 
@@ -220,6 +225,16 @@
                     </td>
 
                     <td>
+                      <select wire:change="updateStatusTransaksi({{ $item->id }}, $event.target.value)" class="form-select form-select-sm" style="min-width: 120px;">
+                        @foreach (\App\Enums\StatusTransaksi::cases() as $status)
+                          <option value="{{ $status->value }}" {{ $item->status === $status ? 'selected' : '' }}>
+                            {{ ucfirst($status->value) }}
+                          </option>
+                        @endforeach
+                      </select>
+                    </td>
+
+                    <td>
                       <button wire:click="openModalSelectKurir({{ $item->id }})"
                               type="button"
                               class="btn btn-sm btn-outline-primary">
@@ -241,10 +256,11 @@
                   {{-- KURIR --}}
                   @if (getActiveUser()->role === Role::KURIR)
                     <td>
-                      <button wire:click="pesananDiterima({{ $item->id}})" type="button" class="btn btn-sm btn-outline-success"
-                              {{ $item->status === \App\Enums\StatusTransaksi::DITERIMA ? 'disabled' : '' }}>
-                        <i class="bi bi-check2-circle"></i> Pesanan Diterima
-                      </button>
+                      <select wire:change="updateStatusTransaksi({{ $item->id }}, $event.target.value)" class="form-select form-select-sm" style="min-width: 120px;">
+                        <option value="diproses" {{ $item->status === \App\Enums\StatusTransaksi::DIPROSES ? 'selected' : '' }}>Dikemas</option>
+                        <option value="dikirim" {{ $item->status === \App\Enums\StatusTransaksi::DIKIRIM ? 'selected' : '' }}>Dikirim</option>
+                        <option value="diterima" {{ $item->status === \App\Enums\StatusTransaksi::DITERIMA ? 'selected' : '' }}>Diterima</option>
+                      </select>
                     </td>
                   @endif
 
