@@ -105,7 +105,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6 col-12">
+        <div class="col-md-4 col-12">
             <div class="mb-3">
                 <label for="harga_beli" class="form-label fw-semibold">Harga Beli</label>
                 <input wire:model="form.harga_beli" type="number" step="0.01" class="form-control" id="harga_beli"
@@ -116,7 +116,7 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-12">
+        <div class="col-md-4 col-12">
             <div class="mb-3">
                 <label for="harga_jual" class="form-label fw-semibold">Harga Jual</label>
                 <input wire:model="form.harga_jual" type="number" step="0.01" class="form-control" id="harga_jual"
@@ -127,7 +127,16 @@
             </div>
         </div>
 
-
+        <div class="col-md-4 col-12">
+            <div class="mb-3">
+                <label for="tanggal_exp" class="form-label fw-semibold">Tanggal Kadaluarsa</label>
+                <input wire:model="form.tanggal_exp" type="date" class="form-control" id="tanggal_exp"
+                    @if ($currentState === \App\Enums\State::SHOW) disabled @endif>
+                @error('form.tanggal_exp')
+                    <small class="d-block mt-1 text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
     </div>
 
 
@@ -269,6 +278,7 @@
                           <th scope="col">Kategori</th>
                           <th scope="col">Harga Beli/bal (Rp.)</th>
                           <th scope="col">Harga Jual/bal (Rp.)</th>
+                          <th scope="col">Tanggal Exp</th>
                           <th scope="col">Persediaan</th>
                           <th scope="col" class="text-end">Aksi</th>
                         </tr>
@@ -283,6 +293,7 @@
                                 <td>{{ $produk->kategori->nama_kategori ?? '-' }}</td>
                                 <td>{{ number_format($produk->harga_beli, 0, ',', '.') }}</td>
                                 <td>{{ number_format($produk->harga_jual, 0, ',', '.') }}</td>
+                                <td>{{ $produk->tanggal_exp ? \Carbon\Carbon::parse($produk->tanggal_exp)->format('d M Y') : '-' }}</td>
                                 <td>{{ $produk->totalPersediaan() }}</td>
 <td class="text-end">
     <button wire:click="detail({{ $produk->id }})" class="btn btn-sm btn-outline-info me-1">
