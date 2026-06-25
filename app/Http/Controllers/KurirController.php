@@ -10,18 +10,6 @@ use Illuminate\Validation\Rule;
 
 class KurirController extends Controller
 {
-    public function index()
-    {
-        $dikirim = Transaksi::where('status', 'dikirim')->count();
-        $diproses = Transaksi::where('status', 'diproses')->count();
-
-        return view('kurir.index', [
-            'page' => 'Dashboard',
-            'dikirim' => $dikirim,
-            'diproses' => $diproses,
-        ]);
-    }
-
 
     public function konfirmasiPembayaranPage()
     {

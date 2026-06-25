@@ -22,27 +22,7 @@ class AdminGudangController extends Controller
         ]);
     }
 
-    public function index()
-    {
-        $total_produk = Produk::count();
-        $total_persediaan = Produk::with('persediaan')->get()->sum('persediaan.jumlah');
 
-        return view("{$this->role}.index", [
-            'page' => 'Dashboard',
-            'total_produk' => $total_produk,
-            'total_persediaan' => $total_persediaan,
-        ]);
-    }
-
-    public function barangMasuk()
-    {
-        $barang_masuk = Mutasi::with('produk')->where('jenis', 'masuk')->get();
-
-        return view("{$this->role}.barang-masuk", [
-            'page' => 'Barang Masuk',
-            'barang_masuk' => $barang_masuk,
-        ]);
-    }
 
     public function pesanan()
     {
@@ -54,15 +34,7 @@ class AdminGudangController extends Controller
         ]);
     }
 
-    public function produk()
-    {
-        $produk = Produk::all();
 
-        return view("{$this->role}.produk.produk", [
-            'page' => 'Produk',
-            'produk' => $produk,
-        ]);
-    }
 
     private function getPM($periode1, $periode2, $id_produk)
     {

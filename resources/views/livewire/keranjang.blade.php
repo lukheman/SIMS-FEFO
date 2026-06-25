@@ -66,6 +66,7 @@
 
       </div>
       <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
         <button wire:click="saveToCart" type="button" class="btn btn-primary" {{ !$form->isStokCukup() ? 'disabled' : '' }}>
         <i class="bi bi-cart-plus"></i>
         Simpan ke Keranjang

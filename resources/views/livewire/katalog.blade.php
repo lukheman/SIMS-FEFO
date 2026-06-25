@@ -80,6 +80,7 @@
 
         </div>
         <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
           <button wire:click="addToCart" type="button" class="btn btn-primary" {{ !$this->isStokCukup($jumlahPesanan, $satuan) ? 'disabled' : '' }}>
             <i class="bi bi-cart-plus"></i>
             Tambahkan ke Keranjang

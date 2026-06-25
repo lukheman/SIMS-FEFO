@@ -100,52 +100,6 @@ class AdminTokoController extends Controller
             'message' => 'Persediaan pesanan berhasil dikurangi',
         ], 200);
     }
-
-    public function kasir()
-    {
-
-        return view('admin_toko.kasir', [
-            'page' => 'Kasir',
-        ]);
-
-    }
-
-    public function index()
-    {
-        $pesanan = Transaksi::where('status', StatusTransaksi::PENDING)->count();
-        $total_penjualan = Transaksi::where('status', StatusTransaksi::SELESAI)->count();
-        $persediaan_barang = \App\Models\Persediaan::sum('jumlah');
-
-        return view('admin_toko.index', [
-            'page' => 'Dashboard',
-            'pesanan' => $pesanan,
-            'total_penjualan' => $total_penjualan,
-            'persediaan_barang' => $persediaan_barang,
-        ]);
-    }
-
-    public function pesanan()
-    {
-        $pesanan = Transaksi::with('user')->whereHas('user')->get();
-        $kurir = User::query()->where('role', Role::KURIR)->get();
-
-        return view('admin_toko.pesanan', [
-            'page' => 'Pesanan',
-            'pesanan' => $pesanan,
-            'kurir' => $kurir,
-        ]);
-    }
-
-    public function persediaan()
-    {
-        $produk = Produk::all();
-
-        return view('admin_toko.persediaan', [
-            'page' => 'Persediaan',
-            'produk' => $produk,
-        ]);
-    }
-
     public function nota(Request $request)
     {
 
@@ -164,13 +118,6 @@ class AdminTokoController extends Controller
             'pesanan' => $pesanan,
             'pengirim' => $pengirim,
             'penerima' => $penerima,
-        ]);
-    }
-
-    public function laporanPesanan()
-    {
-        return view('admin_toko.laporan-pesanan', [
-            'page' => 'Laporan Pesanan'
         ]);
     }
 }

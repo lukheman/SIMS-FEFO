@@ -33,6 +33,7 @@
                 <div id="scanner"></div>
       </div>
       <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
       </div>
     </div>
   </div>
@@ -248,6 +249,7 @@
 </form>
       </div>
       <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
                         @if ($currentState === \App\Enums\State::CREATE)
                             <button type="button" wire:click="save" class="btn btn-primary">Tambahkan</button>
                         @elseif ($currentState === \App\Enums\State::UPDATE)

@@ -43,6 +43,7 @@
         </div>
 
         <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
           <button wire:click="saveKurir" type="button" class="btn btn-primary">
             <i class="bi bi-truck me-1"></i> Tugaskan Kurir
           </button>
