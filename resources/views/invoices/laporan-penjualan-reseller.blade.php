@@ -52,18 +52,35 @@
             border-collapse: collapse;
             margin-top: 30px;
             margin-bottom: 30px;
+            font-size: 14px;
         }
 
         #pesanan th {
-            background-color: #f2f2f2;
-            text-align: left;
+            background-color: #1a5bb8;
+            color: white;
+            text-align: center;
             padding: 12px 8px;
-            border: 1px solid #ddd;
+            border: 1px solid #777;
         }
 
         #pesanan td {
-            border: 1px solid #ddd;
+            border: 1px solid #777;
             padding: 10px 8px;
+        }
+
+        #pesanan tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #pesanan tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        #pesanan tfoot td, 
+        #pesanan tr.total td {
+            background-color: #1a5bb8;
+            color: white;
+            font-weight: bold;
         }
 
         .row {
@@ -102,7 +119,7 @@
 
         <x-kop-laporan />
 
-        <h5 class="text-center"><u>Laporan Penjualan Reseller</u></h5>
+        <h4 class="text-center"><b>LAPORAN PENJUALAN RESELLER</b></h4>
 
         <table id="keterangan">
             <tr>

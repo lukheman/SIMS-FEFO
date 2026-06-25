@@ -74,26 +74,40 @@
             border-collapse: collapse;
             margin-top: 30px;
             margin-bottom: 30px;
-            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */ /* Dihilangkan */
+            font-size: 14px;
         }
 
         #pesanan th,
         #rata-rata th {
-            background-color: #f2f2f2;
-            text-align: left;
+            background-color: #1a5bb8;
+            color: white;
+            text-align: center;
             padding: 12px 8px;
-            border: 1px solid #ddd;
+            border: 1px solid #777;
         }
 
         #pesanan td,
         #rata-rata td {
-            border: 1px solid #ddd;
+            border: 1px solid #777;
             padding: 10px 8px;
         }
 
-        #pesanan tbody tr:nth-child(even) {
-            /* background-color: #f9f9f9; */ /* Dihilangkan */
-            background-color: transparent; /* Pastikan tidak ada background */
+        #pesanan tbody tr:nth-child(even),
+        #rata-rata tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #pesanan tbody tr:nth-child(odd),
+        #rata-rata tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        #pesanan tfoot td, 
+        #pesanan tr.total td,
+        #rata-rata tfoot td {
+            background-color: #1a5bb8;
+            color: white;
+            font-weight: bold;
         }
 
         .row {
@@ -171,7 +185,7 @@
 
         <x-kop-laporan />
 
-        <h5 class="text-center"><u>Laporan Penjualan</u></h5>
+        <h4 class="text-center"><b>LAPORAN PENJUALAN</b></h4>
 
         <table id="keterangan">
             <tr>

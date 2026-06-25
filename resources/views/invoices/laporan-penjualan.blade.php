@@ -32,18 +32,44 @@
         .pesanan,
         #rata-rata {
             border-collapse: collapse;
-            margin-top: 50px;
-            margin-bottom: 50px;
-            width: 90%;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            width: 100%;
+            font-size: 14px;
         }
-
 
         .pesanan td,
         .pesanan th,
         #rata-rata td,
         #rata-rata th {
-            border: 1px solid black;
+            border: 1px solid #777;
             padding: 8px;
+        }
+
+        .pesanan thead th,
+        #rata-rata thead th {
+            background-color: #1a5bb8;
+            color: white;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .pesanan tbody tr:nth-child(even),
+        #rata-rata tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .pesanan tbody tr:nth-child(odd),
+        #rata-rata tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        .pesanan tfoot td, 
+        .pesanan tr.total td,
+        #rata-rata tfoot td {
+            background-color: #1a5bb8;
+            color: white;
+            font-weight: bold;
         }
 
         .row {
@@ -87,7 +113,7 @@
 
         <x-kop-laporan />
 
-        <h5 class="text-center"><u>Laporan Penjualan</u></h5>
+        <h4 class="text-center"><b>LAPORAN PENJUALAN</b></h4>
 
         <table id="keterangan">
             <tr>
@@ -100,34 +126,58 @@
         <table class="pesanan">
 
             <thead>
-
                 <tr>
-                    <th>Tanggal</th>
-                    <th>Kode Barang</th>
-                    <th>Nama Barang</th>
-                    <th>Jumlah Terjual</th>
-                    <th>Metode Pembayaran</th>
-                    <th>Harga Barang</th>
-                    <th>Total Pembayaran</th>
+                    <th colspan="2">Barang</th>
+                    <th rowspan="2">Metode<br>Pembayaran</th>
+                    <th rowspan="2">Jumlah</th>
+                    <th rowspan="2">Satuan</th>
+                    <th rowspan="2">Harga<br>Barang</th>
+                    <th rowspan="2">Total<br>Pembayaran</th>
+                    <th rowspan="2">HPP</th>
+                    <th rowspan="2">Keuntungan</th>
                 </tr>
-
+                <tr>
+                    <th>Kode</th>
+                    <th>Nama</th>
+                </tr>
             </thead>
 
             <tbody>
+                @php
+                    $total_hpp = 0;
+                    $total_keuntungan = 0;
+                @endphp
                 @foreach ($penjualan as $item)
+                @php
+                    $satuanUnit = $item->satuan ? ($item->produk->unit_kecil ?? '-') : ($item->produk->unit_besar ?? '-');
+                    $hargaBeliUnit = $item->produk->harga_beli ?? 0;
+                    if ($item->satuan && ($item->produk->tingkat_konversi ?? 1) > 0) {
+                        $hargaBeliUnit = $hargaBeliUnit / $item->produk->tingkat_konversi;
+                    }
+                    $hpp = $hargaBeliUnit * ($item->jumlah ?? 0);
+                    $total_harga = $item->total_harga; 
+                    $keuntungan = $total_harga - $hpp;
+                    
+                    $total_hpp += $hpp;
+                    $total_keuntungan += $keuntungan;
+                @endphp
                 <tr>
-                    <td class="text-center">{{ $item->transaksi->tanggal ? $item->transaksi->tanggal->format('d/m/Y') : '-' }}</td>
                     <td class="text-center">{{ $item->produk->kode_produk ?? '-' }}</td>
                     <td>{{ $item->produk->nama_produk ?? '-' }}</td>
-                    <td class="text-right"> {{ $item->label_jumlah_pesanan }} </td>
-                    <td class="text-center"> {{ $item->transaksi->metode_pembayaran ? $item->transaksi->metode_pembayaran->value : '-' }} </td>
-                    <td class="text-right"> {{ $item->label_harga_satuan }} </td>
-                    <td class="text-right"> {{ $item->label_total_harga_jual }} </td>
+                    <td class="text-center">{{ $item->transaksi->metode_pembayaran ? $item->transaksi->metode_pembayaran->value : '-' }}</td>
+                    <td class="text-center">{{ $item->jumlah }}</td>
+                    <td class="text-center">{{ ucfirst($satuanUnit) }}</td>
+                    <td class="text-right">Rp{{ number_format($item->harga_satuan, 0, ',', '.') }}</td>
+                    <td class="text-right">Rp{{ number_format($total_harga, 0, ',', '.') }}</td>
+                    <td class="text-right">Rp{{ number_format($hpp, 0, ',', '.') }}</td>
+                    <td class="text-right">Rp{{ number_format($keuntungan, 0, ',', '.') }}</td>
                 </tr>
                 @endforeach
-                <tr>
-                    <td colspan="6" style="text-align: right;"><strong>Total</strong></td>
-                    <td style="text-align: right;"><strong>Rp. {{ number_format($total, 2, ',', '.') }}</strong></td>
+                <tr class="total">
+                    <td colspan="6" style="text-align: right; text-transform: uppercase;"><strong>Total</strong></td>
+                    <td style="text-align: right;"><strong>Rp{{ number_format($total, 0, ',', '.') }}</strong></td>
+                    <td style="text-align: right;"><strong>Rp{{ number_format($total_hpp, 0, ',', '.') }}</strong></td>
+                    <td style="text-align: right;"><strong>Rp{{ number_format($total_keuntungan, 0, ',', '.') }}</strong></td>
                 </tr>
             </tbody>
 

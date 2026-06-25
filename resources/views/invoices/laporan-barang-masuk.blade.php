@@ -34,16 +34,37 @@
 
         #pesanan {
             border-collapse: collapse;
-            margin-top: 50px;
-            margin-bottom: 50px;
-            width: 90%;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            width: 100%;
+            font-size: 14px;
         }
-
 
         #pesanan td,
         #pesanan th {
-            border: 1px solid black;
+            border: 1px solid #777;
             padding: 8px;
+        }
+
+        #pesanan thead th {
+            background-color: #1a5bb8;
+            color: white;
+            text-align: center;
+        }
+
+        #pesanan tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #pesanan tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        #pesanan tfoot td, 
+        #pesanan tr.total td {
+            background-color: #1a5bb8;
+            color: white;
+            font-weight: bold;
         }
 
         .row {
@@ -66,7 +87,7 @@
 
         <x-kop-laporan />
 
-        <h5 class="text-center"><u>Laporan Barang Masuk</u></h5>
+        <h4 class="text-center"><b>LAPORAN BARANG MASUK</b></h4>
 
         <table id="keterangan">
             <tr>
