@@ -29,8 +29,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">
                         <i class="bi bi-printer"></i> Cetak
                     </button>
                 </div>
@@ -43,7 +43,7 @@
     <div class="card-header">
 
 
-        <button type="button" class="btn btn-sm btn-outline-danger" id="btn-cetak-laporan-penjualan" data-bs-toggle="modal"
+        <button type="button" class="btn btn-primary" id="btn-cetak-laporan-penjualan" data-bs-toggle="modal"
             data-bs-target="#modal-cetak-laporan-penjualan">
             <i class="bi bi-printer"></i>
             Cetak Laporan Penjualan</button>
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let inputHtml = '';
             const today = new Date();
             const year = today.getFullYear();
-            
+
             if (val === 'harian') {
                 inputHtml = '<input type="date" class="form-control" name="periode" required>';
             } else if (val === 'mingguan') {

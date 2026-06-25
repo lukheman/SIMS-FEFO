@@ -44,11 +44,11 @@
 
     <div class="d-flex align-items-center">
       <div class="input-group input-group-sm w-auto">
-        <button wire:click="kurangiJumlahPesanan" type="button" class="btn btn-outline-secondary" id="btn-kurang-jumlah" {{ $form->jumlah <= 1 ? 'disabled' : '' }}>
+        <button wire:click="kurangiJumlahPesanan" type="button" class="btn btn-secondary" id="btn-kurang-jumlah" {{ $form->jumlah <= 1 ? 'disabled' : '' }}>
           <i class="bi bi-dash"></i>
         </button>
         <input wire:model.live="form.jumlah" type="number" name="jumlah" id="jumlah" class="form-control text-center" style="max-width: 80px;" min="1">
-        <button wire:click="tambahJumlahPesanan" type="button" class="btn btn-outline-secondary" id="btn-tambah-jumlah">
+        <button wire:click="tambahJumlahPesanan" type="button" class="btn btn-secondary" id="btn-tambah-jumlah">
           <i class="bi bi-plus"></i>
         </button>
       </div>
@@ -79,13 +79,13 @@
 
     <div class="card-header d-flex justify-content-between align-items-center">
         <div>
-            <button wire:click="prosesCheckoutKeranjang" type="button" class="btn btn-outline-primary me-2"
+            <button wire:click="prosesCheckoutKeranjang" type="button" class="btn btn-primary me-2"
                     {{ empty($this->selectedIdPesanan) ? 'disabled' : '' }}>
                 <i class="bi bi-cash-stack me-1"></i> Checkout
             </button>
 
             <button type="button"
-                    class="btn btn-outline-danger"
+                    class="btn btn-danger"
                     id="btn-delete-pilihan-pesanan"
                     style="display: none;">
                 <i class="bi bi-trash me-1"></i> Hapus
@@ -124,11 +124,11 @@
                         <td>{{ $item->produk->label_harga_jual }}</td>
                         <td>{{ $item->label_total_harga_jual }}</td>
                         <td class="text-end">
-                            <button wire:click="delete({{ $item->id }})" class="btn btn-outline-danger btn-sm me-1">
+                            <button wire:click="delete({{ $item->id }})" class="btn btn-danger me-1">
                                 <i class="bi bi-trash"></i> Hapus
                             </button>
 
-                            <button wire:click="infoPesanan({{ $item->id }})" class="btn btn-outline-primary btn-sm">
+                            <button wire:click="infoPesanan({{ $item->id }})" class="btn btn-primary ">
                                 <i class="bi bi-plus"></i> Tambah Pesanan
                             </button>
                         </td>

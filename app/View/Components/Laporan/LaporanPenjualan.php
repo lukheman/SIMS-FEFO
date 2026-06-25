@@ -18,7 +18,12 @@ class LaporanPenjualan extends Component
      */
     public function __construct($ttd)
     {
-        $this->penjualan = Mutasi::where('jenis', 'keluar')->get();
+        $this->penjualan = \App\Models\Pesanan::with(['produk', 'transaksi'])
+            ->whereHas('transaksi', function($q) {
+                $q->whereNotIn('status', ['pending', 'dibatalkan']);
+            })->get()->sortBy(function($pesanan) {
+                return $pesanan->transaksi->tanggal;
+            });
         $this->ttd = $ttd;
     }
 

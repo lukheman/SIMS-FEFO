@@ -76,8 +76,8 @@
                                 <td> {{ $item->harga }}</td>
                                 <td>
                                     <div class="btn-group">
-                                        <div class="btn btn-sm btn-primary">Edit</div>
-                                        <div class="btn btn-sm btn-danger">Hapus</div>
+                                        <div class="btn btn-primary">Edit</div>
+                                        <div class="btn btn-danger">Hapus</div>
                                     </div>
                                 </td>
                             </tr>

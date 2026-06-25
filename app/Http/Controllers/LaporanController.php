@@ -24,86 +24,55 @@ class LaporanController extends Controller
         $filterType = $request->input('filter_type', 'bulanan');
         $periodeStr = $request->periode;
 
-        $query = Mutasi::with('produk')->where('jenis', 'keluar');
-        $jumlahHari = 1;
+        $query = \App\Models\Pesanan::with(['produk', 'transaksi'])
+            ->whereHas('transaksi', function ($q) {
+                $q->whereNotIn('status', ['pending', 'dibatalkan']);
+            });
 
         if ($filterType === 'harian') {
             $date = Carbon::createFromFormat('Y-m-d', $periodeStr);
-            $query->whereDate('tanggal', $date->format('Y-m-d'));
+            $query->whereHas('transaksi', function($q) use ($date) {
+                $q->whereDate('tanggal', $date->format('Y-m-d'));
+            });
             $periodeFormat = $date->format('d/m/Y');
         } elseif ($filterType === 'mingguan') {
             $year = substr($periodeStr, 0, 4);
             $week = substr($periodeStr, 6);
             $date = Carbon::now()->setISODate((int)$year, (int)$week);
-            $query->whereBetween('tanggal', [
-                $date->copy()->startOfWeek()->format('Y-m-d'),
-                $date->copy()->endOfWeek()->format('Y-m-d')
-            ]);
-            $jumlahHari = 7;
+            $query->whereHas('transaksi', function($q) use ($date) {
+                $q->whereBetween('tanggal', [
+                    $date->copy()->startOfWeek()->format('Y-m-d'),
+                    $date->copy()->endOfWeek()->format('Y-m-d')
+                ]);
+            });
             $periodeFormat = "Minggu ke-{$week} {$year}";
         } elseif ($filterType === 'tahunan') {
-            $query->whereYear('tanggal', $periodeStr);
-            $jumlahHari = Carbon::createFromDate($periodeStr)->daysInYear;
+            $query->whereHas('transaksi', function($q) use ($periodeStr) {
+                $q->whereYear('tanggal', $periodeStr);
+            });
             $periodeFormat = "Tahun {$periodeStr}";
         } else {
             $date = Carbon::createFromFormat('Y-m', $periodeStr)->startOfMonth();
-            $query->whereYear('tanggal', $date->year)
+            $query->whereHas('transaksi', function($q) use ($date) {
+                $q->whereYear('tanggal', $date->year)
                   ->whereMonth('tanggal', $date->month);
-            $jumlahHari = $date->daysInMonth;
+            });
             $periodeFormat = $date->format('m/Y');
         }
 
-        // Fetch and group sales data
-        $penjualan = $query->select(
-                'mutasi.*',
-                DB::raw("SUM(mutasi.jumlah) OVER (PARTITION BY mutasi.id_produk) / {$jumlahHari} AS rata_rata_harian"),
-                DB::raw('COUNT(*) OVER (PARTITION BY mutasi.id_produk) AS total_mutasi')
-            )
-            ->orderBy('id_produk')
-            ->orderBy('tanggal')
-            ->get();
-
-        // Group sales by product and format rata_rata_harian
-        $groupedPenjualan = $penjualan->groupBy('id_produk')->map(function ($sales) use ($jumlahHari) {
-            $firstSale = $sales->first();
-            $rataRataHarian = $firstSale->rata_rata_harian;
-            $unitKecil = $firstSale->produk->unit_kecil ?? 'pcs';
-            $unitBesar = $firstSale->produk->unit_besar ?? 'dos';
-            $tingkatKonversi = $firstSale->produk->tingkat_konversi ?? 1;
-
-            // Format rata_rata_harian sebagai "X pcs (Y dos)"
-            $rataRataBesar = $tingkatKonversi > 0 ? $rataRataHarian / $tingkatKonversi : 0;
-            $formattedRataRata = sprintf(
-                '%d %s (%d %s)',
-                round($rataRataHarian),
-                $unitKecil,
-                round($rataRataBesar),
-                $unitBesar
-            );
-
-            return [
-                'items' => $sales,
-                'rowspan' => $sales->count(),
-                'rata_rata_harian' => $formattedRataRata,
-                'rrh' => $rataRataHarian
-            ];
+        // Fetch sales data
+        $penjualan = $query->get()->sortBy(function($pesanan) {
+            return $pesanan->transaksi->tanggal;
         });
 
         // Calculate total sales
-        $total = $penjualan->sum('total_harga_jual');
-
-        // Ambil 5 produk dengan total penjualan tertinggi
-        $top5 = $groupedPenjualan
-            ->sortByDesc('total_penjualan')
-            ->take(5);
-
+        $total = $penjualan->sum('total_harga');
 
         return view('invoices.laporan-penjualan', [
-            'groupedPenjualan' => $groupedPenjualan,
+            'penjualan' => $penjualan,
             'total' => $total,
             'periode' => $periodeFormat,
-            'ttd' => $request->ttd,
-            'top5' => $top5
+            'ttd' => $request->ttd
         ]);
     }
 

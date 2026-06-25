@@ -47,7 +47,7 @@
     </div>
 
     <div class="card-header d-flex justify-content-between align-items-center">
-        <button type="button" class="btn btn-sm btn-outline-primary" wire:click="add">
+        <button type="button" class="btn btn-primary" wire:click="add">
             <i class="bi bi-plus"></i> Tambah Kategori
         </button>
 
@@ -63,7 +63,7 @@
                     <th scope="col" style="width: 50px;">#</th>
                     <th scope="col">Nama Kategori</th>
                     <th scope="col">Deskripsi</th>
-                    <th scope="col" class="text-end" style="width: 150px;">Aksi</th>
+                    <th scope="col" class="text-end">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -73,11 +73,11 @@
                         <td>{{ $kategori->nama_kategori }}</td>
                         <td>{{ $kategori->deskripsi ?? '-' }}</td>
                         <td class="text-end">
-                            <button wire:click="edit({{ $kategori->id }})" class="btn btn-sm btn-outline-warning me-1">
-                                <i class="bi bi-pencil-square"></i>
+                            <button wire:click="edit({{ $kategori->id }})" class="btn btn-warning me-1">
+                                <i class="bi bi-pencil-square"></i> Edit
                             </button>
-                            <button wire:click="delete({{ $kategori->id }})" class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash"></i>
+                            <button wire:click="delete({{ $kategori->id }})" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Hapus
                             </button>
                         </td>
                     </tr>

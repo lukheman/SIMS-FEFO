@@ -103,60 +103,32 @@
 
                 <tr>
                     <th>Tanggal</th>
-                    <th>Nama Produk</th>
+                    <th>Kode Barang</th>
+                    <th>Nama Barang</th>
                     <th>Jumlah Terjual</th>
-                    <th>Harga Satuan</th>
-                    <th>Total Harga (Rp.)</th>
+                    <th>Metode Pembayaran</th>
+                    <th>Harga Barang</th>
+                    <th>Total Pembayaran</th>
                 </tr>
 
             </thead>
 
             <tbody>
-                @foreach ($groupedPenjualan as $group)
-                @foreach ($group['items'] as $index => $item)
+                @foreach ($penjualan as $item)
                 <tr>
-                    <td class="text-center">{{ $item->tanggal }}</td>
-                    <td>{{ $item->produk->nama_produk }}</td>
-                    <td class="text-right"> {{ $item->label_jumlah_unit_terjual}} </td>
-                    <td class="text-right"> {{ $item->label_harga_jual }} </td>
+                    <td class="text-center">{{ $item->transaksi->tanggal ? $item->transaksi->tanggal->format('d/m/Y') : '-' }}</td>
+                    <td class="text-center">{{ $item->produk->kode_produk ?? '-' }}</td>
+                    <td>{{ $item->produk->nama_produk ?? '-' }}</td>
+                    <td class="text-right"> {{ $item->label_jumlah_pesanan }} </td>
+                    <td class="text-center"> {{ $item->transaksi->metode_pembayaran ? $item->transaksi->metode_pembayaran->value : '-' }} </td>
+                    <td class="text-right"> {{ $item->label_harga_satuan }} </td>
                     <td class="text-right"> {{ $item->label_total_harga_jual }} </td>
                 </tr>
                 @endforeach
-                @endforeach
                 <tr>
-                    <td colspan="4" style="text-align: right;"><strong>Total</strong></td>
+                    <td colspan="6" style="text-align: right;"><strong>Total</strong></td>
                     <td style="text-align: right;"><strong>Rp. {{ number_format($total, 2, ',', '.') }}</strong></td>
                 </tr>
-            </tbody>
-
-        </table>
-
-
-
-        <h5 class="text-center">5 Produk Terlaris</h5>
-        <table class="pesanan">
-
-            <thead>
-
-                <tr>
-                    <th>Nama Produk</th>
-                    <th>Jumlah Terjual</th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-                @foreach ($top5 as $group)
-                @foreach ($group['items'] as $index => $item)
-
-                <tr>
-                    <td>{{ $item->produk->nama_produk }}</td>
-                    <td class="text-right"> {{ $item->label_jumlah_unit_terjual}} </td>
-
-
-                </tr>
-                @endforeach
-                @endforeach
             </tbody>
 
         </table>

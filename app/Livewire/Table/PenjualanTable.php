@@ -22,42 +22,18 @@ class PenjualanTable extends Component
 
     public function deletePenjualan($id): void
     {
-        if (getActiveUser()->role === \App\Enums\Role::PIMPINAN) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        $this->penjualan = Mutasi::query()
-            ->with('produk', 'produk.persediaan')
-            ->find($id);
-
-        $this->deleteConfirmation('Persediaan produk juga akan dikurangi! Yakin untuk menghapus data mutasi ini?');
-    }
-
-    #[On('deleteConfirmed')]
-    public function deletePenjualanConfirmed() {
-
-        // $persediaan = $this->penjualan()->produk->persediaan;
-        //
-        // if($persediaan->jumlah > 0) {
-        //     $persediaan->jumlah -= $this->penjualan->jumlah;
-        //     $persediaan->save();
-        // }
-
-
-        $this->notifySuccess('Berhasil menghapus data penjualan');
-        // $this->notifySuccess("Berhasil mengurangi persediaan produk {$this->penjualan->produk->nama_produk} sebanyak {$this->penjualan->jumlah}");
-
-        $this->penjualan->delete();
-
-        $this->reset('penjualan');
-
+        abort(403, 'Aksi ini sudah tidak didukung.');
     }
 
     #[Computed]
     public function penjualanList() {
-        return Mutasi::query()
-            ->with('produk')
-            ->where('jenis', 'keluar')
+        return \App\Models\Pesanan::query()
+            ->with(['produk', 'transaksi'])
+            ->whereHas('transaksi', function ($q) {
+                $q->whereNotIn('status', ['pending', 'dibatalkan']);
+            })
+            // Join to sort by transaksi tanggal could be complex, we just sort by created_at of pesanan since they are created alongside transaksi
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
     }
 

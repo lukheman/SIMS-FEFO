@@ -31,7 +31,7 @@
                 <td>Rp {{ number_format($produk->harga_jual_unit_kecil, 0, ',', '.') }}</td>
                 {{-- <td>{{ $produk->totalPersediaan() }}</td> --}}
                 <td class="text-end">
-                  <button wire:click="addProduk({{ $produk->id }})" class="btn btn-sm btn-success">Tambah</button>
+                  <button wire:click="addProduk({{ $produk->id }})" class="btn btn-success">Tambah</button>
                 </td>
               </tr>
               @empty
@@ -72,7 +72,7 @@
               <td>Rp {{ number_format($item['harga'], 0, ',', '.') }}</td>
               <td>Rp {{ number_format($item['total'], 0, ',', '.') }}</td>
               <td class="text-end">
-                <button wire:click="deleteProduk({{ $item['id'] }})" class="btn btn-sm btn-danger">Hapus</button>
+                <button wire:click="deleteProduk({{ $item['id'] }})" class="btn btn-danger">Hapus</button>
               </td>
             </tr>
             @empty

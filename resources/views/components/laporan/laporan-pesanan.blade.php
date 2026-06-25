@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
 
-<button class="btn btn-sm btn-outline-danger" id="btn-cetak-laporan-pesanan"
+<button class="btn btn-primary" id="btn-cetak-laporan-pesanan"
     data-bs-toggle="modal" data-bs-target="#modal-cetak-laporan-pesanan">
     <i class="bi bi-printer"></i>
     Cetak Laporan Pesanan
@@ -92,8 +92,8 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">
                         <i class="bi bi-printer"></i>
                         Cetak
                     </button>

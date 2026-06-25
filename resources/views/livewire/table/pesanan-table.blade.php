@@ -32,7 +32,7 @@
 
                     <button wire:click="selectKurir({{ $item->id }})"
                             type="button"
-                            class="btn btn-outline-primary btn-sm">
+                            class="btn btn-primary ">
                       <i class="bi bi-person-check"></i> Pilih
                     </button>
                   </div>
@@ -43,7 +43,7 @@
         </div>
 
         <div class="modal-footer">
-          <button wire:click="saveKurir" type="button" class="btn btn-outline-primary">
+          <button wire:click="saveKurir" type="button" class="btn btn-primary">
             <i class="bi bi-truck me-1"></i> Tugaskan Kurir
           </button>
         </div>
@@ -218,7 +218,7 @@
                   @if (getActiveUser()->role === Role::KASIR)
                     <td>
                       <button wire:click="transaksiLunas({{ $item->id }})"
-                              class="btn btn-sm btn-success"
+                              class="btn btn-success"
                               {{ $item->metode_pembayaran === \App\Enums\MetodePembayaran::COD ? 'disabled' : '' }}>
                         <i class="bi bi-cash-stack"></i> Lunas
                       </button>
@@ -237,7 +237,7 @@
                     <td>
                       <button wire:click="openModalSelectKurir({{ $item->id }})"
                               type="button"
-                              class="btn btn-sm btn-outline-primary">
+                              class="btn btn-primary">
                         <i class="bi bi-person-check"></i> Pilih Kurir
                       </button>
                     </td>
@@ -246,7 +246,7 @@
                       <form action="{{ route('kasir.nota') }}" method="POST">
                         @csrf
                         <input type="hidden" name="id_transaksi" value="{{ $item->id }}">
-                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                        <button type="submit" class="btn btn-primary">
                           <i class="bi bi-printer"></i> Cetak
                         </button>
                       </form>
@@ -267,7 +267,7 @@
                   <td>
                     <button wire:click="detailTransaksi({{ $item->id }})"
                             type="button"
-                            class="btn btn-sm btn-outline-secondary">
+                            class="btn btn-secondary">
                       <i class="bi bi-info-circle"></i> Detail Pesanan
                     </button>
                   </td>

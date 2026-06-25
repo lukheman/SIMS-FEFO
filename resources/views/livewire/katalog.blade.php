@@ -50,13 +50,13 @@
 
                 <div class="d-flex align-items-center mb-3">
                   <div class="input-group input-group-sm w-auto">
-                    <button wire:click="kurangiJumlahPesanan" type="button" class="btn btn-outline-secondary"
+                    <button wire:click="kurangiJumlahPesanan" type="button" class="btn btn-secondary"
                       id="btn-kurang-jumlah" {{ $jumlahPesanan <= 1 ? 'disabled' : '' }}>
                       <i class="bi bi-dash"></i>
                     </button>
                     <input wire:model.live="jumlahPesanan" type="number" name="jumlah" id="jumlah"
                       class="form-control text-center" style="max-width: 80px;" min="1" max="{{ $this->getMaxPesanan() }}">
-                    <button wire:click="tambahJumlahPesanan" type="button" class="btn btn-outline-secondary"
+                    <button wire:click="tambahJumlahPesanan" type="button" class="btn btn-secondary"
                       id="btn-tambah-jumlah">
                       <i class="bi bi-plus"></i>
                     </button>
@@ -80,7 +80,7 @@
 
         </div>
         <div class="modal-footer">
-          <button wire:click="addToCart" type="button" class="btn btn-outline-primary" {{ !$this->isStokCukup($jumlahPesanan, $satuan) ? 'disabled' : '' }}>
+          <button wire:click="addToCart" type="button" class="btn btn-primary" {{ !$this->isStokCukup($jumlahPesanan, $satuan) ? 'disabled' : '' }}>
             <i class="bi bi-cart-plus"></i>
             Tambahkan ke Keranjang
           </button>

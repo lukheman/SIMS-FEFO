@@ -22,7 +22,7 @@
             <input type="text" id="total-harga" class="form-control" readonly>
         </div>
         <div class="mb-3">
-            <button class="btn btn-sm btn-secondary w-100" id="btn-detail-transaksi" data-bs-toggle="modal" data-bs-target="#modal-detail-transaksi">
+            <button class="btn btn-secondary w-100" id="btn-detail-transaksi" data-bs-toggle="modal" data-bs-target="#modal-detail-transaksi">
                 <i class="fas fa-info-circle"></i> Detail Pesanan
             </button>
         </div>

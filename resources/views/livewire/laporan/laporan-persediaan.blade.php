@@ -2,9 +2,9 @@
 
     <div class="card-header">
 
-<a href="{{ route('laporan.laporan-persediaan-produk')}}" class="btn btn-sm btn-outline-danger" id="btn-cetak-laporan-pesanan" >
+<a href="{{ route('laporan.laporan-persediaan-produk')}}" class="btn btn-primary" id="btn-cetak-laporan-pesanan" >
     <i class="bi bi-printer"></i>
-    Cetak Laporan Persediaan Produk
+    Cetak Laporan Persediaan
 </a>
     </div>
 

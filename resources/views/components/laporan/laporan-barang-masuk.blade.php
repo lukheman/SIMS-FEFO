@@ -1,10 +1,9 @@
 <div class="card">
     <div class="card-header">
-
-        <button class="btn btn-outline-danger" id="btn-cetak-laporan-barang-masuk" data-toggle="modal"
-            data-target="#modal-cetak-laporan-barang-masuk">
-            <i class="fas fa-print"></i>
-            Cetak Laporan</button>
+        <button class="btn btn-primary" id="btn-cetak-laporan-barang-masuk" data-bs-toggle="modal"
+            data-bs-target="#modal-cetak-laporan-barang-masuk">
+            <i class="bi bi-printer"></i>
+            Cetak Laporan Barang Masuk</button>
 
     </div>
     <div class="card-body">
@@ -81,9 +80,9 @@
                     </div>
 
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">
                         <i class="bi bi-printer"></i>
                         Cetak</button>
                 </div>

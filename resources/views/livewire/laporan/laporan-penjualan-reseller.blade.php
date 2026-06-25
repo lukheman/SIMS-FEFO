@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <div>
-            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                 data-bs-target="#modal-cetak-laporan-reseller">
                 <i class="bi bi-printer"></i>
                 Cetak Laporan Penjualan Reseller
@@ -53,7 +53,7 @@
             </tbody>
         </table>
     </div>
-    
+
     @if($this->transaksiList->hasPages())
     <div class="card-footer">
         {{ $this->transaksiList->links() }}
@@ -98,8 +98,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">
                             <i class="bi bi-printer"></i> Cetak
                         </button>
                     </div>
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let inputHtml = '';
             const today = new Date();
             const year = today.getFullYear();
-            
+
             if (val === 'harian') {
                 inputHtml = '<input type="date" class="form-control" name="periode" required>';
             } else if (val === 'mingguan') {

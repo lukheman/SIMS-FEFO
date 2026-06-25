@@ -21,7 +21,7 @@
                             <p class="mb-1 fw-semibold">{{ $user->name }} | {{ $user->phone ?? 'Belum ada nomor HP' }}</p>
                             <p class="mb-0 text-muted">{{ $user->alamat ?? 'Alamat belum diatur. Silakan perbarui profil Anda.' }}</p>
                         </div>
-                        <a href="{{ route('profile') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Ubah</a>
+                        <a href="{{ route('profile') }}" class="btn btn-secondary rounded-pill px-3">Ubah</a>
                     </div>
                 </div>
             </div>

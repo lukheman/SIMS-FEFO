@@ -92,7 +92,7 @@
                     <input wire:model="form.kode_produk" type="text" class="form-control" id="kode_produk"
                         placeholder="Scan atau Manual" @if ($currentState === \App\Enums\State::SHOW) disabled @endif>
                     @if ($currentState !== \App\Enums\State::SHOW)
-                        <button class="btn btn-outline-secondary" type="button" data-bs-target="#modal-scanner" data-bs-toggle="modal">
+                        <button class="btn btn-secondary" type="button" data-bs-target="#modal-scanner" data-bs-toggle="modal">
                             <i class="bi bi-upc-scan"></i> Scan
                         </button>
                     @endif
@@ -260,7 +260,7 @@
 
                   <div class="card-header">
 
-            <button type="button" class="btn btn-sm btn-outline-primary" wire:click="add">
+            <button type="button" class="btn btn-primary" wire:click="add">
                     <i class="bi bi-plus"></i>
 
             Tambah Produk
@@ -296,15 +296,15 @@
                                 <td>{{ $produk->tanggal_exp ? \Carbon\Carbon::parse($produk->tanggal_exp)->format('d M Y') : '-' }}</td>
                                 <td>{{ $produk->totalPersediaan() }}</td>
 <td class="text-end">
-    <button wire:click="detail({{ $produk->id }})" class="btn btn-sm btn-outline-info me-1">
+    <button wire:click="detail({{ $produk->id }})" class="btn btn-info me-1">
         <i class="bi bi-eye"></i> Lihat
     </button>
 
-    <button wire:click="edit({{ $produk->id }})" class="btn btn-sm btn-outline-warning me-1">
+    <button wire:click="edit({{ $produk->id }})" class="btn btn-warning me-1">
         <i class="bi bi-pencil-square"></i> Edit
     </button>
 
-    <button wire:click="delete({{ $produk->id }}, '{{ $produk->role }}')" class="btn btn-sm btn-outline-danger">
+    <button wire:click="delete({{ $produk->id }}, '{{ $produk->role }}')" class="btn btn-danger">
         <i class="bi bi-trash"></i> Hapus
     </button>
 </td>

@@ -13,7 +13,7 @@
                     </div>
 
                     <div class="mt-3">
-                        <label for="profile-photo" class="btn btn-outline-primary btn-sm" style="cursor: pointer;">
+                        <label for="profile-photo" class="btn btn-primary " style="cursor: pointer;">
                             <i class="bi bi-camera"></i> Ganti Foto
                         </label>
                         <input wire:model="form.foto" type="file" id="profile-photo" class="d-none" accept="image/*">

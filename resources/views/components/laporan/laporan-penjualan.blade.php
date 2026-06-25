@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <button class="btn btn-outline-danger" id="btn-cetak-laporan-penjualan" data-bs-toggle="modal"
+        <button class="btn btn-primary" id="btn-cetak-laporan-penjualan" data-bs-toggle="modal"
             data-bs-target="#modal-cetak-laporan-penjualan">
             <i class="fas fa-print"></i>
             Cetak Laporan Penjualan</button>
@@ -9,28 +9,25 @@
         <table id="datatable" class="table table-bordered table-striped">
             <thead>
                 <tr class="text-center">
-                    <th>Tanggal </th>
-                    <th>Nama Produk </th>
+                    <th>Tanggal</th>
+                    <th>Kode Barang</th>
+                    <th>Nama Barang</th>
                     <th>Jumlah Terjual</th>
-                    <th>Harga Produk</th>
-                    <th>Total Harga</th>
-                    <th>Aksi</th>
+                    <th>Metode Pembayaran</th>
+                    <th>Harga Barang</th>
+                    <th>Total Pembayaran</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($penjualan as $item)
                 <tr>
-                    <td>{{ $item->tanggal }}</td>
-                    <td>{{ $item->produk->nama_produk }}</td>
-                    <td class="text-end">{{ $item->label_jumlah_unit_terjual }}</td>
-                    <td class="text-end">{{ $item->label_harga_jual }}</td>
+                    <td>{{ $item->transaksi->tanggal ? $item->transaksi->tanggal->format('d/m/Y') : '-' }}</td>
+                    <td>{{ $item->produk->kode_produk ?? '-' }}</td>
+                    <td>{{ $item->produk->nama_produk ?? '-' }}</td>
+                    <td class="text-end">{{ $item->label_jumlah_pesanan }}</td>
+                    <td class="text-center">{{ $item->transaksi->metode_pembayaran ? $item->transaksi->metode_pembayaran->value : '-' }}</td>
+                    <td class="text-end">{{ $item->label_harga_satuan }}</td>
                     <td class="text-end">{{ $item->label_total_harga_jual }}</td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-danger btn-delete-penjualan"
-                            data-id-penjualan="{{ $item->id }}">
-                            <i class="fas fa-trash"></i> Hapus
-                        </button>
-                    </td>
                 </tr>
                 @endforeach
             </tbody>
@@ -67,8 +64,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">
                         <i class="bi bi-printer"></i> Cetak
                     </button>
                 </div>
@@ -122,7 +119,7 @@ $(document).ready(() => {
             let inputHtml = '';
             const today = new Date();
             const year = today.getFullYear();
-            
+
             if (val === 'harian') {
                 inputHtml = '<input type="date" class="form-control" name="periode" required>';
             } else if (val === 'mingguan') {

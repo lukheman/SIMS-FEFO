@@ -4,7 +4,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-6">
-                    <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal"
                         data-bs-target="#modal-pilih-metode">
                         <i class="fas fa-plus"></i> Tambah Produk
                     </button>
@@ -34,15 +34,15 @@
                             <td>{{ number_format($item->harga_beli, 0, ',', '.') }}</td>
                             <td>{{ number_format($item->harga_jual, 0, ',', '.') }}</td>
                             <td class="text-center">
-                                <button class="btn btn-sm btn-info btn-info-produk" data-bs-toggle="modal"
+                                <button class="btn btn-info btn-info-produk" data-bs-toggle="modal"
                                     data-bs-target="#modal-info-produk" data-id-produk="{{ $item->id }}">
                                     <i class="fas fa-info"></i> Info
                                 </button>
-                                <button class="btn btn-sm btn-warning text-white btn-update-produk" data-bs-toggle="modal"
+                                <button class="btn btn-warning text-white btn-update-produk" data-bs-toggle="modal"
                                     data-bs-target="#modal-update-produk" data-id-produk="{{ $item->id }}">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
-                                <button class="btn btn-sm btn-danger btn-delete-produk" data-id-produk="{{ $item->id }}">
+                                <button class="btn btn-danger btn-delete-produk" data-id-produk="{{ $item->id }}">
                                     <i class="fas fa-trash"></i> Hapus
                                 </button>
                             </td>
@@ -106,7 +106,7 @@
                                     <label for="kode-produk">Barcode Produk</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="kode_produk" id="kode-produk" placeholder="Scan atau Ketik Manual">
-                                        <button class="btn btn-outline-secondary" type="button" data-bs-target="#modal-scanner" data-bs-toggle="modal">
+                                        <button class="btn btn-secondary" type="button" data-bs-target="#modal-scanner" data-bs-toggle="modal">
                                             <i class="fas fa-barcode"></i> Scan
                                         </button>
                                     </div>
@@ -228,7 +228,7 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
                     </div>
                 </form>

@@ -7,14 +7,14 @@
 
     @if ($isLaporan)
 
-      <button type="button" class="btn btn-sm btn-outline-danger" id="btn-cetak-laporan-penjualan" data-bs-toggle="modal"
+      <button type="button" class="btn btn-primary" id="btn-cetak-laporan-penjualan" data-bs-toggle="modal"
         data-bs-target="#modal-cetak-barang-masuk">
         <i class="bi bi-printer"></i>
         Cetak Laporan Barang Masuk</button>
 
     @else
 
-      <button type="button" class="btn btn-sm btn-outline-primary" wire:click="searchProdukModal">
+      <button type="button" class="btn btn-primary" wire:click="searchProdukModal">
         <i class="bi bi-box-arrow-in-down"></i>
 
         Produk Masuk
@@ -55,13 +55,13 @@
 
             @if (!@$isLaporan)
               <td class="text-end">
-                <button wire:click="detailSupplyProduk({{ $item->id }})" class="btn btn-sm btn-outline-info" title="Detail">
+                <button wire:click="detailSupplyProduk({{ $item->id }})" class="btn btn-info" title="Detail">
                   <i class="bi bi-info-circle"></i> Detail
                 </button>
-                <button wire:click="editSupplyProduk({{ $item->id }})" class="btn btn-sm btn-outline-warning" title="Edit">
+                <button wire:click="editSupplyProduk({{ $item->id }})" class="btn btn-warning" title="Edit">
                   <i class="bi bi-pencil"></i> Edit
                 </button>
-                <button wire:click="deleteSupplyProduk({{ $item->id}})" class="btn btn-sm btn-outline-danger" title="Hapus">
+                <button wire:click="deleteSupplyProduk({{ $item->id}})" class="btn btn-danger" title="Hapus">
                   <i class="bi bi-trash"></i> Hapus
                 </button>
               </td>
@@ -125,7 +125,7 @@
                   </div>
 
                   <button wire:click="addSupplyProduk" type="button"
-                    class="btn btn-sm btn-outline-primary w-full px-3 btn-tambah-pesanan">
+                    class="btn btn-primary w-full px-3 btn-tambah-pesanan">
                     <i class="bi bi-box-arrow-in-down me-1"></i> Tambahkan Barang Masuk
                   </button>
                 </div>
@@ -160,7 +160,7 @@
                   <label for="jumlah_bal" class="form-label small mb-1">Jumlah ({{ $produk->unit_besar ?? 'Unit Besar' }})</label>
                   <input type="number" wire:model.live="jumlah_bal" min="0" step="any" class="form-control form-control-sm rounded-3">
                 </div>
-                <button wire:click="updateSupplyProduk" type="button" class="btn btn-sm btn-outline-warning w-full px-3">
+                <button wire:click="updateSupplyProduk" type="button" class="btn btn-warning w-full px-3">
                   <i class="bi bi-save me-1"></i> Simpan Perubahan
                 </button>
               </div>
@@ -215,7 +215,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
         </div>
       </div>
     </div>
@@ -259,7 +259,7 @@
                     </div>
 
                     <button wire:click="addProduk({{ $item->id }})" type="button"
-                      class="btn btn-sm btn-outline-primary w-full px-3 btn-tambah-pesanan">
+                      class="btn btn-primary w-full px-3 btn-tambah-pesanan">
                       <i class="bi bi-box-arrow-in-down me-1"></i> Tambahkan Barang Masuk
                     </button>
                   </div>
@@ -289,11 +289,10 @@
               <input type="month" class="form-control" name="periode" id="periode">
             </div>
           </div>
-          <div class="modal-footer justify-content-between">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-            <button type="submit" class="btn btn-sm btn-outline-danger">
-              <i class="bi bi-printer"></i>
-              Cetak
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-printer"></i> Cetak
             </button>
           </div>
         </form>

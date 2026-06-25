@@ -3,7 +3,7 @@
 <div class="card">
     <div class="card-header">
 
-        <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#modal-pesanan" id="btn-modal-pesanan"> <i class="fas fa-plus"></i> Tambah Pesanan</button>
+        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-pesanan" id="btn-modal-pesanan"> <i class="fas fa-plus"></i> Tambah Pesanan</button>
 
     </div>
     <div class="card-body">
@@ -36,7 +36,7 @@
                                 <td class="text-center"> {{ $item->produk->kode_produk }}</td>
                                 <td> {{ $item->produk->nama_produk }}</td>
                                 <td class="text-center">
-                                    <button class="btn btn-sm btn-danger btn-delete-pesanan"
+                                    <button class="btn btn-danger btn-delete-pesanan"
                                         data-id-pesanan="{{ $item->id }}">
                                         <i class="fas fa-trash"> </i>
                                         Hapus</button>
@@ -96,7 +96,7 @@
 
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"> </i>
                         Tambah</button>

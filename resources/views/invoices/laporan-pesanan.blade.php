@@ -205,7 +205,7 @@
                     </td>
                     <td>
                         {{-- This button should ideally not be part of a printed report --}}
-                        <button class="btn btn-sm btn-success btn-status-pembayaran-lunas"
+                        <button class="btn btn-success btn-status-pembayaran-lunas"
                             data-id-transaksi="{{ $item->id }}"
                             {{ $item->metode_pembayaran === \App\Enums\MetodePembayaran::COD ? 'disabled' : '' }}>
                             <i class="fas fa-money-check"></i> Lunas

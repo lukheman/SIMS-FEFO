@@ -112,13 +112,13 @@
                                 </td>
 
                                 <td>
-                                    <button wire:click="pesananSelesai({{ $item->id}})" type="button" class="btn btn-sm btn-outline-success" {{ $item->status === \App\Enums\StatusTransaksi::DITERIMA ? '' : 'disabled' }}>
+                                    <button wire:click="pesananSelesai({{ $item->id}})" type="button" class="btn btn-success" {{ $item->status === \App\Enums\StatusTransaksi::DITERIMA ? '' : 'disabled' }}>
                                         <i class="bi bi-check2-circle"></i> Pesanan selesai
                                     </button>
                                 </td>
 
                                 <td>
-                                    <button wire:click="detailTransaksi({{ $item->id}})" type="button" class="btn btn-sm btn-outline-secondary" >
+                                    <button wire:click="detailTransaksi({{ $item->id}})" type="button" class="btn btn-secondary" >
                                         <i class="bi bi-info-circle"></i> Detail Pesanan
                                     </button>
                                 </td>

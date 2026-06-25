@@ -51,7 +51,7 @@
                                 </td>
                                 <td>
 
-                                    <button class="btn btn-sm btn-success btn-status-pembayaran-lunas" data-id-transaksi="{{ $item->id }}" {{ $item->metode_pembayaran === \App\Enums\MetodePembayaran::COD ? 'disabled' : ''}} >
+                                    <button class="btn btn-success btn-status-pembayaran-lunas" data-id-transaksi="{{ $item->id }}" {{ $item->metode_pembayaran === \App\Enums\MetodePembayaran::COD ? 'disabled' : ''}} >
                                         <i class="fas fa-money-check"></i> Lunas</button>
                                 </td>
 
@@ -79,11 +79,11 @@
 
                                         @if (isset($item->bukti_pembayaran))
 
-                                            <button type="button" class="btn btn-sm btn-primary btn-lihat-bukti-pembayaran" data-id-transaksi="{{ $item->id }}" data-bukti-pembayaran="{{ $item->bukti_pembayaran }}" data-toggle="modal" data-target="#modal-lihat-bukti-pembayaran">
+                                            <button type="button" class="btn btn-primary btn-lihat-bukti-pembayaran" data-id-transaksi="{{ $item->id }}" data-bukti-pembayaran="{{ $item->bukti_pembayaran }}" data-toggle="modal" data-target="#modal-lihat-bukti-pembayaran">
                                                 <i class="fa fa-eye"></i> Lihat Bukti Pembayaran </button>
                                         @else
 
-                                            <button type="button" class="btn btn-sm btn-primary btn-lihat-bukti-pembayaran disabled">
+                                            <button type="button" class="btn btn-primary btn-lihat-bukti-pembayaran disabled">
                                             <i class="fa fa-eye"></i> Bukti Pembayaran Belum Ada </button>
                                         @endif
                                     @endif
@@ -95,7 +95,7 @@
                                     <form action="{{ route('kasir.nota') }}" method="post">
                                         @csrf
                                         <input type="hidden" name="id_transaksi" value="{{ $item->id }}">
-                                        <button type="submit" class="btn btn-sm btn-danger">
+                                        <button type="submit" class="btn btn-primary">
                                         <i class="nav-icon fas fa-print"></i>
                                         Cetak</button>
                                     </form>
@@ -103,7 +103,7 @@
                                 </td>
 
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-secondary btn-detail-transaksi"
+                                    <button type="button" class="btn btn-secondary btn-detail-transaksi"
                                         data-id-transaksi="{{ $item->id }}" data-toggle="modal"
                                         data-target="#modal-detail-transaksi">
                                         <i class="nav-icon fas fa-info"></i>
