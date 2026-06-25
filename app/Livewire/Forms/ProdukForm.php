@@ -18,7 +18,7 @@ class ProdukForm extends Form
     public string $harga_beli = '';
     public string $harga_jual = '';
 
-    public string $deskripsi = '';
+    public ?string $deskripsi = null;
     public $gambar = null;       // Menyimpan TemporaryUploadedFile saat upload baru
     public ?string $gambarPath = null; // Menyimpan path gambar yang sudah tersimpan di DB
     public string $harga_jual_unit_kecil = '';
@@ -29,7 +29,7 @@ class ProdukForm extends Form
     protected function rules(): array
     {
         return [
-            'id_kategori' => 'nullable|exists:kategoris,id',
+            'id_kategori' => 'required|exists:kategoris,id',
             'tanggal_exp' => 'nullable|date',
             'nama_produk' => 'required|string|max:100',
             'kode_produk' => [
@@ -53,6 +53,8 @@ class ProdukForm extends Form
     protected function messages(): array
     {
         return [
+            'id_kategori.required' => 'Kategori produk wajib dipilih.',
+            'id_kategori.exists' => 'Kategori produk tidak valid.',
             'nama_produk.required' => 'Nama produk wajib diisi.',
             'nama_produk.max' => 'Nama produk maksimal 100 karakter.',
 
